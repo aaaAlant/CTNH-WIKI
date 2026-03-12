@@ -1,13 +1,13 @@
+import 'package:ctnh_wiki/app/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:ctnh_wiki/main.dart';
-
 void main() {
-  testWidgets('wiki home renders core sections', (WidgetTester tester) async {
+  testWidgets('wiki home renders navigation tabs', (WidgetTester tester) async {
     await tester.pumpWidget(const CtnhWikiApp());
 
     expect(find.text('CTNH WIKI'), findsWidgets);
-    expect(find.text('最近更新'), findsOneWidget);
-    expect(find.text('任务书导览'), findsOneWidget);
+    expect(find.text('首页'), findsOneWidget);
+    expect(find.text('图鉴'), findsOneWidget);
+    expect(find.text('任务概览'), findsOneWidget);
   });
 }

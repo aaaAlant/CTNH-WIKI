@@ -19,8 +19,8 @@ class _WikiAppShellState extends State<WikiAppShell> {
 
   static const _pages = [
     HomeTab(),
-    TasksOverviewTab(),
     HandbookTab(),
+    TasksOverviewTab(),
     GuidesTutorialTab(),
     VersionListTab(),
   ];

@@ -43,14 +43,14 @@ class HomeTeamMember {
   const HomeTeamMember({
     required this.name,
     required this.role,
+    required this.tooltip,
     required this.contactUrl,
-    required this.avatarLabel,
-    required this.avatarColor,
+    required this.avatarPath,
   });
 
   final String name;
   final String role;
+  final String tooltip;
   final String contactUrl;
-  final String avatarLabel;
-  final Color avatarColor;
+  final String avatarPath;
 }

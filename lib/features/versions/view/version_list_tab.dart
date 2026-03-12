@@ -43,15 +43,6 @@ class _VersionListTabState extends State<VersionListTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SectionTitle(eyebrow: 'Releases', title: versionListTitle),
-          const SizedBox(height: 12),
-          const Text(
-            versionListDescription,
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xFF5F554D),
-              height: 1.7,
-            ),
-          ),
           const SizedBox(height: 28),
           isCompact
               ? Column(

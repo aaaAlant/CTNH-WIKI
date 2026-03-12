@@ -95,8 +95,6 @@ class VersionRelease {
 }
 
 const versionListTitle = '版本列表';
-const versionListDescription =
-    '参考 GitHub Releases 的结构整理版本信息。左侧时间轴用于快速跳转，右侧版本块展示发布时间、摘要和详细更新记录。';
 
 final versionReleases = [
   VersionRelease(

@@ -75,9 +75,7 @@ class HeroSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 720),
-          child: Text(
+        Text(
             homeHero.description,
             style: const TextStyle(
               fontSize: 16,
@@ -85,7 +83,6 @@ class HeroSection extends StatelessWidget {
               color: Color(0xFF4C433D),
             ),
           ),
-        ),
         const SizedBox(height: 24),
         Wrap(
           spacing: 12,
@@ -97,20 +94,50 @@ class HeroSection extends StatelessWidget {
             IconButton(
               onPressed: () =>
                   _openUrl('https://www.mcmod.cn/modpack/897.html'),
+              tooltip: 'MC百科',
               icon: Image.asset(
                 'assets/icons/home/mc-wiki-logo.png',
                 width: 30,
               ),
             ),
             IconButton(
-              onPressed: () => _openUrl('https://qm.qq.com/'),
+              onPressed: () => _openUrl('https://pd.qq.com/s/pel4yyss?b=5'),
+              tooltip: 'QQ频道',
               icon: SvgPicture.asset(
                 'assets/icons/home/tencent-qq-logo.svg',
+                width: 25,
+              ),
+            ),
+            IconButton(
+              onPressed: () => _openUrl('https://github.com/CTNH-Team/Create-New-Horizon'),
+              tooltip: 'GitHub',
+              icon: SvgPicture.asset(
+                'assets/icons/home/github-logo.svg',
                 width: 30,
                 colorFilter: const ColorFilter.mode(
                   Colors.black,
                   BlendMode.srcIn,
                 ),
+              ),
+            ),
+            IconButton(
+              onPressed: () => _openUrl('https://www.curseforge.com/minecraft/modpacks/ctnh'),
+              tooltip: 'CurseForge',
+              icon: SvgPicture.asset(
+                'assets/icons/home/curseforge-logo.svg',
+                width: 30,
+                colorFilter: const ColorFilter.mode(
+                  Colors.black,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: () => _openUrl('https://discord.com/invite/jQpvUDsVX8'),
+              tooltip: 'Discord',
+              icon: SvgPicture.asset(
+                'assets/icons/home/discord-logo.svg',
+                width: 30,
               ),
             ),
           ],
@@ -482,21 +509,47 @@ class AboutUsSection extends StatelessWidget {
                 runSpacing: 14,
                 children: homeCoreMembers
                     .map(
-                      (member) => ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: isCompact ? constraints.maxWidth : 280,
-                          maxWidth: isCompact ? constraints.maxWidth : 360,
-                        ),
-                        child: TeamMemberCard(
-                          member: member,
-                          onOpenContact: () => _openContact(member.contactUrl),
-                        ),
+                      (member) => TeamMemberCard(
+                        member: member,
+                        onOpenContact: () => {
+                          member.contactUrl.isNotEmpty ?_openContact(member.contactUrl):null
+                        },
                       ),
                     )
                     .toList(),
               );
             },
           ),
+          const SizedBox(height: 16),
+          const Text(
+            '致谢',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF201A16),
+            ),
+          ),
+          const SizedBox(height: 14),
+          // LayoutBuilder(
+          //   builder: (context, constraints) {
+          //     return Wrap(
+          //       spacing: 14,
+          //       runSpacing: 14,
+          //       children: homeCoreMembers
+          //           .map(
+          //             (member) => TeamMemberCard(
+          //               member: member,
+          //               onOpenContact: () {
+          //                 if (member.contactUrl.isNotEmpty) {
+          //                   _openContact(member.contactUrl);
+          //                 }
+          //               },
+          //             ),
+          //           )
+          //           .toList(),
+          //     );
+          //   },
+          // ),
         ],
       ),
     );
@@ -516,7 +569,7 @@ class TeamMemberCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFCF6),
         borderRadius: BorderRadius.circular(18),
@@ -526,50 +579,44 @@ class TeamMemberCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          IconButton(
-            onPressed: onOpenContact,
-            style: IconButton.styleFrom(
-              padding: EdgeInsets.zero,
-              minimumSize: const Size(44, 44),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: CircleAvatar(
-              radius: 22,
-              backgroundColor: member.avatarColor,
-              child: Text(
-                member.avatarLabel,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w900,
-                  color: Color(0xFF201A16),
-                ),
+          InkWell(
+            onTap: member.contactUrl.isNotEmpty ? onOpenContact : null,
+            borderRadius: BorderRadius.circular(999),
+            child: Tooltip(
+              message: member.tooltip,
+              child: ClipOval(
+                child: member.avatarPath.isNotEmpty?Image.asset(
+                  member.avatarPath,
+                  width: 36,
+                  height: 36,
+                  fit: BoxFit.cover,
+                ):Icon(Icons.person),
               ),
             ),
           ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  member.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF201A16),
-                  ),
+          const SizedBox(width: 12),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                member.name,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF201A16),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  member.role,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    height: 1.4,
-                    color: Color(0xFF5F554D),
-                  ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                member.role,
+                style: const TextStyle(
+                  fontSize: 12,
+                  height: 1.3,
+                  color: Color(0xFF5F554D),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
