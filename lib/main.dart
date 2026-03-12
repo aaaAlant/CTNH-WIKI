@@ -9,58 +9,16 @@ class CtnhWikiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const background = Color(0xFFF4F0E8);
-    const surface = Color(0xFFFFFBF4);
-    const ink = Color(0xFF201A16);
-    const brass = Color(0xFFC88A3D);
-    const moss = Color(0xFF425C45);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CTNH Wiki',
       theme: ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: background,
+        scaffoldBackgroundColor: const Color(0xFFF4F0E8),
         colorScheme: const ColorScheme.light(
-          primary: moss,
-          secondary: brass,
-          surface: surface,
-        ),
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(
-            fontSize: 60,
-            fontWeight: FontWeight.w800,
-            height: 0.95,
-            color: ink,
-            letterSpacing: -1.8,
-          ),
-          displayMedium: TextStyle(
-            fontSize: 42,
-            fontWeight: FontWeight.w800,
-            height: 1,
-            color: ink,
-            letterSpacing: -1.1,
-          ),
-          headlineMedium: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: ink,
-          ),
-          titleLarge: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-            color: ink,
-          ),
-          bodyLarge: TextStyle(
-            fontSize: 16,
-            height: 1.6,
-            color: Color(0xFF4C433D),
-          ),
-          bodyMedium: TextStyle(
-            fontSize: 14,
-            height: 1.6,
-            color: Color(0xFF5F554D),
-          ),
+          primary: Color(0xFF425C45),
+          secondary: Color(0xFFC88A3D),
+          surface: Color(0xFFFFFBF4),
         ),
       ),
       home: const WikiHomePage(),
@@ -68,8 +26,17 @@ class CtnhWikiApp extends StatelessWidget {
   }
 }
 
-class WikiHomePage extends StatelessWidget {
+class WikiHomePage extends StatefulWidget {
   const WikiHomePage({super.key});
+
+  @override
+  State<WikiHomePage> createState() => _WikiHomePageState();
+}
+
+class _WikiHomePageState extends State<WikiHomePage> {
+  static const _tabs = ['首页', '任务概览', '图鉴', '版本列表'];
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -82,54 +49,37 @@ class WikiHomePage extends StatelessWidget {
           const Positioned.fill(child: _BackgroundTexture()),
           SafeArea(
             child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: isCompact ? 20 : 32,
+                vertical: isCompact ? 18 : 28,
+              ),
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 1280),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isCompact ? 20 : 32,
-                      vertical: isCompact ? 18 : 28,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _TopBar(isCompact: isCompact),
-                        SizedBox(height: isCompact ? 20 : 30),
-                        _HeroSection(isCompact: isCompact),
-                        const SizedBox(height: 24),
-                        _QuickStats(isCompact: isCompact),
-                        const SizedBox(height: 24),
-                        _SectionTitle(
-                          eyebrow: 'Explore',
-                          title: '从核心系统切入，而不是从杂乱词条开始',
-                        ),
-                        const SizedBox(height: 16),
-                        _CategoryGrid(isCompact: isCompact),
-                        const SizedBox(height: 24),
-                        if (isCompact) ...[
-                          _StarterPath(isCompact: true),
-                          const SizedBox(height: 24),
-                          _UpdatePanel(isCompact: true),
-                        ] else
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Expanded(flex: 3, child: _StarterPath()),
-                              SizedBox(width: 24),
-                              Expanded(flex: 2, child: _UpdatePanel()),
-                            ],
-                          ),
-                        const SizedBox(height: 24),
-                        _SectionTitle(
-                          eyebrow: 'Featured',
-                          title: '当前首页应优先承载的重点内容',
-                        ),
-                        const SizedBox(height: 16),
-                        _FeaturedCards(isCompact: isCompact),
-                        const SizedBox(height: 24),
-                        _Footer(isCompact: isCompact),
-                      ],
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _TopBar(
+                        isCompact: isCompact,
+                        items: _tabs,
+                        selectedIndex: _selectedIndex,
+                        onSelected: (index) {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        },
+                      ),
+                      SizedBox(height: isCompact ? 20 : 30),
+                      IndexedStack(
+                        index: _selectedIndex,
+                        children: const [
+                          _HomeTab(),
+                          _EmptyTab(title: '任务概览'),
+                          _EmptyTab(title: '图鉴'),
+                          _EmptyTab(title: '版本列表'),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -142,19 +92,31 @@ class WikiHomePage extends StatelessWidget {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.isCompact});
+  const _TopBar({
+    required this.isCompact,
+    required this.items,
+    required this.selectedIndex,
+    required this.onSelected,
+  });
 
   final bool isCompact;
+  final List<String> items;
+  final int selectedIndex;
+  final ValueChanged<int> onSelected;
 
   @override
   Widget build(BuildContext context) {
-    final items = ['首页', '整合包概览', '任务线', '模组词条', '版本更新'];
+    final chips = List.generate(
+      items.length,
+      (index) => _NavChip(
+        label: items[index],
+        selected: index == selectedIndex,
+        onTap: () => onSelected(index),
+      ),
+    );
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isCompact ? 16 : 22,
-        vertical: 14,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: isCompact ? 16 : 22, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(24),
@@ -166,21 +128,17 @@ class _TopBar extends StatelessWidget {
               children: [
                 const _BrandLockup(),
                 const SizedBox(height: 14),
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: items.map(_NavChip.new).toList(),
-                ),
+                Wrap(spacing: 10, runSpacing: 10, children: chips),
               ],
             )
           : Row(
               children: [
                 const _BrandLockup(),
                 const Spacer(),
-                ...items.map(
-                  (item) => Padding(
+                ...chips.map(
+                  (chip) => Padding(
                     padding: const EdgeInsets.only(left: 10),
-                    child: _NavChip(item),
+                    child: chip,
                   ),
                 ),
               ],
@@ -230,26 +188,122 @@ class _BrandLockup extends StatelessWidget {
 }
 
 class _NavChip extends StatelessWidget {
-  const _NavChip(this.label);
+  const _NavChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 
   final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(999),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: selected ? const Color(0xFF201A16) : const Color(0xFFF7F1E7),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+              color: selected ? const Color(0xFF201A16) : const Color(0xFFE2D6C2),
+            ),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: selected ? Colors.white : const Color(0xFF2F2924),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeTab extends StatelessWidget {
+  const _HomeTab();
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isCompact = width < 900;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _HeroSection(isCompact: isCompact),
+        const SizedBox(height: 24),
+        _QuickStats(isCompact: isCompact),
+        const SizedBox(height: 24),
+        const _SectionTitle(eyebrow: 'Explore', title: '从核心系统切入，而不是从杂乱词条开始'),
+        const SizedBox(height: 16),
+        _CategoryGrid(isCompact: isCompact),
+        const SizedBox(height: 24),
+        if (isCompact) ...[
+          const _StarterPath(),
+          const SizedBox(height: 24),
+          const _UpdatePanel(),
+        ] else
+          const Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 3, child: _StarterPath()),
+              SizedBox(width: 24),
+              Expanded(flex: 2, child: _UpdatePanel()),
+            ],
+          ),
+        const SizedBox(height: 24),
+        const _SectionTitle(eyebrow: 'Featured', title: '当前首页优先承载的重点内容'),
+        const SizedBox(height: 16),
+        _FeaturedCards(isCompact: isCompact),
+        const SizedBox(height: 24),
+        const _Footer(),
+      ],
+    );
+  }
+}
+
+class _EmptyTab extends StatelessWidget {
+  const _EmptyTab({required this.title});
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: 420),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F1E7),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE2D6C2)),
+        color: Colors.white.withValues(alpha: 0.84),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: const Color(0xFFE0D5C3)),
       ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          color: Color(0xFF2F2924),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF201A16),
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            '该板块暂时为空页面。',
+            style: TextStyle(fontSize: 16, color: Color(0xFF5F554D), height: 1.6),
+          ),
+        ],
       ),
     );
   }
@@ -262,6 +316,51 @@ class _HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final heroCopy = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            color: const Color(0x33201A16),
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: const Text(
+            'Minecraft Modpack Encyclopedia',
+            style: TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF201A16)),
+          ),
+        ),
+        const SizedBox(height: 18),
+        Text(
+          '让玩家快速查到\n配方、机制与推进路线',
+          style: TextStyle(
+            fontSize: isCompact ? 42 : 60,
+            fontWeight: FontWeight.w800,
+            height: isCompact ? 1.0 : 0.95,
+            letterSpacing: isCompact ? -1.1 : -1.8,
+            color: const Color(0xFF201A16),
+          ),
+        ),
+        const SizedBox(height: 16),
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 560),
+          child: Text(
+            '首页保留当前 main.dart 的全部展示内容，作为整个站点的入口页，先告诉玩家该从哪条线开始，再逐步深入到任务、图鉴与版本信息。',
+            style: TextStyle(fontSize: 16, height: 1.6, color: Color(0xFF4C433D)),
+          ),
+        ),
+        const SizedBox(height: 22),
+        const Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            _AccentButton(label: '查看开荒指南', filled: true),
+            _AccentButton(label: '浏览模组分类'),
+          ],
+        ),
+      ],
+    );
+
     return Container(
       padding: EdgeInsets.all(isCompact ? 22 : 30),
       decoration: BoxDecoration(
@@ -283,70 +382,19 @@ class _HeroSection extends StatelessWidget {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _HeroCopy(isCompact: true),
+                heroCopy,
                 const SizedBox(height: 20),
                 const _SearchPanel(),
               ],
             )
-          : const Row(
+          : Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(flex: 3, child: _HeroCopy()),
-                SizedBox(width: 24),
-                Expanded(flex: 2, child: _SearchPanel()),
+                Expanded(flex: 3, child: heroCopy),
+                const SizedBox(width: 24),
+                const Expanded(flex: 2, child: _SearchPanel()),
               ],
             ),
-    );
-  }
-}
-
-class _HeroCopy extends StatelessWidget {
-  const _HeroCopy({this.isCompact = false});
-
-  final bool isCompact;
-
-  @override
-  Widget build(BuildContext context) {
-    final displayStyle = isCompact
-        ? Theme.of(context).textTheme.displayMedium
-        : Theme.of(context).textTheme.displayLarge;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-          decoration: BoxDecoration(
-            color: const Color(0x33201A16),
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: const Text(
-            'Minecraft Modpack Encyclopedia',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF201A16),
-            ),
-          ),
-        ),
-        const SizedBox(height: 18),
-        Text('让玩家快速查到\n配方、机制与推进路线', style: displayStyle),
-        const SizedBox(height: 16),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 560),
-          child: const Text(
-            '首页应像一本整合包操作手册：先告诉玩家该从哪条线开始，再让他们继续深入到机器、魔法、任务和资源体系。',
-          ),
-        ),
-        const SizedBox(height: 22),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: const [
-            _AccentButton(label: '查看开荒指南', filled: true),
-            _AccentButton(label: '浏览模组分类'),
-          ],
-        ),
-      ],
     );
   }
 }
@@ -362,9 +410,7 @@ class _AccentButton extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       decoration: BoxDecoration(
-        color: filled
-            ? const Color(0xFF201A16)
-            : Colors.white.withValues(alpha: 0.6),
+        color: filled ? const Color(0xFF201A16) : Colors.white.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: filled ? const Color(0xFF201A16) : const Color(0xFFD4C8B7),
@@ -393,48 +439,22 @@ class _SearchPanel extends StatelessWidget {
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: const Color(0xFFE0D5C3)),
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             '快速检索',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF201A16),
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF201A16)),
           ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F0E8),
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: const Color(0xFFE5DCCF)),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.search_rounded, color: Color(0xFF6B6157)),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    '搜索词条、合成表、任务章节、模组名',
-                    style: TextStyle(color: Color(0xFF81766B)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 18),
-          const Text(
+          SizedBox(height: 12),
+          _SearchBarMock(),
+          SizedBox(height: 18),
+          Text(
             '推荐入口',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF201A16),
-            ),
+            style: TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF201A16)),
           ),
-          const SizedBox(height: 10),
-          const Wrap(
+          SizedBox(height: 10),
+          Wrap(
             spacing: 10,
             runSpacing: 10,
             children: [
@@ -443,6 +463,34 @@ class _SearchPanel extends StatelessWidget {
               _MiniPill(label: '任务总览'),
               _MiniPill(label: '常见卡点'),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SearchBarMock extends StatelessWidget {
+  const _SearchBarMock();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F0E8),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE5DCCF)),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.search_rounded, color: Color(0xFF6B6157)),
+          SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              '搜索词条、合成表、任务章节、模组名',
+              style: TextStyle(color: Color(0xFF81766B)),
+            ),
           ),
         ],
       ),
@@ -578,7 +626,14 @@ class _SectionTitle extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(title, style: Theme.of(context).textTheme.headlineMedium),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF201A16),
+          ),
+        ),
       ],
     );
   }
@@ -592,37 +647,12 @@ class _CategoryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const items = [
-      (
-        '开荒与生存',
-        '前 3 小时要做什么、初期资源怎么拿、第一套工具如何过渡',
-        Icons.terrain_rounded,
-        Color(0xFFE6D0A8),
-      ),
-      (
-        '科技主线',
-        '发电、机器、多方块结构、物流与自动化推进',
-        Icons.precision_manufacturing_rounded,
-        Color(0xFFCAD9C4),
-      ),
-      (
-        '魔法与仪式',
-        '法术体系、祭坛结构、材料获取与跨模组联动',
-        Icons.auto_fix_high_rounded,
-        Color(0xFFD6CCE9),
-      ),
-      (
-        '任务与章节',
-        '按照任务书阅读整合包设计者安排的推进节奏',
-        Icons.task_alt_rounded,
-        Color(0xFFF0D9C7),
-      ),
-      ('资源与作物', '矿脉、农场、养蜂、自动化采集与材料闭环', Icons.grass_rounded, Color(0xFFD6E4C5)),
-      (
-        '疑难排错',
-        '常见卡关点、配方替换、结构搭建错误与版本差异',
-        Icons.build_circle_rounded,
-        Color(0xFFE9CFCA),
-      ),
+      ('开荒与生存', '前 3 小时做什么、初期资源怎么拿、第一套工具如何过渡', Icons.terrain_rounded, Color(0xFFE6D0A8)),
+      ('科技主线', '发电、机器、多方块结构、物流与自动化推进', Icons.precision_manufacturing_rounded, Color(0xFFCAD9C4)),
+      ('魔法与仪式', '法术体系、祭坛结构、材料获取与跨模组联动', Icons.auto_fix_high_rounded, Color(0xFFD6CCE9)),
+      ('任务章节', '按任务书理解整合包设计者安排的推进节奏', Icons.task_alt_rounded, Color(0xFFF0D9C7)),
+      ('资源与农作', '矿脉、农田、养蜂、自动化采集与材料闭环', Icons.grass_rounded, Color(0xFFD6E4C5)),
+      ('疑难排错', '常见卡关点、配方替换、结构搭建错误与版本差异', Icons.build_circle_rounded, Color(0xFFE9CFCA)),
     ];
 
     return Wrap(
@@ -673,23 +703,16 @@ class _CategoryCard extends StatelessWidget {
           Container(
             width: 52,
             height: 52,
-            decoration: BoxDecoration(
-              color: tint,
-              borderRadius: BorderRadius.circular(16),
-            ),
+            decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(16)),
             child: Icon(icon, color: const Color(0xFF201A16)),
           ),
           const SizedBox(height: 18),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 21,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF201A16),
-            ),
+            style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w800, color: Color(0xFF201A16)),
           ),
           const SizedBox(height: 10),
-          Text(description),
+          Text(description, style: const TextStyle(fontSize: 14, height: 1.6, color: Color(0xFF5F554D))),
         ],
       ),
     );
@@ -697,9 +720,7 @@ class _CategoryCard extends StatelessWidget {
 }
 
 class _StarterPath extends StatelessWidget {
-  const _StarterPath({this.isCompact = false});
-
-  final bool isCompact;
+  const _StarterPath();
 
   @override
   Widget build(BuildContext context) {
@@ -707,7 +728,7 @@ class _StarterPath extends StatelessWidget {
       ('01', '建立基础资源循环', '解决食物、木材、煤炭和基础矿石来源。'),
       ('02', '完成首个电力节点', '明确最早期发电方式和第一批机器优先级。'),
       ('03', '解锁任务关键分叉', '把科技线与魔法线的前置门槛拆开说明。'),
-      ('04', '搭建自动化骨架', '让仓储、物流和材料回收开始闭环。'),
+      ('04', '搭建自动化骨架', '让仓储、物流和材料回收开始形成闭环。'),
     ];
 
     return Container(
@@ -721,29 +742,20 @@ class _StarterPath extends StatelessWidget {
         children: [
           const Text(
             '建议首页挂载一条清晰的入门路径',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white),
           ),
           const SizedBox(height: 10),
           const Text(
-            '这部分参考大型游戏百科的“Getting Started”分区，优先解决新玩家不知道先看哪里的痛点。',
+            '这部分保留当前首页的“Getting Started”定位，优先解决新玩家不知道先看哪里的痛点。',
             style: TextStyle(color: Color(0xFFD5DED0), height: 1.6),
           ),
           const SizedBox(height: 18),
           ...steps.map(
             (step) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: _PathStep(
-                index: step.$1,
-                title: step.$2,
-                description: step.$3,
-              ),
+              child: _PathStep(index: step.$1, title: step.$2, description: step.$3),
             ),
           ),
-          if (isCompact) const SizedBox(height: 4),
         ],
       ),
     );
@@ -775,17 +787,14 @@ class _PathStep extends StatelessWidget {
           Container(
             width: 42,
             height: 42,
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: const Color(0xFFC88A3D),
               borderRadius: BorderRadius.circular(14),
             ),
-            alignment: Alignment.center,
             child: Text(
               index,
-              style: const TextStyle(
-                fontWeight: FontWeight.w900,
-                color: Color(0xFF201A16),
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF201A16)),
             ),
           ),
           const SizedBox(width: 14),
@@ -795,11 +804,7 @@ class _PathStep extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.white),
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -816,16 +821,14 @@ class _PathStep extends StatelessWidget {
 }
 
 class _UpdatePanel extends StatelessWidget {
-  const _UpdatePanel({this.isCompact = false});
-
-  final bool isCompact;
+  const _UpdatePanel();
 
   @override
   Widget build(BuildContext context) {
     const updates = [
-      ('首页框架', '确定 Hero、分类、入门路径、精选词条四层结构。'),
-      ('词条模板', '后续可扩展为模组页、物品页、任务页三类模板。'),
-      ('搜索系统', '预留搜索入口与热门查询，未来可接本地索引。'),
+      ('首页框架', '保留 Hero、分类、入门路径和精选卡片的四层结构。'),
+      ('导航拆分', '现在分为首页、任务概览、图鉴、版本列表四个板块。'),
+      ('空白页预留', '其余三个板块先留空，便于后续继续填充内容。'),
     ];
 
     return Container(
@@ -840,11 +843,7 @@ class _UpdatePanel extends StatelessWidget {
         children: [
           const Text(
             '最近更新',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF201A16),
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF201A16)),
           ),
           const SizedBox(height: 10),
           ...updates.map(
@@ -861,24 +860,15 @@ class _UpdatePanel extends StatelessWidget {
                   children: [
                     Text(
                       update.$1,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF201A16),
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF201A16)),
                     ),
                     const SizedBox(height: 6),
-                    Text(update.$2),
+                    Text(update.$2, style: const TextStyle(height: 1.6, color: Color(0xFF5F554D))),
                   ],
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 6),
-          const Text(
-            '适合后续接入 changelog、更新日志或编辑记录。',
-            style: TextStyle(color: Color(0xFF72675D)),
-          ),
-          if (isCompact) const SizedBox(height: 4),
         ],
       ),
     );
@@ -893,9 +883,9 @@ class _FeaturedCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const items = [
-      ('任务书导览', '把任务章节按“生存 / 科技 / 魔法 / 终局”重组，适合新玩家快速理解整合包结构。'),
+      ('任务书导览', '把任务章节按生存、科技、魔法、终局重新编组，便于快速理解整体结构。'),
       ('配方改动总表', '集中收纳魔改配方、替代工艺和核心门槛，降低查资料成本。'),
-      ('模组联动关系图', '把能源、物流、材料和魔法的互锁关系可视化，适合做首页亮点内容。'),
+      ('模组联动关系图', '把能源、物流、材料与魔法的依赖关系可视化，适合作为首页亮点内容。'),
     ];
 
     return Wrap(
@@ -927,14 +917,10 @@ class _FeaturedCards extends StatelessWidget {
                     const SizedBox(height: 10),
                     Text(
                       item.$1,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF201A16),
-                      ),
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF201A16)),
                     ),
                     const SizedBox(height: 10),
-                    Text(item.$2),
+                    Text(item.$2, style: const TextStyle(height: 1.6, color: Color(0xFF5F554D))),
                   ],
                 ),
               ),
@@ -946,9 +932,7 @@ class _FeaturedCards extends StatelessWidget {
 }
 
 class _Footer extends StatelessWidget {
-  const _Footer({required this.isCompact});
-
-  final bool isCompact;
+  const _Footer();
 
   @override
   Widget build(BuildContext context) {
@@ -959,46 +943,23 @@ class _Footer extends StatelessWidget {
         color: const Color(0xFF201A16),
         borderRadius: BorderRadius.circular(28),
       ),
-      child: isCompact
-          ? const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'CTNH WIKI',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '下一步建议：拆分成独立页面路由，并接入真实词条数据。',
-                  style: TextStyle(color: Color(0xFFD5CDC5), height: 1.6),
-                ),
-              ],
-            )
-          : const Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'CTNH WIKI',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    '下一步建议：补齐路由、词条模板、搜索索引和更新日志，逐步从首页框架扩展成完整百科站。',
-                    style: TextStyle(color: Color(0xFFD5CDC5), height: 1.6),
-                  ),
-                ),
-              ],
+      child: const Row(
+        children: [
+          Expanded(
+            child: Text(
+              'CTNH WIKI',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white),
             ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              '下一步建议是继续给任务概览、图鉴与版本列表分别接入真实数据，让首页从单页展示演进成完整站点。',
+              style: TextStyle(color: Color(0xFFD5CDC5), height: 1.6),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1024,10 +985,7 @@ class _BackgroundTexture extends StatelessWidget {
             child: Container(
               width: 280,
               height: 280,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0x33C88A3D),
-              ),
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0x33C88A3D)),
             ),
           ),
           Positioned(
@@ -1036,10 +994,7 @@ class _BackgroundTexture extends StatelessWidget {
             child: Container(
               width: 180,
               height: 180,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0x22425C45),
-              ),
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0x22425C45)),
             ),
           ),
           Positioned(
@@ -1048,10 +1003,7 @@ class _BackgroundTexture extends StatelessWidget {
             child: Container(
               width: 220,
               height: 220,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0x22FFFFFF),
-              ),
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0x22FFFFFF)),
             ),
           ),
         ],
