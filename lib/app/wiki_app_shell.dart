@@ -139,10 +139,9 @@ class _BrandLockup extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: const Color(0xFF201A16),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(Icons.menu_book_rounded, color: Colors.white),
+          child: Image.asset('assets/icons/app/logo-480x300.jpg', width: 42),
         ),
         const SizedBox(width: 12),
         const Column(
@@ -157,7 +156,7 @@ class _BrandLockup extends StatelessWidget {
               ),
             ),
             Text(
-              'Community Tech & Magic Handbook',
+              'Create : New Horizon',
               style: TextStyle(fontSize: 11, color: Color(0xFF6E6359)),
             ),
           ],

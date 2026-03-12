@@ -1,9 +1,13 @@
+import 'dart:ui' as html;
+
 import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
 import 'package:ctnh_wiki/features/home/data/home_page_data.dart';
 import 'package:ctnh_wiki/features/home/models/home_module.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -56,21 +60,6 @@ class HeroSection extends StatelessWidget {
     final heroCopy = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-          decoration: BoxDecoration(
-            color: const Color(0x33201A16),
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Text(
-            homeHero.badge,
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF201A16),
-            ),
-          ),
-        ),
-        const SizedBox(height: 18),
         Text(
           homeHero.title,
           style: TextStyle(
@@ -81,9 +70,9 @@ class HeroSection extends StatelessWidget {
             color: const Color(0xFF201A16),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
          ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 560),
+          constraints: BoxConstraints(),
           child: Text(
             homeHero.description,
             style: TextStyle(
@@ -93,13 +82,21 @@ class HeroSection extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 24),
          Wrap(
           spacing: 12,
           runSpacing: 12,
           children: [
-            AccentButton(label: homeHero.primaryAction, filled: true),
-            AccentButton(label: homeHero.secondaryAction),
+            AccentButton(label: '交流渠道', filled: true),
+            AccentButton(label: 'Bug反馈'),
+            AccentButton(label: '加入我们'),
+            IconButton(onPressed: () async {
+              final uri = Uri.parse('https://www.mcmod.cn/modpack/897.html');
+              await launchUrl(uri, webOnlyWindowName: '_blank');
+  }, icon: Image.asset('assets/icons/home/mc-wiki-logo.png', width: 30)),
+            IconButton(onPressed: (){}, icon: SvgPicture.asset('assets/icons/home/tencent-qq-logo.svg', 
+            colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+             width: 30))
           ],
         ),
       ],
@@ -328,34 +325,6 @@ class ModuleSwitcher extends StatelessWidget {
                     color: Color(0xFF5F554D),
                   ),
                 ),
-                const SizedBox(height: 22),
-                isCompact
-                    ? Column(
-                        children: module.sections
-                            .map(
-                              (section) => Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: ModuleSectionCard(section: section),
-                              ),
-                            )
-                            .toList(),
-                      )
-                    : Row(
-                        children: module.sections
-                            .map(
-                              (section) => Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    right: section == module.sections.last
-                                        ? 0
-                                        : 14,
-                                  ),
-                                  child: ModuleSectionCard(section: section),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
               ],
             ),
           ),
@@ -420,7 +389,7 @@ class ModulePreviewCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                module.description,
+                module.subTitle,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
