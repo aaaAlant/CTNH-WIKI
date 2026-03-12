@@ -2,6 +2,7 @@ import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
 import 'package:ctnh_wiki/features/versions/data/version_list_data.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class VersionListTab extends StatefulWidget {
   const VersionListTab({super.key});
@@ -41,10 +42,7 @@ class _VersionListTabState extends State<VersionListTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionTitle(
-            eyebrow: 'Releases',
-            title: versionListTitle,
-          ),
+          const SectionTitle(eyebrow: 'Releases', title: versionListTitle),
           const SizedBox(height: 12),
           const Text(
             versionListDescription,
@@ -59,9 +57,7 @@ class _VersionListTabState extends State<VersionListTab> {
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _CompactReleaseJumpBar(
-                      onSelected: _jumpToRelease,
-                    ),
+                    _CompactReleaseJumpBar(onSelected: _jumpToRelease),
                     const SizedBox(height: 20),
                     ...List.generate(
                       versionReleases.length,
@@ -88,9 +84,7 @@ class _VersionListTabState extends State<VersionListTab> {
                           (index) => Padding(
                             key: _releaseKeys[index],
                             padding: const EdgeInsets.only(bottom: 20),
-                            child: ReleaseCard(
-                              release: versionReleases[index],
-                            ),
+                            child: ReleaseCard(release: versionReleases[index]),
                           ),
                         ),
                       ),
@@ -104,10 +98,7 @@ class _VersionListTabState extends State<VersionListTab> {
 }
 
 class ReleaseTimelineNav extends StatelessWidget {
-  const ReleaseTimelineNav({
-    super.key,
-    required this.onSelected,
-  });
+  const ReleaseTimelineNav({super.key, required this.onSelected});
 
   final ValueChanged<int> onSelected;
 
@@ -126,10 +117,7 @@ class ReleaseTimelineNav extends StatelessWidget {
             top: 14,
             bottom: 14,
             left: 13,
-            child: Container(
-              width: 2,
-              color: const Color(0xFFD8CCBA),
-            ),
+            child: Container(width: 2, color: const Color(0xFFD8CCBA)),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,10 +147,7 @@ class ReleaseTimelineNav extends StatelessWidget {
 }
 
 class _TimelineNavItem extends StatelessWidget {
-  const _TimelineNavItem({
-    required this.release,
-    required this.onTap,
-  });
+  const _TimelineNavItem({required this.release, required this.onTap});
 
   final VersionRelease release;
   final VoidCallback onTap;
@@ -191,7 +176,10 @@ class _TimelineNavItem extends StatelessWidget {
                         ? const Color(0xFF201A16)
                         : const Color(0xFFC6B9A6),
                     shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFFFFFCF6), width: 2),
+                    border: Border.all(
+                      color: const Color(0xFFFFFCF6),
+                      width: 2,
+                    ),
                   ),
                 ),
               ),
@@ -235,20 +223,13 @@ class _TimelineNavItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      release.publishedAt,
+                      DateFormat('yyyy/MM/dd').format(release.publishedAt),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Color(0xFF7A6F64),
                       ),
                     ),
                     const SizedBox(height: 3),
-                    Text(
-                      release.relativeTimeLabel,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF7A6F64),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -261,9 +242,7 @@ class _TimelineNavItem extends StatelessWidget {
 }
 
 class _CompactReleaseJumpBar extends StatelessWidget {
-  const _CompactReleaseJumpBar({
-    required this.onSelected,
-  });
+  const _CompactReleaseJumpBar({required this.onSelected});
 
   final ValueChanged<int> onSelected;
 
@@ -294,10 +273,7 @@ class _CompactReleaseJumpBar extends StatelessWidget {
 }
 
 class ReleaseCard extends StatelessWidget {
-  const ReleaseCard({
-    super.key,
-    required this.release,
-  });
+  const ReleaseCard({super.key, required this.release});
 
   final VersionRelease release;
 
@@ -326,14 +302,9 @@ class ReleaseCard extends StatelessWidget {
           : Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: 280,
-                  child: ReleaseMetaPanel(release: release),
-                ),
+                SizedBox(width: 280, child: ReleaseMetaPanel(release: release)),
                 const SizedBox(width: 24),
-                Expanded(
-                  child: ReleaseDetailsPanel(release: release),
-                ),
+                Expanded(child: ReleaseDetailsPanel(release: release)),
               ],
             ),
     );
@@ -341,12 +312,28 @@ class ReleaseCard extends StatelessWidget {
 }
 
 class ReleaseMetaPanel extends StatelessWidget {
-  const ReleaseMetaPanel({
-    super.key,
-    required this.release,
-  });
+  const ReleaseMetaPanel({super.key, required this.release});
 
   final VersionRelease release;
+
+  String buildRelativeTimeLabel(DateTime publishedAt) {
+    final now = DateTime.now();
+    final diff = now.difference(publishedAt);
+
+    if (diff.inSeconds < 60) {
+      return '刚刚';
+    } else if (diff.inMinutes < 60) {
+      return '${diff.inMinutes}分钟前';
+    } else if (diff.inHours < 24) {
+      return '${diff.inHours}小时前';
+    } else if (diff.inDays < 30) {
+      return '${diff.inDays}天前';
+    } else if (diff.inDays < 365) {
+      return '${diff.inDays ~/ 30}个月前';
+    } else {
+      return '${diff.inDays ~/ 365}年前';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -387,13 +374,13 @@ class ReleaseMetaPanel extends StatelessWidget {
               ),
           ],
         ),
-        const SizedBox(height: 20),
-        _MetaLine(label: '发布时间', value: release.publishedAt),
-        const SizedBox(height: 8),
-        _MetaLine(label: '相对时间', value: release.relativeTimeLabel),
-        const SizedBox(height: 8),
-        _MetaLine(label: '发布者', value: release.author),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
+        _MetaLine(
+          label: '发布时间',
+          value:
+              '${DateFormat('yyyy/MM/dd').format(release.publishedAt)} · ${buildRelativeTimeLabel(release.publishedAt)}',
+        ),
+        const SizedBox(height: 12),
         Text(
           release.summary,
           style: const TextStyle(
@@ -421,11 +408,7 @@ class ReleaseMetaPanel extends StatelessWidget {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(top: 8),
-                  child: Icon(
-                    Icons.circle,
-                    size: 7,
-                    color: Color(0xFFC88A3D),
-                  ),
+                  child: Icon(Icons.circle, size: 7, color: Color(0xFFC88A3D)),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -448,10 +431,7 @@ class ReleaseMetaPanel extends StatelessWidget {
 }
 
 class _MetaLine extends StatelessWidget {
-  const _MetaLine({
-    required this.label,
-    required this.value,
-  });
+  const _MetaLine({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -474,10 +454,7 @@ class _MetaLine extends StatelessWidget {
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF403833),
-            ),
+            style: const TextStyle(fontSize: 13, color: Color(0xFF403833)),
           ),
         ),
       ],
@@ -486,10 +463,7 @@ class _MetaLine extends StatelessWidget {
 }
 
 class ReleaseDetailsPanel extends StatelessWidget {
-  const ReleaseDetailsPanel({
-    super.key,
-    required this.release,
-  });
+  const ReleaseDetailsPanel({super.key, required this.release});
 
   final VersionRelease release;
 
@@ -514,9 +488,7 @@ class ReleaseDetailsPanel extends StatelessWidget {
 }
 
 class _ReleaseChangeTile extends StatelessWidget {
-  const _ReleaseChangeTile({
-    required this.change,
-  });
+  const _ReleaseChangeTile({required this.change});
 
   final ReleaseChangeEntry change;
 

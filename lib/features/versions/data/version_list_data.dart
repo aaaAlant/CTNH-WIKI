@@ -80,41 +80,36 @@ class VersionRelease {
   const VersionRelease({
     required this.version,
     required this.publishedAt,
-    required this.relativeTimeLabel,
     required this.summary,
     required this.highlights,
     required this.changes,
     this.isLatest = false,
-    this.author = 'CTNH Wiki Team',
   });
 
   final String version;
-  final String publishedAt;
-  final String relativeTimeLabel;
+  final DateTime publishedAt;
   final String summary;
   final List<String> highlights;
   final List<ReleaseChangeEntry> changes;
   final bool isLatest;
-  final String author;
 }
 
 const versionListTitle = '版本列表';
 const versionListDescription =
     '参考 GitHub Releases 的结构整理版本信息。左侧时间轴用于快速跳转，右侧版本块展示发布时间、摘要和详细更新记录。';
 
-const versionReleases = [
+final versionReleases = [
   VersionRelease(
     version: 'v1.4.1b',
-    publishedAt: '2026-03-12',
-    relativeTimeLabel: '4 小时前',
+    publishedAt: DateTime(2026, 3, 12),
     summary: 'CTNH v1.4.1b 整合包核心模组维护版本，重点修复配方、电路、EMI 显示和跨模组兼容问题。',
     isLatest: true,
-    highlights: [
+    highlights: const [
       '修复多条 GregTech 与附属模组配方错误。',
       '回收部分异常副产物与冗余配方，降低误导成本。',
       '补齐 EMI 页面与空间站相关显示缺失。',
     ],
-    changes: [
+    changes: const [
       ReleaseChangeEntry(
         type: ReleaseChangeType.bugFix,
         scope: 'GregTech',
@@ -159,64 +154,6 @@ const versionReleases = [
         type: ReleaseChangeType.modRemoved,
         scope: '配方',
         title: '移除原版四氟化钛配方并修复相关替代配方。',
-      ),
-    ],
-  ),
-  VersionRelease(
-    version: 'v1.4.0',
-    publishedAt: '2026-02-28',
-    relativeTimeLabel: '12 天前',
-    summary: '一次偏功能性的大版本，补齐了若干中期推进节点，并引入新的模组联动内容。',
-    highlights: [
-      '增加任务线与图鉴的基础映射。',
-      '整理中期科技推进的几条常见断点。',
-    ],
-    changes: [
-      ReleaseChangeEntry(
-        type: ReleaseChangeType.modAdded,
-        scope: '探索内容',
-        title: '新增一组辅助探索的结构与掉落联动。',
-      ),
-      ReleaseChangeEntry(
-        type: ReleaseChangeType.modUpdate,
-        scope: 'GregTech',
-        title: '同步核心脚本，更新若干机器前置与合成链。',
-      ),
-      ReleaseChangeEntry(
-        type: ReleaseChangeType.balance,
-        scope: '任务线',
-        title: '调整中期章节奖励，降低卡任务时的资源惩罚。',
-      ),
-      ReleaseChangeEntry(
-        type: ReleaseChangeType.bugFix,
-        scope: '多方块',
-        title: '修复部分多方块结构在旋转后无法识别的问题。',
-      ),
-    ],
-  ),
-  VersionRelease(
-    version: 'v1.3.8',
-    publishedAt: '2026-02-05',
-    relativeTimeLabel: '1 个月前',
-    summary: '稳定性维护版本，重点清理旧脚本残留和冲突内容。',
-    highlights: [
-      '以兼容性和清理为主，不引入新系统。',
-    ],
-    changes: [
-      ReleaseChangeEntry(
-        type: ReleaseChangeType.modRemoved,
-        scope: '旧脚本',
-        title: '移除一批已失效的旧版脚本注入内容。',
-      ),
-      ReleaseChangeEntry(
-        type: ReleaseChangeType.modUpdate,
-        scope: '兼容层',
-        title: '更新兼容层配置，减少配方覆盖冲突。',
-      ),
-      ReleaseChangeEntry(
-        type: ReleaseChangeType.bugFix,
-        scope: '客户端',
-        title: '修复若干启动阶段的资源加载异常。',
       ),
     ],
   ),

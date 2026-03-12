@@ -14,7 +14,7 @@ class HomeModule {
     required this.subTitle,
     required this.description,
     required this.icon,
-    required this.tint
+    required this.tint,
   });
 
   final String label;
@@ -26,10 +26,7 @@ class HomeModule {
 }
 
 class HomeHeroData {
-  const HomeHeroData({
-    required this.title,
-    required this.description
-  });
+  const HomeHeroData({required this.title, required this.description});
 
   final String title;
   final String description;
@@ -40,4 +37,20 @@ class HomeStat {
 
   final String value;
   final String label;
+}
+
+class HomeTeamMember {
+  const HomeTeamMember({
+    required this.name,
+    required this.role,
+    required this.contactUrl,
+    required this.avatarLabel,
+    required this.avatarColor,
+  });
+
+  final String name;
+  final String role;
+  final String contactUrl;
+  final String avatarLabel;
+  final Color avatarColor;
 }

@@ -1,4 +1,5 @@
 import 'package:ctnh_wiki/data/wiki_tabs_data.dart';
+import 'package:ctnh_wiki/features/guides/view/guides_tutorial_tab.dart';
 import 'package:ctnh_wiki/features/handbook/view/handbook_tab.dart';
 import 'package:ctnh_wiki/features/home/view/home_tab.dart';
 import 'package:ctnh_wiki/features/shared/widgets/background_texture.dart';
@@ -20,6 +21,7 @@ class _WikiAppShellState extends State<WikiAppShell> {
     HomeTab(),
     TasksOverviewTab(),
     HandbookTab(),
+    GuidesTutorialTab(),
     VersionListTab(),
   ];
 
@@ -87,6 +89,7 @@ class _TopBar extends StatelessWidget {
       items.length,
       (index) => _NavChip(
         label: items[index].label,
+        icon: items[index].icon,
         selected: index == selectedIndex,
         onTap: () => onSelected(index),
       ),
@@ -138,9 +141,7 @@ class _BrandLockup extends StatelessWidget {
         Container(
           width: 42,
           height: 42,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
           child: Image.asset('assets/icons/app/logo-480x300.jpg', width: 42),
         ),
         const SizedBox(width: 12),
@@ -169,11 +170,13 @@ class _BrandLockup extends StatelessWidget {
 class _NavChip extends StatelessWidget {
   const _NavChip({
     required this.label,
+    required this.icon,
     required this.selected,
     required this.onTap,
   });
 
   final String label;
+  final IconData icon;
   final bool selected;
   final VoidCallback onTap;
 
@@ -195,13 +198,24 @@ class _NavChip extends StatelessWidget {
                   : const Color(0xFFE2D6C2),
             ),
           ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: selected ? Colors.white : const Color(0xFF2F2924),
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: selected ? Colors.white : const Color(0xFF2F2924),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: selected ? Colors.white : const Color(0xFF2F2924),
+                ),
+              ),
+            ],
           ),
         ),
       ),

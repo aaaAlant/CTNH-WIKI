@@ -1,5 +1,3 @@
-import 'dart:ui' as html;
-
 import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
 import 'package:ctnh_wiki/features/home/data/home_page_data.dart';
 import 'package:ctnh_wiki/features/home/models/home_module.dart';
@@ -45,6 +43,8 @@ class _HomeTabState extends State<HomeTab> {
             });
           },
         ),
+        const SizedBox(height: 24),
+        AboutUsSection(isCompact: isCompact),
       ],
     );
   }
@@ -54,6 +54,10 @@ class HeroSection extends StatelessWidget {
   const HeroSection({super.key, required this.isCompact});
 
   final bool isCompact;
+
+  Future<void> _openUrl(String url) async {
+    await launchUrl(Uri.parse(url), webOnlyWindowName: '_blank');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,32 +75,44 @@ class HeroSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-         ConstrainedBox(
-          constraints: BoxConstraints(),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
           child: Text(
             homeHero.description,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
-              height: 1.6,
+              height: 1.7,
               color: Color(0xFF4C433D),
             ),
           ),
         ),
         const SizedBox(height: 24),
-         Wrap(
+        Wrap(
           spacing: 12,
           runSpacing: 12,
           children: [
-            AccentButton(label: '交流渠道', filled: true),
-            AccentButton(label: 'Bug反馈'),
-            AccentButton(label: '加入我们'),
-            IconButton(onPressed: () async {
-              final uri = Uri.parse('https://www.mcmod.cn/modpack/897.html');
-              await launchUrl(uri, webOnlyWindowName: '_blank');
-  }, icon: Image.asset('assets/icons/home/mc-wiki-logo.png', width: 30)),
-            IconButton(onPressed: (){}, icon: SvgPicture.asset('assets/icons/home/tencent-qq-logo.svg', 
-            colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-             width: 30))
+            const AccentButton(label: '交流渠道', filled: true),
+            const AccentButton(label: 'Bug反馈'),
+            const AccentButton(label: '加入我们'),
+            IconButton(
+              onPressed: () =>
+                  _openUrl('https://www.mcmod.cn/modpack/897.html'),
+              icon: Image.asset(
+                'assets/icons/home/mc-wiki-logo.png',
+                width: 30,
+              ),
+            ),
+            IconButton(
+              onPressed: () => _openUrl('https://qm.qq.com/'),
+              icon: SvgPicture.asset(
+                'assets/icons/home/tencent-qq-logo.svg',
+                width: 30,
+                colorFilter: const ColorFilter.mode(
+                  Colors.black,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
           ],
         ),
       ],
@@ -248,8 +264,25 @@ class ModuleSwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     final module = homeModules[selectedIndex];
 
-    return ContentPanel(
+    return Container(
+      width: double.infinity,
       padding: EdgeInsets.all(isCompact ? 20 : 24),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFF6EBD7), Color(0xFFF2E6D8), Color(0xFFEAE6D9)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: const Color(0xFFDCCCB4), width: 1.2),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x12000000),
+            blurRadius: 18,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -406,39 +439,136 @@ class ModulePreviewCard extends StatelessWidget {
   }
 }
 
-class ModuleSectionCard extends StatelessWidget {
-  const ModuleSectionCard({super.key, required this.section});
+class AboutUsSection extends StatelessWidget {
+  const AboutUsSection({super.key, required this.isCompact});
 
-  final HomeModuleSection section;
+  final bool isCompact;
+
+  Future<void> _openContact(String url) async {
+    await launchUrl(Uri.parse(url), webOnlyWindowName: '_blank');
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 180,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFE7DCCB)),
-      ),
+    return ContentPanel(
+      padding: EdgeInsets.all(isCompact ? 20 : 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            section.title,
-            style: const TextStyle(
-              fontSize: 21,
+          const SectionTitle(eyebrow: aboutUsEyebrow, title: aboutUsTitle),
+          const SizedBox(height: 12),
+          const Text(
+            aboutUsDescription,
+            style: TextStyle(
+              fontSize: 16,
+              height: 1.7,
+              color: Color(0xFF5F554D),
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            '主要成员',
+            style: TextStyle(
+              fontSize: 20,
               fontWeight: FontWeight.w800,
               color: Color(0xFF201A16),
             ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            section.description,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.7,
-              color: Color(0xFF5F554D),
+          const SizedBox(height: 14),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Wrap(
+                spacing: 14,
+                runSpacing: 14,
+                children: homeCoreMembers
+                    .map(
+                      (member) => ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: isCompact ? constraints.maxWidth : 280,
+                          maxWidth: isCompact ? constraints.maxWidth : 360,
+                        ),
+                        child: TeamMemberCard(
+                          member: member,
+                          onOpenContact: () => _openContact(member.contactUrl),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TeamMemberCard extends StatelessWidget {
+  const TeamMemberCard({
+    super.key,
+    required this.member,
+    required this.onOpenContact,
+  });
+
+  final HomeTeamMember member;
+  final VoidCallback onOpenContact;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFCF6),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE2D7C6)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: onOpenContact,
+            style: IconButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: const Size(44, 44),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            icon: CircleAvatar(
+              radius: 22,
+              backgroundColor: member.avatarColor,
+              child: Text(
+                member.avatarLabel,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF201A16),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  member.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF201A16),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  member.role,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    height: 1.4,
+                    color: Color(0xFF5F554D),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
