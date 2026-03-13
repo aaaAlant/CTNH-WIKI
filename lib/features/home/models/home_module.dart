@@ -46,11 +46,14 @@ class HomeTeamMember {
     required this.tooltip,
     required this.contactUrl,
     required this.avatarPath,
+    this.afdUrl,
   });
 
   final String name;
   final String role;
   final String tooltip;
   final String contactUrl;
+  final String? afdUrl;
   final String avatarPath;
 }
+

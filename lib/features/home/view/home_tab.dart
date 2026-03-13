@@ -76,13 +76,13 @@ class HeroSection extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Text(
-            homeHero.description,
-            style: const TextStyle(
-              fontSize: 16,
-              height: 1.7,
-              color: Color(0xFF4C433D),
-            ),
+          homeHero.description,
+          style: const TextStyle(
+            fontSize: 16,
+            height: 1.7,
+            color: Color(0xFF4C433D),
           ),
+        ),
         const SizedBox(height: 24),
         Wrap(
           spacing: 12,
@@ -109,7 +109,8 @@ class HeroSection extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () => _openUrl('https://github.com/CTNH-Team/Create-New-Horizon'),
+              onPressed: () =>
+                  _openUrl('https://github.com/CTNH-Team/Create-New-Horizon'),
               tooltip: 'GitHub',
               icon: SvgPicture.asset(
                 'assets/icons/home/github-logo.svg',
@@ -121,7 +122,9 @@ class HeroSection extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () => _openUrl('https://www.curseforge.com/minecraft/modpacks/ctnh'),
+              onPressed: () => _openUrl(
+                'https://www.curseforge.com/minecraft/modpacks/ctnh',
+              ),
               tooltip: 'CurseForge',
               icon: SvgPicture.asset(
                 'assets/icons/home/curseforge-logo.svg',
@@ -133,13 +136,22 @@ class HeroSection extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () => _openUrl('https://discord.com/invite/jQpvUDsVX8'),
+              onPressed: () =>
+                  _openUrl('https://discord.com/invite/jQpvUDsVX8'),
               tooltip: 'Discord',
               icon: SvgPicture.asset(
                 'assets/icons/home/discord-logo.svg',
                 width: 30,
               ),
             ),
+            // IconButton(
+            //   onPressed: () => _openUrl('https://oopz.cn/i/eTjBvw'),
+            //   tooltip: 'oopz',
+            //   icon: SvgPicture.asset(
+            //     'assets/icons/home/oopz-logo.png',
+            //     width: 30,
+            //   ),
+            // ),
           ],
         ),
       ],
@@ -493,13 +505,22 @@ class AboutUsSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
-            '主要成员',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF201A16),
-            ),
+          Row(
+            children: [
+              const Text(
+                '主要成员',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF201A16),
+                ),
+              ),
+              SizedBox(width: 8),
+              Tooltip(
+                message: '按参与整合包制作的时间排序：(也许是不分先后排序或顺序颠倒）',
+                child: Icon(Icons.info),
+              ),
+            ],
           ),
           const SizedBox(height: 14),
           LayoutBuilder(
@@ -512,7 +533,9 @@ class AboutUsSection extends StatelessWidget {
                       (member) => TeamMemberCard(
                         member: member,
                         onOpenContact: () => {
-                          member.contactUrl.isNotEmpty ?_openContact(member.contactUrl):null
+                          member.contactUrl.isNotEmpty
+                              ? _openContact(member.contactUrl)
+                              : null,
                         },
                       ),
                     )
@@ -566,6 +589,10 @@ class TeamMemberCard extends StatelessWidget {
   final HomeTeamMember member;
   final VoidCallback onOpenContact;
 
+  Future<void> _openContact(String url) async {
+    await launchUrl(Uri.parse(url), webOnlyWindowName: '_blank');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -585,12 +612,14 @@ class TeamMemberCard extends StatelessWidget {
             child: Tooltip(
               message: member.tooltip,
               child: ClipOval(
-                child: member.avatarPath.isNotEmpty?Image.asset(
-                  member.avatarPath,
-                  width: 36,
-                  height: 36,
-                  fit: BoxFit.cover,
-                ):Icon(Icons.person),
+                child: member.avatarPath.isNotEmpty
+                    ? Image.asset(
+                        member.avatarPath,
+                        width: 36,
+                        height: 36,
+                        fit: BoxFit.cover,
+                      )
+                    : Icon(Icons.person),
               ),
             ),
           ),
@@ -599,23 +628,40 @@ class TeamMemberCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                member.name,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF201A16),
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: 40),
+                child: Row(
+                  children: [
+                    Text(
+                      member.name,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF201A16),
+                      ),
+                    ),
+                    Container(
+                      child: member.afdUrl != null && member.afdUrl!.isNotEmpty
+                          ? TextButton(
+                              onPressed: () => _openContact(member.afdUrl!),
+                              child: Text(
+                                '支持一下',
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                            )
+                          : SizedBox(),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 2),
               Text(
-                member.role,
-                style: const TextStyle(
-                  fontSize: 12,
-                  height: 1.3,
-                  color: Color(0xFF5F554D),
+                  member.role,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    height: 1.3,
+                    color: Color(0xFF5F554D),
+                  ),
                 ),
-              ),
             ],
           ),
         ],
