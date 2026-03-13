@@ -1,3 +1,4 @@
+import 'package:ctnh_wiki/app/web_cursor.dart';
 import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
 import 'package:ctnh_wiki/features/home/data/home_page_data.dart';
 import 'package:ctnh_wiki/features/home/models/home_module.dart';
@@ -16,6 +17,12 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   int _selectedModuleIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WebCursorController.setTheme(homeModules.first.cursorTheme);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +48,7 @@ class _HomeTabState extends State<HomeTab> {
             setState(() {
               _selectedModuleIndex = index;
             });
+            WebCursorController.setTheme(homeModules[index].cursorTheme);
           },
         ),
         const SizedBox(height: 24),

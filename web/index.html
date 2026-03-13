@@ -31,6 +31,21 @@
 
   <title>ctnh_wiki</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    html,
+    body,
+    flutter-view {
+      cursor: var(--app-cursor, auto);
+    }
+
+    a,
+    button,
+    [role="button"],
+    input[type="button"],
+    input[type="submit"] {
+      cursor: var(--app-pointer-cursor, pointer);
+    }
+  </style>
 </head>
 <body>
   <!--
@@ -41,6 +56,84 @@
     For more details:
     * https://docs.flutter.dev/platform-integration/web/initialization
   -->
+  <script>
+    window.appCursorConfig = {
+      hotspotX: 8,
+      hotspotY: 8,
+      themes: ['tech', 'magic', 'adventure'],
+    };
+
+    const appCursorCache = new Map();
+    const appCursorLastSelection = new Map();
+
+    function buildCursorValue(path, fallback) {
+      const { hotspotX, hotspotY } = window.appCursorConfig;
+      return `url("${path}") ${hotspotX} ${hotspotY}, ${fallback}`;
+    }
+
+    function applyCursorPath(path) {
+      const root = document.documentElement;
+      root.style.setProperty('--app-cursor', buildCursorValue(path, 'auto'));
+      root.style.setProperty('--app-pointer-cursor', buildCursorValue(path, 'pointer'));
+    }
+
+    async function loadCursorManifest(themeName) {
+      const response = await fetch(`cursors/${themeName}/manifest.json`, {
+        cache: 'no-cache',
+      });
+
+      if (!response.ok) {
+        return [];
+      }
+
+      const payload = await response.json();
+      if (!Array.isArray(payload)) {
+        return [];
+      }
+
+      return payload
+        .filter((item) => typeof item === 'string' && item.trim().length > 0)
+        .map((item) => `cursors/${themeName}/${item}`);
+    }
+
+    function loadCursorCandidates(themeName) {
+      if (appCursorCache.has(themeName)) {
+        return appCursorCache.get(themeName);
+      }
+
+      const loader = loadCursorManifest(themeName);
+
+      appCursorCache.set(themeName, loader);
+      return loader;
+    }
+
+    window.setAppCursorTheme = async function (themeName) {
+      const { themes } = window.appCursorConfig;
+      const safeTheme = themes.includes(themeName) ? themeName : 'tech';
+      const candidates = await loadCursorCandidates(safeTheme);
+
+      if (candidates.length === 0) {
+        return;
+      }
+
+      const previousSelection = appCursorLastSelection.get(safeTheme);
+      let availablePool = candidates;
+
+      if (candidates.length > 1 && previousSelection) {
+        const filtered = candidates.filter((item) => item !== previousSelection);
+        if (filtered.length > 0) {
+          availablePool = filtered;
+        }
+      }
+
+      const randomIndex = Math.floor(Math.random() * availablePool.length);
+      const nextSelection = availablePool[randomIndex];
+      appCursorLastSelection.set(safeTheme, nextSelection);
+      applyCursorPath(nextSelection);
+    };
+
+    window.setAppCursorTheme('tech');
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

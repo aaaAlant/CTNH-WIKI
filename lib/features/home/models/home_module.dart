@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+enum HomeCursorTheme {
+  tech,
+  magic,
+  adventure,
+}
+
 class HomeModuleSection {
   const HomeModuleSection({required this.title, required this.description});
 
@@ -13,6 +19,7 @@ class HomeModule {
     required this.title,
     required this.subTitle,
     required this.description,
+    required this.cursorTheme,
     required this.icon,
     required this.tint,
   });
@@ -21,6 +28,7 @@ class HomeModule {
   final String title;
   final String subTitle;
   final String description;
+  final HomeCursorTheme cursorTheme;
   final IconData icon;
   final Color tint;
 }
