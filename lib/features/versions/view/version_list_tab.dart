@@ -37,40 +37,27 @@ class _VersionListTabState extends State<VersionListTab> {
     final width = MediaQuery.sizeOf(context).width;
     final isCompact = width < 1000;
 
-    return ContentPanel(
-      minHeight: 560,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionTitle(eyebrow: 'Releases', title: versionListTitle),
-          const SizedBox(height: 28),
-          isCompact
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _CompactReleaseJumpBar(onSelected: _jumpToRelease),
-                    const SizedBox(height: 20),
-                    ...List.generate(
-                      versionReleases.length,
-                      (index) => Padding(
-                        key: _releaseKeys[index],
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: ReleaseCard(release: versionReleases[index]),
-                      ),
-                    ),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 240,
-                      child: ReleaseTimelineNav(onSelected: _jumpToRelease),
-                    ),
-                    const SizedBox(width: 24),
-                    Expanded(
-                      child: Column(
-                        children: List.generate(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitle(eyebrow: 'Tracking', title: '开发追踪'),
+        const SizedBox(height: 20),
+        WorkPlanPreview(isCompact: isCompact),
+        const SizedBox(height: 24),
+        ContentPanel(
+          minHeight: 560,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SectionTitle(eyebrow: 'Releases', title: '版本列表'),
+              const SizedBox(height: 28),
+              isCompact
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _CompactReleaseJumpBar(onSelected: _jumpToRelease),
+                        const SizedBox(height: 20),
+                        ...List.generate(
                           versionReleases.length,
                           (index) => Padding(
                             key: _releaseKeys[index],
@@ -78,10 +65,338 @@ class _VersionListTabState extends State<VersionListTab> {
                             child: ReleaseCard(release: versionReleases[index]),
                           ),
                         ),
+                      ],
+                    )
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 240,
+                          child: ReleaseTimelineNav(onSelected: _jumpToRelease),
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: Column(
+                            children: List.generate(
+                              versionReleases.length,
+                              (index) => Padding(
+                                key: _releaseKeys[index],
+                                padding: const EdgeInsets.only(bottom: 20),
+                                child: ReleaseCard(
+                                  release: versionReleases[index],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class WorkPlanPreview extends StatelessWidget {
+  const WorkPlanPreview({super.key, required this.isCompact});
+
+  final bool isCompact;
+
+  @override
+  Widget build(BuildContext context) {
+    return ContentPanel(
+      child: Padding(
+        padding: EdgeInsets.all(isCompact ? 18 : 22),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '工作计划',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF201A16),
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              '以甘特图预览当前已受理、正在编写中的工作项目进度。',
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.6,
+                color: Color(0xFF5F554D),
+              ),
+            ),
+            const SizedBox(height: 18),
+            isCompact
+                ? const _CompactWorkPlanList()
+                : const _DesktopWorkPlanGantt(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopWorkPlanGantt extends StatelessWidget {
+  const _DesktopWorkPlanGantt();
+
+  static const double _leftColumnWidth = 280;
+  static const double _rowHeight = 56;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final timelineWidth = constraints.maxWidth - _leftColumnWidth;
+        final dayWidth = timelineWidth / workPlanDays.length;
+
+        return Column(
+          children: [
+            Row(
+              children: [
+                const SizedBox(
+                  width: _leftColumnWidth,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 12),
+                    child: Text(
+                      '已受理项目',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF8D8175),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    children: workPlanDays
+                        .map(
+                          (day) => SizedBox(
+                            width: dayWidth,
+                            child: Text(
+                              day,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF8D8175),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            ...workPlanItems.map(
+              (item) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: SizedBox(
+                  height: _rowHeight,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: _leftColumnWidth,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                item.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF201A16),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${item.owner} · ${item.status}',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFF7A6F64),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Row(
+                              children: List.generate(
+                                workPlanDays.length,
+                                (index) => Container(
+                                  width: dayWidth,
+                                  height: _rowHeight,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      left: BorderSide(
+                                        color: index == 0
+                                            ? const Color(0xFFE8DECF)
+                                            : const Color(0xFFF1EADF),
+                                      ),
+                                      right: BorderSide(
+                                        color: index == workPlanDays.length - 1
+                                            ? const Color(0xFFE8DECF)
+                                            : Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: item.startDay * dayWidth + 6,
+                              top: 8,
+                              child: _GanttBar(
+                                item: item,
+                                width: (item.duration * dayWidth) - 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _CompactWorkPlanList extends StatelessWidget {
+  const _CompactWorkPlanList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: workPlanItems
+          .map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFE6DDCF)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF201A16),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      '${item.owner} · ${item.status}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF7A6F64),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _GanttBar(item: item, width: double.infinity),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${workPlanDays[item.startDay]} - ${workPlanDays[item.startDay + item.duration - 1]}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF8D8175),
                       ),
                     ),
                   ],
                 ),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
+class _GanttBar extends StatelessWidget {
+  const _GanttBar({required this.item, required this.width});
+
+  final WorkPlanItem item;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: 40,
+      decoration: BoxDecoration(
+        color: item.color.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: item.color.withValues(alpha: 0.35)),
+      ),
+      child: Stack(
+        children: [
+          FractionallySizedBox(
+            widthFactor: item.progress.clamp(0.0, 1.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: item.color,
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.status,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        color: item.progress > 0.45
+                            ? Colors.white
+                            : const Color(0xFF201A16),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '${(item.progress * 100).round()}%',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      color: item.progress > 0.72
+                          ? Colors.white
+                          : const Color(0xFF201A16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

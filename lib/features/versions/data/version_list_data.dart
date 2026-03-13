@@ -96,6 +96,78 @@ class VersionRelease {
 
 const versionListTitle = '版本列表';
 
+const workPlanTitle = '工作计划';
+const workPlanDescription = '以甘特图预览当前已受理、正在编写中的工作项目进度。';
+
+class WorkPlanItem {
+  const WorkPlanItem({
+    required this.title,
+    required this.owner,
+    required this.startDay,
+    required this.duration,
+    required this.progress,
+    required this.color,
+    required this.status,
+  });
+
+  final String title;
+  final String owner;
+  final int startDay;
+  final int duration;
+  final double progress;
+  final Color color;
+  final String status;
+}
+
+const workPlanDays = [
+  '03/13',
+  '03/14',
+  '03/15',
+  '03/16',
+  '03/17',
+  '03/18',
+  '03/19',
+];
+
+const workPlanItems = [
+  WorkPlanItem(
+    title: '版本列表页：工作计划预览',
+    owner: 'Wiki 前端',
+    startDay: 0,
+    duration: 3,
+    progress: 0.72,
+    color: Color(0xFF3B7DD8),
+    status: '进行中',
+  ),
+  WorkPlanItem(
+    title: '任务概览页：章节骨架整理',
+    owner: '任务线',
+    startDay: 1,
+    duration: 4,
+    progress: 0.45,
+    color: Color(0xFF8D62D9),
+    status: '编写中',
+  ),
+  WorkPlanItem(
+    title: '图鉴页：材料词条首批录入',
+    owner: '图鉴组',
+    startDay: 2,
+    duration: 3,
+    progress: 0.30,
+    color: Color(0xFF2F9B63),
+    status: '排期中',
+  ),
+  WorkPlanItem(
+    title: '首页：成员区样式细化',
+    owner: '主页',
+    startDay: 4,
+    duration: 2,
+    progress: 0.55,
+    color: Color(0xFFC88A3D),
+    status: '进行中',
+  ),
+];
+
 final versionReleases = [
   VersionRelease(
     version: 'v1.4.1b',
