@@ -7,7 +7,7 @@ const homeHero = HomeHeroData(
 );
 
 const homeExploreEyebrow = 'Explore';
-const homeExploreTitle = '科技、魔法与冒险三条主线';
+const homeExploreTitle = '科技、魔法与冒险';
 
 const homeStats = [
   HomeStat(value: '100,000+', label: '魔改配方'),
