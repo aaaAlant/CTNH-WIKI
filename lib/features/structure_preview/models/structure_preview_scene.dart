@@ -1,5 +1,7 @@
 enum StructurePrimitiveType { cuboid, cylinder }
 
+enum StructureCubeFace { right, left, top, bottom, front, back }
+
 class StructureVector3 {
   const StructureVector3(this.x, this.y, this.z);
 
@@ -24,12 +26,63 @@ class StructureMaterialStyle {
     this.metalness = 0.1,
     this.roughness = 0.85,
     this.opacity = 1,
+    this.mapAsset,
+    this.faceTextures,
+    this.pixelated = false,
+    this.alphaTest = 0,
+    this.doubleSided = false,
   });
 
   final int color;
   final double metalness;
   final double roughness;
   final double opacity;
+  final String? mapAsset;
+  final StructureFaceTextureSet? faceTextures;
+  final bool pixelated;
+  final double alphaTest;
+  final bool doubleSided;
+}
+
+class StructureFaceTextureSet {
+  const StructureFaceTextureSet({
+    this.all,
+    this.right,
+    this.left,
+    this.top,
+    this.bottom,
+    this.front,
+    this.back,
+  });
+
+  final String? all;
+  final String? right;
+  final String? left;
+  final String? top;
+  final String? bottom;
+  final String? front;
+  final String? back;
+
+  bool get hasAnyTexture {
+    return all != null ||
+        right != null ||
+        left != null ||
+        top != null ||
+        bottom != null ||
+        front != null ||
+        back != null;
+  }
+
+  String? textureFor(StructureCubeFace face) {
+    return switch (face) {
+      StructureCubeFace.right => right ?? all,
+      StructureCubeFace.left => left ?? all,
+      StructureCubeFace.top => top ?? all,
+      StructureCubeFace.bottom => bottom ?? all,
+      StructureCubeFace.front => front ?? all,
+      StructureCubeFace.back => back ?? all,
+    };
+  }
 }
 
 class StructureCameraConfig {

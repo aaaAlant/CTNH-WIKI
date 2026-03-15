@@ -229,13 +229,7 @@ List<StructurePreviewPart> _buildTechStructurePreviewParts() {
       category: StructurePartCategory.machine,
       position: StructureVector3(0.8, 0.58, -0.95),
       tags: ['machine', 'core'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'body',
-          size: StructureVector3(0.95, 0.95, 0.95),
-          material: StructureMaterialStyle(color: 0xFF7D5638, roughness: 0.88),
-        ),
-      ],
+      visuals: [],
     ),
     StructurePreviewPart(
       id: 'machine-b',
@@ -245,13 +239,7 @@ List<StructurePreviewPart> _buildTechStructurePreviewParts() {
       category: StructurePartCategory.machine,
       position: StructureVector3(1.85, 0.58, -0.95),
       tags: ['machine'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'body',
-          size: StructureVector3(0.95, 0.95, 0.95),
-          material: StructureMaterialStyle(color: 0xFF7D5638, roughness: 0.88),
-        ),
-      ],
+      visuals: [],
     ),
     StructurePreviewPart(
       id: 'machine-c',
@@ -261,13 +249,7 @@ List<StructurePreviewPart> _buildTechStructurePreviewParts() {
       category: StructurePartCategory.machine,
       position: StructureVector3(1.35, 0.58, 0.95),
       tags: ['machine', 'core'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'body',
-          size: StructureVector3(0.95, 0.95, 0.95),
-          material: StructureMaterialStyle(color: 0xFF7D5638, roughness: 0.88),
-        ),
-      ],
+      visuals: [],
     ),
     StructurePreviewPart(
       id: 'machine-d',
@@ -277,13 +259,7 @@ List<StructurePreviewPart> _buildTechStructurePreviewParts() {
       category: StructurePartCategory.machine,
       position: StructureVector3(0.35, 0.58, 0.95),
       tags: ['machine'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'body',
-          size: StructureVector3(0.95, 0.95, 0.95),
-          material: StructureMaterialStyle(color: 0xFF7D5638, roughness: 0.88),
-        ),
-      ],
+      visuals: [],
     ),
     StructurePreviewPart(
       id: 'display-top',
@@ -293,27 +269,7 @@ List<StructurePreviewPart> _buildTechStructurePreviewParts() {
       category: StructurePartCategory.display,
       position: StructureVector3(0.35, 0.58, -1.45),
       tags: ['display', 'monitor'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'frame',
-          size: StructureVector3(0.32, 0.48, 0.18),
-          material: StructureMaterialStyle(
-            color: 0xFF2D241F,
-            metalness: 0.18,
-            roughness: 0.62,
-          ),
-        ),
-        StructurePartVisual.cuboid(
-          id: 'screen',
-          size: StructureVector3(0.18, 0.3, 0.04),
-          localOffset: StructureVector3(0, 0, 0.11),
-          material: StructureMaterialStyle(
-            color: 0xFF4ED1C8,
-            metalness: 0.22,
-            roughness: 0.16,
-          ),
-        ),
-      ],
+      visuals: [],
     ),
     StructurePreviewPart(
       id: 'display-bottom',
@@ -324,27 +280,7 @@ List<StructurePreviewPart> _buildTechStructurePreviewParts() {
       position: StructureVector3(2.1, 0.58, -0.3),
       rotation: StructureRotation(0, -90, 0),
       tags: ['display', 'monitor'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'frame',
-          size: StructureVector3(0.32, 0.48, 0.18),
-          material: StructureMaterialStyle(
-            color: 0xFF2D241F,
-            metalness: 0.18,
-            roughness: 0.62,
-          ),
-        ),
-        StructurePartVisual.cuboid(
-          id: 'screen',
-          size: StructureVector3(0.18, 0.3, 0.04),
-          localOffset: StructureVector3(0, 0, 0.11),
-          material: StructureMaterialStyle(
-            color: 0xFF61B1FF,
-            metalness: 0.22,
-            roughness: 0.16,
-          ),
-        ),
-      ],
+      visuals: [],
     ),
     StructurePreviewPart(
       id: 'support-top',

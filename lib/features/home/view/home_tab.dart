@@ -489,7 +489,7 @@ class AboutUsSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Row(
+          Row( 
             children: [
               const Text(
                 '主要成员',

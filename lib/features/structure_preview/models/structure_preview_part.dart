@@ -60,7 +60,7 @@ class StructurePreviewPart {
     required this.description,
     required this.category,
     required this.position,
-    required this.visuals,
+    this.visuals = const [],
     this.rotation = const StructureRotation.zero(),
     this.facing = StructureFacing.north,
     this.state = StructurePartState.required,

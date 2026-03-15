@@ -43,4 +43,18 @@ class StructurePreviewDefinition {
   final List<StructurePreviewPart> parts;
   final List<StructurePreviewStep> steps;
   final StructurePreviewStage stage;
+
+  StructurePreviewPart? partById(String? id) {
+    if (id == null) {
+      return null;
+    }
+
+    for (final part in parts) {
+      if (part.id == id) {
+        return part;
+      }
+    }
+
+    return null;
+  }
 }
