@@ -1,9 +1,7 @@
-import 'dart:js_interop';
-
+import 'package:ctnh_wiki/app/web_cursor_bridge_stub.dart'
+    if (dart.library.js_interop) 'package:ctnh_wiki/app/web_cursor_bridge_web.dart'
+    as web_cursor_bridge;
 import 'package:ctnh_wiki/features/home/models/home_module.dart';
-
-@JS('setAppCursorTheme')
-external void _setAppCursorTheme(String themeName);
 
 class WebCursorController {
   const WebCursorController._();
@@ -11,7 +9,7 @@ class WebCursorController {
   static const HomeCursorTheme defaultTheme = HomeCursorTheme.tech;
 
   static void setTheme(HomeCursorTheme theme) {
-    _setAppCursorTheme(_themeName(theme));
+    web_cursor_bridge.setAppCursorTheme(_themeName(theme));
   }
 
   static String _themeName(HomeCursorTheme theme) {

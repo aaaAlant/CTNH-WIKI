@@ -1,0 +1,1 @@
+void setAppCursorTheme(String _) {}
