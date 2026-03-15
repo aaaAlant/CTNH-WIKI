@@ -2,6 +2,9 @@ import 'package:ctnh_wiki/app/web_cursor.dart';
 import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
 import 'package:ctnh_wiki/features/home/data/home_page_data.dart';
 import 'package:ctnh_wiki/features/home/models/home_module.dart';
+import 'package:ctnh_wiki/features/home/view/modules/adventure_module_page.dart';
+import 'package:ctnh_wiki/features/home/view/modules/magic_module_page.dart';
+import 'package:ctnh_wiki/features/home/view/modules/tech_module_page.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
@@ -309,7 +312,11 @@ class ModuleSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final module = homeModules[selectedIndex];
+    final modulePage = switch (selectedIndex) {
+      0 => const TechModulePage(),
+      1 => const MagicModulePage(),
+      _ => const AdventureModulePage(),
+    };
 
     return Container(
       width: double.infinity,
@@ -375,38 +382,7 @@ class ModuleSwitcher extends StatelessWidget {
               borderRadius: BorderRadius.circular(26),
               border: Border.all(color: const Color(0xFFE8DDCC)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: module.tint,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Icon(module.icon, color: const Color(0xFF201A16)),
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  module.title,
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF201A16),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  module.description,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    height: 1.7,
-                    color: Color(0xFF5F554D),
-                  ),
-                ),
-              ],
-            ),
+            child: modulePage,
           ),
         ],
       ),
