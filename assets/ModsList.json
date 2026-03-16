@@ -1,0 +1,3940 @@
+{
+  "taxonomy_version": "1.0",
+  "source": "用户提供的默认 Mod 列表",
+  "taxonomy": {
+    "primary_categories": {
+      "科技": "以机器、能源、工业流程、太空与自动化生产为核心的模组。",
+      "魔法": "以法术、仪式、法力、血魔法、植物魔法等超自然系统为核心。",
+      "冒险": "新增维度、群系、结构、Boss、探索内容与世界生成体验。",
+      "农业与烹饪": "农业种植、食材、料理、餐饮链条与食物玩法。",
+      "建筑与装饰": "建造工具、装饰方块、风格化建筑与空间便利设施。",
+      "仓储与物流": "仓储、背包、抽屉、数字存储、物流网络与请求系统。",
+      "生存与战斗": "RPG成长、属性、装备、死亡管理、环境生存与战斗平衡。",
+      "信息与界面": "HUD、配方查询、菜单、提示、说明书与交互便捷化。",
+      "地图与传送": "小地图、大地图、定位工具、快速旅行、飞行与移动。",
+      "任务与联机管理": "任务书、队伍、领地、经济、备份与服务器管理。",
+      "性能优化": "FPS、内存、渲染、Tick、网络与兼容修复优化。",
+      "脚本与配置": "KubeJS/JS/JSON/数据驱动、Ponder脚本与整合包配置工具。",
+      "前置与兼容": "API、核心库、前置、兼容层、配方统一与生态桥接。"
+    },
+    "secondary_examples": {
+      "科技": [
+        "机械动力",
+        "自动化",
+        "能源",
+        "冶金",
+        "资源采集",
+        "太空",
+        "载具",
+        "工业",
+        "Create附属"
+      ],
+      "魔法": [
+        "法术",
+        "植物魔法",
+        "血魔法",
+        "生体魔法",
+        "魔法自动化",
+        "附属"
+      ],
+      "冒险": [
+        "新维度",
+        "群系",
+        "结构",
+        "Boss战",
+        "RPG探索",
+        "生态环境"
+      ],
+      "农业与烹饪": [
+        "农业",
+        "烹饪",
+        "食物附属",
+        "餐饮",
+        "农业工具"
+      ],
+      "建筑与装饰": [
+        "装饰方块",
+        "工业装饰",
+        "建造工具",
+        "木质装饰",
+        "移动建筑"
+      ],
+      "仓储与物流": [
+        "数字仓储",
+        "实体仓储",
+        "背包",
+        "物流网络",
+        "废物处理",
+        "AE2附属"
+      ],
+      "生存与战斗": [
+        "RPG强化",
+        "属性",
+        "生存强化",
+        "死亡管理",
+        "刷怪控制",
+        "TCon附属"
+      ],
+      "信息与界面": [
+        "配方查询",
+        "信息探查",
+        "菜单增强",
+        "合成辅助",
+        "指南书",
+        "音频",
+        "HUD",
+        "测试"
+      ],
+      "地图与传送": [
+        "地图",
+        "探索定位",
+        "传送",
+        "移动",
+        "虚空维度"
+      ],
+      "任务与联机管理": [
+        "任务",
+        "队伍",
+        "领地",
+        "服务器管理",
+        "经济",
+        "备份",
+        "本地化"
+      ],
+      "性能优化": [
+        "渲染优化",
+        "红石优化",
+        "内存优化",
+        "综合优化",
+        "后台优化",
+        "网络修复",
+        "修复",
+        "性能分析",
+        "Create优化"
+      ],
+      "脚本与配置": [
+        "脚本开发",
+        "数据驱动",
+        "Ponder脚本",
+        "整合包工具",
+        "匠魂脚本",
+        "Create脚本"
+      ],
+      "前置与兼容": [
+        "前置",
+        "前置/开发",
+        "兼容",
+        "结构前置",
+        "音频前置",
+        "配方统一"
+      ]
+    }
+  },
+  "summary_counts": {
+    "脚本与配置": 12,
+    "科技": 19,
+    "性能优化": 24,
+    "前置与兼容": 59,
+    "信息与界面": 39,
+    "仓储与物流": 15,
+    "任务与联机管理": 8,
+    "冒险": 14,
+    "农业与烹饪": 11,
+    "建筑与装饰": 6,
+    "地图与传送": 8,
+    "生存与战斗": 10,
+    "魔法": 9
+  },
+  "mods": [
+    {
+      "filename": "0Pack2Reload-Forge-1.20.1-1.0.1.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "整合包工具"
+      ],
+      "tags": [
+        "Forge",
+        "整合包开发",
+        "脚本与配置",
+        "资源重载",
+        "重载"
+      ],
+      "note": null,
+      "description": "优化资源包选择界面的重载流程，避免玩家未真正更改资源包时仍触发一次耗时的资源重载。"
+    },
+    {
+      "filename": "0World2Create-Universal-1.19-1.20.X-1.0.0.jar",
+      "primary": "科技",
+      "subcategories": [
+        "Create附属",
+        "世界生成"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "世界生成",
+        "科技",
+        "联动"
+      ],
+      "note": null,
+      "description": "修复单人世界列表为空时的界面行为，避免在没有存档时点击单人游戏就直接走创建新世界流程。"
+    },
+    {
+      "filename": "AchievementOptimizer-1.20.1-1.0.5.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "进度优化"
+      ],
+      "tags": [
+        "性能优化",
+        "成就系统优化"
+      ],
+      "note": null,
+      "description": "优化进度/成就系统的处理逻辑，以减轻相关数据更新带来的性能开销。"
+    },
+    {
+      "filename": "addonapi-mc1.20.1-1.2.0.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "AdvancedLootInfo-forge-1.20.1-1.6.0.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "掉落信息"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "战利品",
+        "掉落"
+      ],
+      "note": null,
+      "description": "在战利品信息展示上提供更详细的掉落说明，方便查询战利品来源与概率。"
+    },
+    {
+      "filename": "ad_astra-forge-1.20.1-1.15.20.jar",
+      "primary": "科技",
+      "subcategories": [
+        "太空"
+      ],
+      "tags": [
+        "Forge",
+        "太空",
+        "星球探索",
+        "火箭",
+        "科技"
+      ],
+      "note": null,
+      "description": "科技向模组，通常加入机器、能源、物流、自动化或工业生产内容。"
+    },
+    {
+      "filename": "ae2cs-1.20.1-forge-1.1.3.2.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "AE2附属"
+      ],
+      "tags": [
+        "AE2",
+        "AE2生态",
+        "Forge",
+        "仓储",
+        "仓储与物流",
+        "物流",
+        "自动化",
+        "附属"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "ae2ct-1.20.1-1.1.1.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "AE2附属"
+      ],
+      "tags": [
+        "AE2",
+        "AE2生态",
+        "仓储",
+        "仓储与物流",
+        "物流",
+        "自动化",
+        "附属"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "ae2omnicells-1.20.1-forge-1.1.0.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "AE2附属"
+      ],
+      "tags": [
+        "AE2",
+        "AE2生态",
+        "Forge",
+        "仓储",
+        "仓储与物流",
+        "物流",
+        "自动化",
+        "附属"
+      ],
+      "note": null,
+      "description": "为应用能源2加入更通用的存储单元/单元类型，便于统一处理多种资源。"
+    },
+    {
+      "filename": "ae2pw-0.26.1.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "AE2附属"
+      ],
+      "tags": [
+        "AE2",
+        "AE2生态",
+        "仓储",
+        "仓储与物流",
+        "物流",
+        "自动化",
+        "附属"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "ae2wtlib-15.3.3-forge.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "AE2生态",
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "应用能源2无线终端相关扩展的前置库，主要为无线终端类模组提供共用功能。"
+    },
+    {
+      "filename": "ae2_ftbquest_detector-1.1-SNAPSHOT.jar",
+      "primary": "任务与联机管理",
+      "subcategories": [
+        "任务联动"
+      ],
+      "tags": [
+        "AE2",
+        "AE2生态",
+        "FTB任务",
+        "FTB生态",
+        "任务",
+        "任务与联机管理",
+        "检测"
+      ],
+      "note": null,
+      "description": "联机管理或任务系统相关模组，用于服务器、队伍、备份、权限或任务引导。"
+    },
+    {
+      "filename": "aeroblender-1.20.1-1.0.1-neoforge.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置"
+      ],
+      "tags": [
+        "Forge",
+        "世界生成前置",
+        "兼容",
+        "前置与兼容"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "aether-1.20.1-1.5.2-neoforge.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "新维度",
+        "RPG"
+      ],
+      "tags": [
+        "BOSS",
+        "Forge",
+        "冒险",
+        "天空维度",
+        "探索",
+        "装备"
+      ],
+      "note": null,
+      "description": "加入经典的天堂维度、高空地形、生物群系、怪物、装备与探索内容。"
+    },
+    {
+      "filename": "alexscaves-2.0.2.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "洞穴探索",
+        "生物"
+      ],
+      "tags": [
+        "BOSS",
+        "冒险",
+        "地下世界",
+        "探索",
+        "生物"
+      ],
+      "note": null,
+      "description": "加入多个风格鲜明的地下洞穴区域、怪物、生物与战利品，强化洞穴冒险体验。"
+    },
+    {
+      "filename": "almostunified-forge-1.20.1-0.9.4.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "配方统一"
+      ],
+      "tags": [
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "整合包",
+        "矿辞统一"
+      ],
+      "note": null,
+      "description": "统一多模组重复矿物与材料的配方/产物，减少同类物品并存带来的混乱。"
+    },
+    {
+      "filename": "alternate_current-mc1.20-1.7.0.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "红石优化"
+      ],
+      "tags": [
+        "性能",
+        "性能优化",
+        "红石"
+      ],
+      "note": null,
+      "description": "性能优化或修复类模组，主要用于改善帧率、内存占用、渲染效率或减少特定卡顿。"
+    },
+    {
+      "filename": "AlwaysEat-5.2.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "便捷"
+      ],
+      "tags": [
+        "便捷",
+        "农业与烹饪",
+        "进食"
+      ],
+      "note": null,
+      "description": "允许玩家在饱食度已满时也能继续食用食物，便于触发药水效果或其他食用收益。"
+    },
+    {
+      "filename": "angelblockrenewed-forge-1.3-1.20.jar",
+      "primary": "建筑与装饰",
+      "subcategories": [
+        "建造工具"
+      ],
+      "tags": [
+        "Forge",
+        "天使方块",
+        "建筑与装饰",
+        "空中搭建"
+      ],
+      "note": null,
+      "description": "加入天使方块，可在空中直接放置作为搭建与高空施工的支点。"
+    },
+    {
+      "filename": "angelring-1.20.1-2.3.1.jar",
+      "primary": "地图与传送",
+      "subcategories": [
+        "移动"
+      ],
+      "tags": [
+        "创造飞行",
+        "地图与传送",
+        "机动"
+      ],
+      "note": null,
+      "description": "加入天使戒指等飞行装备，使玩家在满足条件后获得创造式飞行能力。"
+    },
+    {
+      "filename": "Apotheosis-1.20.1-7.4.8.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "RPG"
+      ],
+      "tags": [
+        "地牢",
+        "成长",
+        "生存与战斗",
+        "附魔"
+      ],
+      "note": null,
+      "description": "大型强化模组，扩展附魔、刷怪笼、战利品、词缀装备、药水与成长系统。"
+    },
+    {
+      "filename": "ApothicAttributes-1.20.1-1.3.7.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "属性"
+      ],
+      "tags": [
+        "RPG",
+        "属性",
+        "生存与战斗"
+      ],
+      "note": null,
+      "description": "扩展属性系统，为装备、实体与其他模组提供更多可用属性和数值机制。"
+    },
+    {
+      "filename": "appleskin-forge-mc1.20.1-2.5.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "生存信息"
+      ],
+      "tags": [
+        "Forge",
+        "HUD",
+        "信息与界面",
+        "食物信息",
+        "饱食度"
+      ],
+      "note": null,
+      "description": "在 HUD 上显示饱食度、隐藏饱和度与食物恢复预览等信息。"
+    },
+    {
+      "filename": "appliedenergistics2-forge-15.4.10.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "数字仓储",
+        "自动化"
+      ],
+      "tags": [
+        "AE2",
+        "AE2生态",
+        "Forge",
+        "ME网络",
+        "P2P",
+        "仓储与物流",
+        "自动合成"
+      ],
+      "note": null,
+      "description": "提供数字化仓储与自动化网络系统，可存储物品/流体并通过终端和样板实现自动加工。"
+    },
+    {
+      "filename": "architectury-9.2.14-forge.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "跨平台开发前置库，用于让模组在不同加载器之间共享通用代码。"
+    },
+    {
+      "filename": "armorcurve-3.0.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "数值平衡"
+      ],
+      "tags": [
+        "平衡",
+        "护甲机制",
+        "生存与战斗",
+        "装备"
+      ],
+      "note": null,
+      "description": "调整护甲减伤曲线，使护甲数值在不同阶段的防护表现更平滑合理。"
+    },
+    {
+      "filename": "ars_artifice-1.20.1-2.0.4.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "Ars附属"
+      ],
+      "tags": [
+        "Ars Nouveau",
+        "Ars生态",
+        "构筑",
+        "附属",
+        "魔法"
+      ],
+      "note": null,
+      "description": "魔法向模组，围绕法术、祭坛、魔力、遗物或神秘资源系统展开。"
+    },
+    {
+      "filename": "ars_creo-1.20.1-4.3.0.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "Ars附属"
+      ],
+      "tags": [
+        "Ars Nouveau",
+        "Ars生态",
+        "Create联动",
+        "魔法"
+      ],
+      "note": null,
+      "description": "魔法向模组，围绕法术、祭坛、魔力、遗物或神秘资源系统展开。"
+    },
+    {
+      "filename": "ars_nouveau-1.20.1-4.12.7-all.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "法术"
+      ],
+      "tags": [
+        "Ars生态",
+        "法术",
+        "自动化",
+        "魔法"
+      ],
+      "note": null,
+      "description": "魔法向模组，围绕法术、祭坛、魔力、遗物或神秘资源系统展开。"
+    },
+    {
+      "filename": "artifacts-forge-9.5.13.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "饰品"
+      ],
+      "tags": [
+        "Forge",
+        "冒险",
+        "探索奖励",
+        "遗物",
+        "饰品"
+      ],
+      "note": null,
+      "description": "加入大量可佩戴遗物，每件遗物提供独特被动能力或功能效果。"
+    },
+    {
+      "filename": "athena-forge-1.20.1-3.1.2.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Abnormals 系模组常用前置库，提供注册、数据与通用功能支持。"
+    },
+    {
+      "filename": "AttributeFix-Forge-1.20.1-21.0.4.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "属性修复"
+      ],
+      "tags": [
+        "Forge",
+        "修复",
+        "属性",
+        "属性上限",
+        "性能优化"
+      ],
+      "note": null,
+      "description": "修复原版属性系统上限等问题，避免高数值属性失效或表现异常。"
+    },
+    {
+      "filename": "balm-forge-1.20.1-7.3.9-all.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "BlayTheNinth 系模组通用前置库，提供配置、网络与跨平台支持。"
+    },
+    {
+      "filename": "BetterAdvancements-Forge-1.20.1-0.4.2.10.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "进度界面"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "成就",
+        "界面增强",
+        "进度"
+      ],
+      "note": null,
+      "description": "重做进度界面，提供更好用的分类、搜索与展示体验。"
+    },
+    {
+      "filename": "BetterModsButton-v8.0.2-1.20.1-Forge.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "菜单"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "模组列表",
+        "菜单"
+      ],
+      "note": null,
+      "description": "优化主菜单中的 Mods 按钮与模组列表入口显示。"
+    },
+    {
+      "filename": "betterp2p-1.5.0-forge.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "AE2附属",
+        "网络可视化"
+      ],
+      "tags": [
+        "AE2",
+        "Forge",
+        "P2P",
+        "仓储与物流",
+        "网络布局"
+      ],
+      "note": null,
+      "description": "强化应用能源2 P2P 通道的查看与管理体验，便于大型网络排查。"
+    },
+    {
+      "filename": "biofactory-forge-1.20.1-0.6.0.jar",
+      "primary": "科技",
+      "subcategories": [
+        "生物科技"
+      ],
+      "tags": [
+        "Forge",
+        "生物工厂",
+        "科技",
+        "自动化",
+        "资源处理"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "biomancy-forge-1.20.1-2.8.19.0.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "生体魔法"
+      ],
+      "tags": [
+        "Forge",
+        "生物改造",
+        "血肉",
+        "魔法"
+      ],
+      "note": null,
+      "description": "围绕血肉、生物组织与器官构筑展开的黑暗生物系模组。"
+    },
+    {
+      "filename": "biomemusic-1.20.1-3.4.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "音乐"
+      ],
+      "tags": [
+        "信息与界面",
+        "氛围",
+        "群系",
+        "音乐"
+      ],
+      "note": null,
+      "description": "为 Biomes O’ Plenty 等环境内容补充音乐与氛围音轨。"
+    },
+    {
+      "filename": "BiomesOPlenty-forge-1.20.1-19.0.0.94.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "群系"
+      ],
+      "tags": [
+        "Forge",
+        "冒险",
+        "探索",
+        "生态",
+        "群系"
+      ],
+      "note": null,
+      "description": "加入大量新生物群系、树木、花卉与地表环境变化。"
+    },
+    {
+      "filename": "bloodmagic-1.20.1-3.3.5-47.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "血魔法"
+      ],
+      "tags": [
+        "仪式",
+        "献祭",
+        "祭坛",
+        "魔法"
+      ],
+      "note": null,
+      "description": "以生命值、献祭与血之祭坛为核心资源体系的魔法模组。"
+    },
+    {
+      "filename": "Bookshelf-Forge-1.20.1-20.2.13.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Darkhax 系模组常用前置库，提供数据、注册与通用功能支持。"
+    },
+    {
+      "filename": "Botania-1.20.1-450-FORGE.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "植物魔法"
+      ],
+      "tags": [
+        "Botania生态",
+        "Forge",
+        "法力",
+        "自动化",
+        "花",
+        "装备",
+        "魔法"
+      ],
+      "note": null,
+      "description": "以魔力与自然能量为核心的科技化魔法模组，包含花、符文、功能装置与自动化。"
+    },
+    {
+      "filename": "botarium-forge-1.20.1-2.3.4.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "为能量/流体/物品等能力封装提供统一接口的前置库。"
+    },
+    {
+      "filename": "buildinggadgets2-1.0.8.jar",
+      "primary": "建筑与装饰",
+      "subcategories": [
+        "建造工具"
+      ],
+      "tags": [
+        "便捷建造",
+        "复制粘贴",
+        "建筑",
+        "建筑与装饰",
+        "批量放置",
+        "界面"
+      ],
+      "note": null,
+      "description": "加入建筑工具枪类道具，可复制、批量放置、替换与撤销方块。"
+    },
+    {
+      "filename": "carryon-forge-1.20.1-2.1.2.7.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "搬运"
+      ],
+      "tags": [
+        "Forge",
+        "仓储与物流",
+        "容器搬运",
+        "搬运",
+        "方块搬运"
+      ],
+      "note": null,
+      "description": "允许玩家徒手搬运箱子、木桶、刷怪笼及部分实体。"
+    },
+    {
+      "filename": "catalogue-forge-1.20.1-1.8.0.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "模组配置"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "模组菜单",
+        "配置界面"
+      ],
+      "note": null,
+      "description": "在游戏内提供更友好的配置界面，方便查看和修改支持的模组配置。"
+    },
+    {
+      "filename": "chisel-forge-2.0.0+mc1.20.1.jar",
+      "primary": "建筑与装饰",
+      "subcategories": [
+        "装饰方块"
+      ],
+      "tags": [
+        "Forge",
+        "建筑",
+        "建筑与装饰",
+        "装饰",
+        "雕刻"
+      ],
+      "note": null,
+      "description": "加入大量装饰方块变体与雕琢系统，便于建筑美化。"
+    },
+    {
+      "filename": "chloride-FORGE-mc1.20.1-v1.5.5.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "渲染优化"
+      ],
+      "tags": [
+        "FPS",
+        "Forge",
+        "客户端优化",
+        "性能优化"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "citadel-2.6.0-1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Alex 系模组常用前置库，提供实体动画、数据与共用功能。"
+    },
+    {
+      "filename": "cloth-config-11.1.136-forge.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发",
+        "配置"
+      ],
+      "note": null,
+      "description": "通用配置界面前置库，为模组提供可视化配置菜单。"
+    },
+    {
+      "filename": "Clumps-forge-1.20.1-12.0.0.4.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "经验优化"
+      ],
+      "tags": [
+        "Forge",
+        "性能",
+        "性能优化",
+        "经验球合并"
+      ],
+      "note": null,
+      "description": "将经验球合并为更少的大经验球，减少卡顿并方便拾取。"
+    },
+    {
+      "filename": "configuration-forge-1.20.1-3.1.0.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发",
+        "配置"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "Controlling-forge-1.20.1-12.0.2.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "键位管理"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "冲突检测",
+        "按键",
+        "搜索"
+      ],
+      "note": null,
+      "description": "为按键设置界面加入搜索、冲突高亮等功能，便于管理大量快捷键。"
+    },
+    {
+      "filename": "coroutil-forge-1.20.1-1.3.7.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Coro 系模组的通用工具/前置库。"
+    },
+    {
+      "filename": "cosmeticarmorreworked-1.20.1-v1a.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "外观"
+      ],
+      "tags": [
+        "信息与界面",
+        "外观",
+        "时装甲",
+        "装备"
+      ],
+      "note": null,
+      "description": "加入外观护甲栏，使玩家可以把外观与实际装备属性分离。"
+    },
+    {
+      "filename": "crafting-on-a-stick-1.20.1-1.1.5.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "便携工具"
+      ],
+      "tags": [
+        "信息与界面",
+        "合成",
+        "工作台",
+        "快捷"
+      ],
+      "note": null,
+      "description": "加入便携合成棒，可随时打开 2x2 或便携合成界面。"
+    },
+    {
+      "filename": "craftingtweaks-forge-1.20.1-18.2.5.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "合成辅助"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "合成",
+        "快捷合成",
+        "整理",
+        "配方辅助"
+      ],
+      "note": null,
+      "description": "为工作台和容器加入一键整理、旋转、平均分配等便捷操作。"
+    },
+    {
+      "filename": "create-1.20.1-6.0.6.jar",
+      "primary": "科技",
+      "subcategories": [
+        "机械动力",
+        "自动化"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "机械传动",
+        "物流",
+        "科技",
+        "自动化",
+        "装配线"
+      ],
+      "note": null,
+      "description": "机械动力本体，以旋转动力、机械传动、装配与可视化自动化为核心。"
+    },
+    {
+      "filename": "create-new-age-forge-1.20.1-1.1.4.jar",
+      "primary": "科技",
+      "subcategories": [
+        "Create附属",
+        "电力"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "Forge",
+        "发电",
+        "电力",
+        "科技",
+        "科技附属"
+      ],
+      "note": null,
+      "description": "机械动力本体，以旋转动力、机械传动、装配与可视化自动化为核心。"
+    },
+    {
+      "filename": "createbetterfps-1.20.1-1.1.1.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "Create优化"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "FPS",
+        "性能优化"
+      ],
+      "note": null,
+      "description": "针对机械动力相关场景进行性能优化，减少 Create 大型装置带来的帧率压力。"
+    },
+    {
+      "filename": "createcafe-1.2.4-1.20.1.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "Create附属",
+        "餐饮"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "农业与烹饪",
+        "装饰",
+        "餐饮",
+        "饮品"
+      ],
+      "note": null,
+      "description": "机械动力餐饮/食品方向扩展，为食物加工和饮品制作提供新内容。"
+    },
+    {
+      "filename": "createdieselgenerators-1.20.1-1.3.8.jar",
+      "primary": "科技",
+      "subcategories": [
+        "Create附属",
+        "能源"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "发电",
+        "柴油",
+        "流体",
+        "科技",
+        "科技附属"
+      ],
+      "note": null,
+      "description": "机械动力扩展，加入柴油发电机及液体燃料发电相关机械。"
+    },
+    {
+      "filename": "CreateLazyTick-2.4.7-6.0.x-forge-1.20.1.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "Create优化"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "Forge",
+        "Tick优化",
+        "性能优化",
+        "服务端优化"
+      ],
+      "note": null,
+      "description": "优化 Create 方块实体/机械部件的 Tick 频率，以降低大型机械装置的性能消耗。"
+    },
+    {
+      "filename": "createliquidfuel-2.1.1-1.20.1.jar",
+      "primary": "科技",
+      "subcategories": [
+        "Create附属",
+        "能源"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "发电",
+        "液体燃料",
+        "燃料",
+        "界面",
+        "科技",
+        "科技附属"
+      ],
+      "note": null,
+      "description": "为机械动力补充液体燃料相关内容，使部分设备可使用流体燃料运作。"
+    },
+    {
+      "filename": "createmetallurgy-0.0.7-HF-1.20.1.jar",
+      "primary": "科技",
+      "subcategories": [
+        "Create附属",
+        "冶金"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "冶炼",
+        "冶金",
+        "科技",
+        "科技附属",
+        "金属"
+      ],
+      "note": null,
+      "description": "机械动力冶金扩展，强化金属加工、冶炼或合金路线。"
+    },
+    {
+      "filename": "createoreexcavation-1.20-1.6.4.jar",
+      "primary": "科技",
+      "subcategories": [
+        "Create附属",
+        "资源采集"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "矿物",
+        "矿物获取",
+        "科技",
+        "科技附属",
+        "自动采矿"
+      ],
+      "note": null,
+      "description": "机械动力采矿扩展，加入基于钻机/机械动力的大规模矿脉开采内容。"
+    },
+    {
+      "filename": "create_central_kitchen-1.20.1-for-create-6.0.4-1.4.1.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "Create附属",
+        "烹饪联动"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "农业与烹饪",
+        "农夫乐事联动",
+        "厨房",
+        "食物"
+      ],
+      "note": null,
+      "description": "机械动力本体，以旋转动力、机械传动、装配与可视化自动化为核心。"
+    },
+    {
+      "filename": "create_connected-1.1.7-mc1.20.1-all.jar",
+      "primary": "科技",
+      "subcategories": [
+        "Create附属",
+        "连接器"
+      ],
+      "tags": [
+        "Create",
+        "Create生态",
+        "传动网络",
+        "科技",
+        "科技附属",
+        "连接"
+      ],
+      "note": null,
+      "description": "机械动力本体，以旋转动力、机械传动、装配与可视化自动化为核心。"
+    },
+    {
+      "filename": "CreativeCore_FORGE_v2.12.31_mc1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发",
+        "矿物"
+      ],
+      "note": null,
+      "description": "CreativeMD 系模组通用前置库。"
+    },
+    {
+      "filename": "cryonicconfig-forge-1.0.0+mc1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发",
+        "配置"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "CTNH-Core-1.4.1b.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发",
+        "矿物"
+      ],
+      "note": null,
+      "description": "Create: New Horizon 整合包核心模组，用于承载整合包专属机制、物品、配方或系统逻辑。"
+    },
+    {
+      "filename": "CTNHChangelog-1.1.0.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Create: New Horizon 整合包的更新日志/变更说明辅助模组，用于在游戏内展示整合包更新信息。"
+    },
+    {
+      "filename": "culturaldelights-0.16.1.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "食物"
+      ],
+      "tags": [
+        "光照",
+        "农业",
+        "农业与烹饪",
+        "料理"
+      ],
+      "note": null,
+      "description": "农夫乐事系附属模组，加入带有文化地域风格的新食材和料理。"
+    },
+    {
+      "filename": "cupboard-1.20.1-2.7.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "通用前置/工具库，为部分模组提供注册与运行支持。"
+    },
+    {
+      "filename": "curios-forge-5.14.1+1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "饰品槽位 API，本体主要提供额外装备栏与饰品接口。"
+    },
+    {
+      "filename": "deep_aether-1.20.1-1.0.4.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "Aether附属"
+      ],
+      "tags": [
+        "Aether",
+        "冒险",
+        "探索",
+        "新内容"
+      ],
+      "note": null,
+      "description": "冒险与探索向模组，通常加入新结构、维度、生物、Boss 或战利品。"
+    },
+    {
+      "filename": "dummmmmmy-1.20-2.0.9.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "测试"
+      ],
+      "tags": [
+        "伤害测试",
+        "信息与界面",
+        "训练假人"
+      ],
+      "note": null,
+      "description": "加入训练假人，用于测试武器伤害、DPS 与攻击效果。"
+    },
+    {
+      "filename": "DungeonsArise-1.20.x-2.1.58-release.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "结构"
+      ],
+      "tags": [
+        "冒险",
+        "大型结构",
+        "探索"
+      ],
+      "note": null,
+      "description": "大幅增加地牢、遗迹与大型结构，强化世界探索。"
+    },
+    {
+      "filename": "EclipticSeasons-1.20.1-forge-0.11.6.0.1-all.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "环境"
+      ],
+      "tags": [
+        "Forge",
+        "冒险",
+        "农作物",
+        "季节",
+        "温度"
+      ],
+      "note": null,
+      "description": "加入四季/节气系统，影响环境表现、作物与生态体验。"
+    },
+    {
+      "filename": "ecologics-forge-1.20.1-2.2.0.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "生态"
+      ],
+      "tags": [
+        "Forge",
+        "冒险",
+        "生物",
+        "群系",
+        "自然"
+      ],
+      "note": null,
+      "description": "补充更丰富的生态细节、生物与环境内容，使原版群系更鲜活。"
+    },
+    {
+      "filename": "elevatorid-1.20.1-lex-1.9.jar",
+      "primary": "建筑与装饰",
+      "subcategories": [
+        "移动建筑"
+      ],
+      "tags": [
+        "便捷移动",
+        "建筑与装饰",
+        "电梯"
+      ],
+      "note": null,
+      "description": "加入电梯方块，可在上下楼层间快速传送。"
+    },
+    {
+      "filename": "embeddium-0.3.31+mc1.20.1.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "渲染优化"
+      ],
+      "tags": [
+        "FPS",
+        "Sodium系",
+        "性能优化",
+        "渲染"
+      ],
+      "note": null,
+      "description": "Sodium 风格的 Forge 渲染性能优化模组，显著提升帧率。"
+    },
+    {
+      "filename": "emi-1.1.22+1.20.1+forge.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "配方查询"
+      ],
+      "tags": [
+        "EMI",
+        "Forge",
+        "信息与界面",
+        "合成查询",
+        "配方"
+      ],
+      "note": null,
+      "description": "配方查询与物品用途查看模组，可替代或补充 JEI 类功能。"
+    },
+    {
+      "filename": "emiffect-forge-1.1.2+mc1.20.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "配方查询"
+      ],
+      "tags": [
+        "EMI附属",
+        "Forge",
+        "信息与界面",
+        "药水效果"
+      ],
+      "note": null,
+      "description": "为 EMI 补充效果/状态相关信息展示的附属模组。"
+    },
+    {
+      "filename": "EnchantmentDescriptions-Forge-1.20.1-17.1.19.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "说明文本"
+      ],
+      "tags": [
+        "Forge",
+        "tooltip",
+        "信息与界面",
+        "附魔说明"
+      ],
+      "note": null,
+      "description": "为附魔补充说明文本，便于了解附魔效果。"
+    },
+    {
+      "filename": "EnderIO-1.20.1-6.2.11-beta-all.jar",
+      "primary": "科技",
+      "subcategories": [
+        "电力与机器",
+        "物流"
+      ],
+      "tags": [
+        "机器",
+        "科技",
+        "管道",
+        "能源",
+        "自动化"
+      ],
+      "note": null,
+      "description": "经典科技模组，包含机器、导管、发电、合成与自动化系统。"
+    },
+    {
+      "filename": "ends_delight-1.20.1-2.5.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "食物附属"
+      ],
+      "tags": [
+        "光照",
+        "农业与烹饪",
+        "末地料理",
+        "食物"
+      ],
+      "note": null,
+      "description": "农业与烹饪向模组，通常围绕作物、食材、料理和厨房流程展开。"
+    },
+    {
+      "filename": "entityculling-forge-1.7.0-mc1.20.1.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "渲染优化"
+      ],
+      "tags": [
+        "FPS",
+        "Forge",
+        "剔除",
+        "实体剔除",
+        "性能优化"
+      ],
+      "note": null,
+      "description": "通过遮挡剔除优化实体与方块实体渲染，减少不可见对象的开销。"
+    },
+    {
+      "filename": "eup2p-1.20.1-2.0.3.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "AE2附属",
+        "网络可视化"
+      ],
+      "tags": [
+        "AE2",
+        "P2P",
+        "仓储与物流",
+        "网络布局"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "eventwrapper-forge-1.20.1-1.1.3.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "explorations-forge-1.20.1-1.6.1.jar",
+      "primary": "建筑与装饰",
+      "subcategories": [
+        "装饰"
+      ],
+      "tags": [
+        "Forge",
+        "建筑",
+        "建筑与装饰",
+        "木制装饰"
+      ],
+      "note": null,
+      "description": "为探索/装饰玩法加入额外木头、石材或群系相关方块的补充模组。"
+    },
+    {
+      "filename": "ExplorersCompass-1.20.1-1.3.3-forge.jar",
+      "primary": "地图与传送",
+      "subcategories": [
+        "定位"
+      ],
+      "tags": [
+        "Forge",
+        "地图与传送",
+        "定位",
+        "探索",
+        "矿物",
+        "结构定位"
+      ],
+      "note": null,
+      "description": "加入探险家罗盘，可搜索指定结构的位置。"
+    },
+    {
+      "filename": "ExtendedAE-1.20-1.4.10-forge.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "AE2附属"
+      ],
+      "tags": [
+        "AE2",
+        "Forge",
+        "仓储",
+        "仓储与物流",
+        "物流",
+        "自动化",
+        "附属"
+      ],
+      "note": null,
+      "description": "应用能源2扩展模组，加入额外存储、网络或自动化功能。"
+    },
+    {
+      "filename": "extrabotany-forge-1.20.1-1.9.2.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "Botania附属"
+      ],
+      "tags": [
+        "Botania",
+        "Forge",
+        "挑战",
+        "装备",
+        "魔法"
+      ],
+      "note": null,
+      "description": "植物魔法大型附属模组，加入额外花、神器、战斗和终局内容。"
+    },
+    {
+      "filename": "ExtremeSoundMuffler-3.48-forge-1.20.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "音频"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "声音控制",
+        "静音",
+        "音频"
+      ],
+      "note": null,
+      "description": "允许单独屏蔽或调低特定声音来源，减少噪音干扰。"
+    },
+    {
+      "filename": "factory_blocks-forge-1.4.0+mc1.20.1.jar",
+      "primary": "建筑与装饰",
+      "subcategories": [
+        "工业装饰"
+      ],
+      "tags": [
+        "Forge",
+        "工业风",
+        "建筑与装饰",
+        "装饰"
+      ],
+      "note": null,
+      "description": "建筑与装饰向模组，用于补充方块样式、家具、建材或施工工具。"
+    },
+    {
+      "filename": "fancymenu_forge_3.3.2_MC_1.20.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "主菜单"
+      ],
+      "tags": [
+        "Forge",
+        "UI",
+        "信息与界面",
+        "菜单",
+        "菜单定制"
+      ],
+      "note": null,
+      "description": "高度可定制的主菜单/界面美化模组，可自定义背景、按钮与布局。"
+    },
+    {
+      "filename": "FarmersDelight-1.20.1-1.2.7.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "烹饪"
+      ],
+      "tags": [
+        "光照",
+        "农业",
+        "农业与烹饪",
+        "烹饪",
+        "食材"
+      ],
+      "note": null,
+      "description": "以烹饪、种植、食材处理和厨房工具为核心的农食模组。"
+    },
+    {
+      "filename": "farmingforblockheads-forge-1.20.1-14.0.2.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "农业"
+      ],
+      "tags": [
+        "Forge",
+        "农业与烹饪",
+        "商店",
+        "种植"
+      ],
+      "note": null,
+      "description": "加入种子商店、市场和农务便捷工具，简化农业流程。"
+    },
+    {
+      "filename": "FastLeafDecay-32.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "世界优化"
+      ],
+      "tags": [
+        "便捷",
+        "性能优化",
+        "树叶衰减"
+      ],
+      "note": null,
+      "description": "加快树叶衰败速度，减少砍树后的等待时间。"
+    },
+    {
+      "filename": "fastrecipesearch-1.20.1-1.9-forge.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "配方查询"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "搜索优化",
+        "配方"
+      ],
+      "note": null,
+      "description": "优化配方搜索性能与体验，方便在大量配方中快速定位目标。"
+    },
+    {
+      "filename": "ferritecore-6.0.1-forge.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "内存优化"
+      ],
+      "tags": [
+        "Forge",
+        "内存",
+        "库/前置",
+        "性能",
+        "性能优化",
+        "矿物"
+      ],
+      "note": null,
+      "description": "以内存优化为主的性能模组，可降低游戏和模组环境的内存占用。"
+    },
+    {
+      "filename": "findme-3.2.1-forge.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "物品查找"
+      ],
+      "tags": [
+        "Forge",
+        "仓储辅助",
+        "信息与界面",
+        "查找物品"
+      ],
+      "note": null,
+      "description": "帮助在终端/容器/仓储中快速定位物品来源或所在容器。"
+    },
+    {
+      "filename": "flerovium-forge-1.20.1-1.2.16-all.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "FpsReducer2-forge-1.20-2.5.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "后台优化"
+      ],
+      "tags": [
+        "FPS",
+        "Forge",
+        "后台限帧",
+        "性能优化",
+        "省电"
+      ],
+      "note": null,
+      "description": "在窗口失焦、静置等情况下主动降低渲染频率，以节省资源。"
+    },
+    {
+      "filename": "freecam-forge-1.2.1+1.20.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "视角工具"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "截图",
+        "自由视角",
+        "观察"
+      ],
+      "note": null,
+      "description": "提供自由摄像机模式，便于观察建筑、机器或地形。"
+    },
+    {
+      "filename": "ftb-chunks-forge-2001.3.6.jar",
+      "primary": "任务与联机管理",
+      "subcategories": [
+        "领地"
+      ],
+      "tags": [
+        "FTB生态",
+        "Forge",
+        "任务与联机管理",
+        "区块",
+        "区块加载",
+        "地图",
+        "领地"
+      ],
+      "note": null,
+      "description": "提供区块认领、加载与地图管理功能。"
+    },
+    {
+      "filename": "ftb-essentials-forge-2001.2.4.jar",
+      "primary": "任务与联机管理",
+      "subcategories": [
+        "服务器管理"
+      ],
+      "tags": [
+        "FTB生态",
+        "Forge",
+        "TPA",
+        "任务与联机管理",
+        "家",
+        "指令",
+        "服务器"
+      ],
+      "note": null,
+      "description": "为服务器/联机提供常用管理与实用指令。"
+    },
+    {
+      "filename": "ftb-library-forge-2001.2.12.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置"
+      ],
+      "tags": [
+        "FTB前置",
+        "FTB生态",
+        "Forge",
+        "前置与兼容",
+        "库/前置"
+      ],
+      "note": null,
+      "description": "FTB 系模组的通用前置库。"
+    },
+    {
+      "filename": "ftb-quests-forge-2001.4.18.jar",
+      "primary": "任务与联机管理",
+      "subcategories": [
+        "任务"
+      ],
+      "tags": [
+        "FTB生态",
+        "Forge",
+        "任务",
+        "任务与联机管理",
+        "任务书",
+        "引导",
+        "进度"
+      ],
+      "note": null,
+      "description": "任务系统模组，可创建章节、奖励、检测与引导流程。"
+    },
+    {
+      "filename": "ftb-teams-forge-2001.3.2.jar",
+      "primary": "任务与联机管理",
+      "subcategories": [
+        "队伍"
+      ],
+      "tags": [
+        "FTB生态",
+        "Forge",
+        "任务与联机管理",
+        "联机",
+        "队伍"
+      ],
+      "note": null,
+      "description": "为玩家提供队伍/团队系统，并与 FTB 其他模组联动。"
+    },
+    {
+      "filename": "ftb-ultimine-forge-2001.1.7.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "便捷挖掘"
+      ],
+      "tags": [
+        "FTB生态",
+        "Forge",
+        "便捷",
+        "信息与界面",
+        "连锁挖矿"
+      ],
+      "note": null,
+      "description": "按键连锁挖掘模组，可批量挖掘同类方块。"
+    },
+    {
+      "filename": "ftb-xmod-compat-forge-2.1.3.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "兼容"
+      ],
+      "tags": [
+        "FTB兼容",
+        "FTB生态",
+        "Forge",
+        "前置",
+        "前置与兼容"
+      ],
+      "note": null,
+      "description": "FTB 模组与其他模组之间的兼容桥梁。"
+    },
+    {
+      "filename": "ftbbackups2-forge-1.20-1.0.23.jar",
+      "primary": "任务与联机管理",
+      "subcategories": [
+        "备份"
+      ],
+      "tags": [
+        "FTB生态",
+        "Forge",
+        "任务与联机管理",
+        "备份",
+        "服务器",
+        "自动备份"
+      ],
+      "note": null,
+      "description": "自动/手动备份世界存档，提升整合包存档安全性。"
+    },
+    {
+      "filename": "ftbquestlocalizer-1.20.1-forge-3.0.0.jar",
+      "primary": "任务与联机管理",
+      "subcategories": [
+        "本地化"
+      ],
+      "tags": [
+        "FTB生态",
+        "Forge",
+        "任务",
+        "任务与联机管理",
+        "任务书",
+        "本地化"
+      ],
+      "note": null,
+      "description": "为 FTB 任务提供本地化/翻译支持。"
+    },
+    {
+      "filename": "functionalstorage-1.20.1-1.2.13.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "实体仓储"
+      ],
+      "tags": [
+        "仓储与物流",
+        "存储",
+        "抽屉",
+        "整理",
+        "物流"
+      ],
+      "note": null,
+      "description": "提供抽屉式高容量仓储方块，适合大宗物资存储与展示。"
+    },
+    {
+      "filename": "fusion-1.2.12-forge-mc1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "用于资源包/模型/材质融合的前置模组，常服务于美术资源兼容。"
+    },
+    {
+      "filename": "geckolib-forge-1.20.1-4.7.3.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "广泛使用的实体动画前置库，用于复杂生物/模型动画。"
+    },
+    {
+      "filename": "GlitchCore-forge-1.20.1-0.0.1.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发",
+        "矿物"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "Glodium-1.20-1.5-forge.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "渲染"
+      ],
+      "tags": [
+        "Forge",
+        "优化",
+        "性能优化",
+        "渲染增强"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "gravestone-forge-1.20.1-1.0.24.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "死亡管理"
+      ],
+      "tags": [
+        "Forge",
+        "墓碑",
+        "死亡保护",
+        "生存与战斗"
+      ],
+      "note": null,
+      "description": "死亡后生成墓碑保存掉落物，减少跑尸损失。"
+    },
+    {
+      "filename": "GregTech-Construct-3.11.2.169.jar",
+      "primary": "科技",
+      "subcategories": [
+        "工业",
+        "材料"
+      ],
+      "tags": [
+        "GT风格",
+        "合金",
+        "工业",
+        "工具",
+        "科技"
+      ],
+      "note": null,
+      "description": "面向 GregTech Modern 与匠魂/现代匠魂体系的联动模组，用于让两套材料与工具系统兼容。"
+    },
+    {
+      "filename": "gtportal-1.1.3.jar",
+      "primary": "科技",
+      "subcategories": [
+        "维度传送"
+      ],
+      "tags": [
+        "GregTech风格",
+        "传送",
+        "科技"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "guideme-20.1.11.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发",
+        "界面"
+      ],
+      "note": null,
+      "description": "提供书籍/指南类界面支持，常用于在游戏内展示模组说明文档。"
+    },
+    {
+      "filename": "HostileNeuralNetworks-1.20.1-5.3.3.jar",
+      "primary": "科技",
+      "subcategories": [
+        "资源模拟"
+      ],
+      "tags": [
+        "数据模型",
+        "科技",
+        "自动化刷怪掉落"
+      ],
+      "note": null,
+      "description": "通过击杀数据训练“深度学习模型”并产出怪物掉落，提供无需刷怪塔的另类资源路线。"
+    },
+    {
+      "filename": "ImmediatelyFast-Forge-1.5.3+1.20.4.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "渲染优化"
+      ],
+      "tags": [
+        "FPS",
+        "Forge",
+        "即时渲染优化",
+        "性能优化"
+      ],
+      "note": null,
+      "description": "对 GUI、文本与部分渲染路径进行优化，以提升帧率与界面流畅度。"
+    },
+    {
+      "filename": "immersive_aircraft-1.1.5+1.20.1-forge.jar",
+      "primary": "科技",
+      "subcategories": [
+        "载具"
+      ],
+      "tags": [
+        "Forge",
+        "交通",
+        "合成",
+        "科技",
+        "载具",
+        "飞机"
+      ],
+      "note": null,
+      "description": "科技向模组，通常加入机器、能源、物流、自动化或工业生产内容。"
+    },
+    {
+      "filename": "inventoryhud.forge.1.20.1-3.4.26.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "生存信息"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "状态显示",
+        "背包HUD"
+      ],
+      "note": null,
+      "description": "在 HUD 中显示背包、护甲和状态信息。"
+    },
+    {
+      "filename": "inventorysorter-1.20.1-23.1.9.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "整理"
+      ],
+      "tags": [
+        "信息与界面",
+        "物品整理",
+        "背包"
+      ],
+      "note": null,
+      "description": "为背包和容器提供一键整理功能。"
+    },
+    {
+      "filename": "item-filters-forge-2001.1.0-build.59.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发",
+        "界面"
+      ],
+      "note": null,
+      "description": "为任务、配方或自动化系统提供物品过滤器前置支持。"
+    },
+    {
+      "filename": "jackseconomy-1.2.4.jar",
+      "primary": "任务与联机管理",
+      "subcategories": [
+        "经济"
+      ],
+      "tags": [
+        "任务与联机管理",
+        "商店",
+        "服务器经济",
+        "经济",
+        "货币"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "Jade-1.20.1-Forge-11.13.2.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "信息探查"
+      ],
+      "tags": [
+        "Forge",
+        "HUD",
+        "信息与界面",
+        "实体信息",
+        "方块信息"
+      ],
+      "note": null,
+      "description": "提供类似 WAILA 的悬浮信息显示，可查看方块/实体详情。"
+    },
+    {
+      "filename": "JadeAddons-1.20.1-Forge-5.5.0.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "信息探查"
+      ],
+      "tags": [
+        "Forge",
+        "Jade附属",
+        "信息与界面",
+        "更多信息"
+      ],
+      "note": null,
+      "description": "为 Jade 补充更多模组兼容信息与额外显示内容。"
+    },
+    {
+      "filename": "JavaScriptJS-2001-1.0.3.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "脚本开发"
+      ],
+      "tags": [
+        "KubeJS",
+        "事件",
+        "整合包开发",
+        "脚本",
+        "脚本与配置",
+        "配方"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "JAVD-Forge-5.0.1+mc1.20.1.jar",
+      "primary": "地图与传送",
+      "subcategories": [
+        "虚空维度"
+      ],
+      "tags": [
+        "Forge",
+        "便携",
+        "地图与传送",
+        "存储维度",
+        "建造空间"
+      ],
+      "note": null,
+      "description": "加入虚空矿维度/采矿空间，便于后期集中采集资源。"
+    },
+    {
+      "filename": "jecalculation-forge-1.20.1-4.0.4.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "配方辅助"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "计算器",
+        "配方"
+      ],
+      "note": null,
+      "description": "JEI/EMI 相关计算辅助模组，常用于显示合成成本或配方数量计算。"
+    },
+    {
+      "filename": "jecharacters-1.20.1-forge-4.5.16.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "搜索支持"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "多语言",
+        "拼音搜索"
+      ],
+      "note": null,
+      "description": "修复/增强配方查看器中字符显示与输入兼容性。"
+    },
+    {
+      "filename": "JsonThings-1.20.1-0.9.9.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "数据驱动"
+      ],
+      "tags": [
+        "JSON定义",
+        "数据驱动",
+        "整合包开发",
+        "物品/方块",
+        "脚本",
+        "脚本与配置"
+      ],
+      "note": null,
+      "description": "允许通过 JSON 数据包定义物品、方块、配方等内容的开发向模组。"
+    },
+    {
+      "filename": "justenoughbreeding-forge-1.20-1.20.1-1.5.0.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "配方查询"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "百科",
+        "繁殖信息"
+      ],
+      "note": null,
+      "description": "显示动物繁殖食物和繁殖条件等信息。"
+    },
+    {
+      "filename": "konkrete_forge_1.8.0_MC_1.20-1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Keksuccino 系模组常用前置库。"
+    },
+    {
+      "filename": "kotlinforforge-4.11.0-all.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "为 Forge 模组提供 Kotlin 运行时与开发支持。"
+    },
+    {
+      "filename": "kubejs-create-forge-2001.3.0-build.8.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "脚本开发"
+      ],
+      "tags": [
+        "Create生态",
+        "Forge",
+        "KubeJS",
+        "事件",
+        "整合包开发",
+        "界面",
+        "脚本",
+        "脚本与配置",
+        "配方"
+      ],
+      "note": null,
+      "description": "KubeJS 对机械动力的脚本支持扩展。"
+    },
+    {
+      "filename": "kubejs-forge-2001.6.5-build.16.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "脚本开发"
+      ],
+      "tags": [
+        "Forge",
+        "KubeJS",
+        "事件",
+        "整合包开发",
+        "界面",
+        "脚本",
+        "脚本与配置",
+        "配方"
+      ],
+      "note": null,
+      "description": "允许使用 JavaScript 脚本修改配方、事件、任务和整合包逻辑。"
+    },
+    {
+      "filename": "ldlib-forge-1.20.1-1.0.48.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "低层通用开发库，常用于复杂科技模组的界面、网络和数据支持。"
+    },
+    {
+      "filename": "legendarysurvivaloverhaul-1.20.1-2.3.20.1.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "生存强化"
+      ],
+      "tags": [
+        "口渴",
+        "温度",
+        "环境生存",
+        "生存与战斗",
+        "硬核"
+      ],
+      "note": null,
+      "description": "强化生存难度，加入体温、口渴、疲劳等更硬核的生存机制。"
+    },
+    {
+      "filename": "libIPN-forge-1.20-4.0.2.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Inventory Profiles Next 相关的前置库。"
+    },
+    {
+      "filename": "LibX-1.20.1-5.0.14.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "综合型开发前置库，为多个模组提供基础功能。"
+    },
+    {
+      "filename": "lionfishapi-2.4-Fix.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发",
+        "钓鱼"
+      ],
+      "note": null,
+      "description": "Lionfish 系模组前置 API。"
+    },
+    {
+      "filename": "lootjs-forge-1.20.1-2.12.0.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "脚本开发"
+      ],
+      "tags": [
+        "Forge",
+        "LootJS",
+        "战利品",
+        "战利品脚本",
+        "整合包开发",
+        "脚本",
+        "脚本与配置"
+      ],
+      "note": null,
+      "description": "KubeJS 生态扩展，可通过脚本修改战利品表。"
+    },
+    {
+      "filename": "lootr-forge-1.20-0.7.34.89.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "战利品"
+      ],
+      "tags": [
+        "Forge",
+        "冒险",
+        "地牢奖励",
+        "多人友好",
+        "战利品",
+        "独立战利品"
+      ],
+      "note": null,
+      "description": "使战利品箱实例化为玩家独立掉落，避免多人服务器争抢同一宝箱内容。"
+    },
+    {
+      "filename": "lost_aether_content-1.20.1-1.2.3.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "Aether附属"
+      ],
+      "tags": [
+        "Aether",
+        "冒险",
+        "探索",
+        "附属"
+      ],
+      "note": null,
+      "description": "冒险与探索向模组，通常加入新结构、维度、生物、Boss 或战利品。"
+    },
+    {
+      "filename": "L_Enders_Cataclysm-3.16.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "Boss战"
+      ],
+      "tags": [
+        "Boss",
+        "冒险",
+        "探索",
+        "高难战斗"
+      ],
+      "note": null,
+      "description": "冒险与探索向模组，通常加入新结构、维度、生物、Boss 或战利品。"
+    },
+    {
+      "filename": "MaidUseHandCrank_1.5.3-forge_47.1.33-1.20.1.jar",
+      "primary": "科技",
+      "subcategories": [
+        "联动"
+      ],
+      "tags": [
+        "Create联动",
+        "Forge",
+        "女仆",
+        "手摇曲柄",
+        "科技"
+      ],
+      "note": null,
+      "description": "东方小女仆与机械动力的联动内容，使女仆可与手摇曲柄等装置产生配合。"
+    },
+    {
+      "filename": "Mantle-1.20.1-1.11.97.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置"
+      ],
+      "tags": [
+        "前置与兼容",
+        "匠魂前置",
+        "匠魂生态"
+      ],
+      "note": null,
+      "description": "匠魂系列核心前置库，提供界面、数据与工具系统支持。"
+    },
+    {
+      "filename": "MaxHealthFix-Forge-1.20.1-12.0.3.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "修复"
+      ],
+      "tags": [
+        "Forge",
+        "性能优化",
+        "生命值修复"
+      ],
+      "note": null,
+      "description": "修复生命值上限过高时的显示或计算异常问题。"
+    },
+    {
+      "filename": "melody_forge_1.0.3_MC_1.20.1-1.20.4.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "音频前置"
+      ],
+      "tags": [
+        "Forge",
+        "前置与兼容",
+        "音频库"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "merequester-forge-1.20.1-1.1.5.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "AE2附属"
+      ],
+      "tags": [
+        "AE2",
+        "Forge",
+        "仓储",
+        "仓储与物流",
+        "任务",
+        "物流",
+        "自动化",
+        "附属"
+      ],
+      "note": null,
+      "description": "应用能源2网络扩展，通常用于更便捷地发起请求/补货/物流操作。"
+    },
+    {
+      "filename": "modelfix-1.15.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "渲染修复"
+      ],
+      "tags": [
+        "性能优化",
+        "模型修复"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "modernfix-forge-5.26.2+mc1.20.1.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "综合优化"
+      ],
+      "tags": [
+        "Forge",
+        "兼容",
+        "内存",
+        "启动优化",
+        "性能优化"
+      ],
+      "note": null,
+      "description": "大型通用优化/修复模组，改善启动、内存、卡顿和若干兼容问题。"
+    },
+    {
+      "filename": "ModernUI-Forge-1.20.1-3.11.0.1-universal.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发",
+        "界面"
+      ],
+      "note": null,
+      "description": "重做部分 UI 渲染与字体显示的现代化界面模组，也常被用于更平滑的文本渲染。"
+    },
+    {
+      "filename": "moonlight-1.20-2.13.26-forge.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "光照",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Selene/Moonlight 通用前置库，广泛用于家具、装饰和环境类模组。"
+    },
+    {
+      "filename": "MouseTweaks-forge-mc1.20.1-2.25.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "交互优化"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "背包交互",
+        "鼠标操作"
+      ],
+      "note": null,
+      "description": "增强鼠标拖拽、快速移动和批量放置操作。"
+    },
+    {
+      "filename": "mutil-1.20.1-6.1.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "MyNethersDelight-1.20.1-0.1.7.5.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "食物附属"
+      ],
+      "tags": [
+        "下界料理",
+        "光照",
+        "农业与烹饪",
+        "农夫乐事附属"
+      ],
+      "note": null,
+      "description": "农夫乐事的下界附属模组，加入下界食材和料理。"
+    },
+    {
+      "filename": "mysterious_mountain_lib-1.5.17-1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置"
+      ],
+      "tags": [
+        "前置与兼容",
+        "前置库",
+        "库/前置"
+      ],
+      "note": null,
+      "description": "前置/兼容类模组，本身通常不提供完整独立玩法，主要为其他模组提供 API、配置、渲染、数据或兼容支持。"
+    },
+    {
+      "filename": "MythicBotany-1.20.1-4.0.4.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "Botania附属"
+      ],
+      "tags": [
+        "Botania",
+        "神话",
+        "符文",
+        "魔法"
+      ],
+      "note": null,
+      "description": "植物魔法附属模组，补充神话主题内容与进阶玩法。"
+    },
+    {
+      "filename": "nanhealthfixer-1.20.1-0.0.1.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "修复"
+      ],
+      "tags": [
+        "性能优化",
+        "数值修复",
+        "生命值"
+      ],
+      "note": null,
+      "description": "修复生命值计算出现 NaN 等异常导致的状态问题。"
+    },
+    {
+      "filename": "NaturesCompass-1.20.1-1.11.2-forge.jar",
+      "primary": "地图与传送",
+      "subcategories": [
+        "定位"
+      ],
+      "tags": [
+        "Forge",
+        "地图与传送",
+        "定位",
+        "探索",
+        "群系定位"
+      ],
+      "note": null,
+      "description": "加入自然罗盘，可搜索指定生物群系的位置。"
+    },
+    {
+      "filename": "Not Enough Recipe Book-FORGE-0.4.1+1.20.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "配方查询"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "配方",
+        "配方书增强"
+      ],
+      "note": null,
+      "description": "改进或替代原版配方书的体验，减少其局限并提升检索便利度。"
+    },
+    {
+      "filename": "observable-4.4.2.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "OctoLib-FORGE-0.4.2+1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "oculus-mc1.20.1-1.8.0.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "着色器"
+      ],
+      "tags": [
+        "光影",
+        "性能优化",
+        "渲染"
+      ],
+      "note": null,
+      "description": "Iris 的 Forge 移植版/相关实现，用于支持光影。"
+    },
+    {
+      "filename": "OverflowingBars-v8.0.1-1.20.1-Forge.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "状态条"
+      ],
+      "tags": [
+        "Ars生态",
+        "Forge",
+        "信息与界面",
+        "状态条",
+        "生命值",
+        "界面"
+      ],
+      "note": null,
+      "description": "扩展血量、护甲等 HUD 条的显示方式，使高数值状态栏更易读。"
+    },
+    {
+      "filename": "overweightfarming-1.20.1-2.1.0-forge.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "农业"
+      ],
+      "tags": [
+        "Forge",
+        "作物",
+        "农业与烹饪",
+        "农业扩展"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "packetfixer-3.3.1-1.18-1.20.4-merged.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "网络修复"
+      ],
+      "tags": [
+        "性能优化",
+        "网络包修复"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "Patchouli-1.20.1-84-FORGE.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "指南书"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "教程",
+        "文档",
+        "模组手册"
+      ],
+      "note": null,
+      "description": "提供书籍/图鉴系统，许多模组用它显示游戏内文档。"
+    },
+    {
+      "filename": "pccard-1.20.1-1.2.3.jar",
+      "primary": "科技",
+      "subcategories": [
+        "计算机"
+      ],
+      "tags": [
+        "卡片",
+        "科技",
+        "自动化",
+        "设备"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "PickUpNotifier-v8.0.0-1.20.1-Forge.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "拾取提示"
+      ],
+      "tags": [
+        "Forge",
+        "HUD",
+        "信息与界面",
+        "拾取信息",
+        "提示"
+      ],
+      "note": null,
+      "description": "在拾取物品时显示通知提示。"
+    },
+    {
+      "filename": "Placebo-1.20.1-8.6.2.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Shadows-of-Fire 系模组通用前置库。"
+    },
+    {
+      "filename": "polylib-forge-2000.0.3-build.143.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发",
+        "界面"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "ponderjs-1.20.1-2.1.0.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "Ponder脚本"
+      ],
+      "tags": [
+        "Create",
+        "Ponder",
+        "教程内容",
+        "脚本",
+        "脚本与配置"
+      ],
+      "note": null,
+      "description": "为 Ponder 场景系统提供脚本化支持，可用脚本编写机械动力式教学场景。"
+    },
+    {
+      "filename": "PresenceFootsteps-1.9.0.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "音效"
+      ],
+      "tags": [
+        "信息与界面",
+        "沉浸",
+        "脚步声"
+      ],
+      "note": null,
+      "description": "增强脚步声环境音效，使不同材质和环境下的脚步声更真实。"
+    },
+    {
+      "filename": "probejs-6.0.1-forge.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "脚本开发"
+      ],
+      "tags": [
+        "Forge",
+        "KubeJS",
+        "事件",
+        "整合包开发",
+        "脚本",
+        "脚本与配置",
+        "配方"
+      ],
+      "note": null,
+      "description": "为 KubeJS/脚本开发提供代码补全、导出或调试支持。"
+    },
+    {
+      "filename": "PuzzlesLib-v8.1.25-1.20.1-Forge.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置"
+      ],
+      "tags": [
+        "Forge",
+        "Fuzs前置",
+        "前置与兼容",
+        "库/前置"
+      ],
+      "note": null,
+      "description": "Fuzs 系模组通用前置库。"
+    },
+    {
+      "filename": "radium-mc1.20.1-0.12.4+git.26c9d8e.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "逻辑优化"
+      ],
+      "tags": [
+        "AI",
+        "Tick",
+        "性能优化",
+        "服务端优化"
+      ],
+      "note": null,
+      "description": "基于 Lithium 思路的 Forge 服务器/逻辑性能优化模组。"
+    },
+    {
+      "filename": "Re-Avaritia-forged-1.20.1-1.3.9.3-alpha4.jar",
+      "primary": "科技",
+      "subcategories": [
+        "终局"
+      ],
+      "tags": [
+        "Forge",
+        "夸张数值",
+        "科技",
+        "终局装备",
+        "资源汇总"
+      ],
+      "note": null,
+      "description": "重制/续作版无尽贪婪，提供极端后期合成、终局材料和夸张数值装备。"
+    },
+    {
+      "filename": "rehooked-1.8.3-1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "resourcefulconfig-forge-1.20.1-2.1.2.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发",
+        "配置"
+      ],
+      "note": null,
+      "description": "Resourceful 系模组的配置前置库。"
+    },
+    {
+      "filename": "resourcefullib-forge-1.20.1-2.1.29.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "Resourceful 系模组的通用前置库。"
+    },
+    {
+      "filename": "rhino-forge-2001.2.3-build.6.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "脚本开发"
+      ],
+      "tags": [
+        "Forge",
+        "KubeJS",
+        "事件",
+        "整合包开发",
+        "界面",
+        "脚本",
+        "脚本与配置",
+        "脚本运行时",
+        "配方"
+      ],
+      "note": null,
+      "description": "JavaScript 运行时前置库，KubeJS 等脚本模组依赖它执行脚本。"
+    },
+    {
+      "filename": "Searchables-forge-1.20.1-1.0.3.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置"
+      ],
+      "tags": [
+        "Forge",
+        "Fuzs",
+        "前置与兼容",
+        "搜索前置"
+      ],
+      "note": null,
+      "description": "为界面列表提供搜索能力的前置库。"
+    },
+    {
+      "filename": "smsn-forge-1.3.6-1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/兼容"
+      ],
+      "tags": [
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "整合包前置"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "sodiumdynamiclights-forge-1.0.10-1.20.1.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "动态光源"
+      ],
+      "tags": [
+        "Forge",
+        "光照",
+        "动态光源",
+        "性能优化",
+        "渲染"
+      ],
+      "note": null,
+      "description": "为 Embeddium/Sodium 生态补充动态光源效果。"
+    },
+    {
+      "filename": "sodiumoptionsapi-forge-1.0.10-1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "渲染前置"
+      ],
+      "tags": [
+        "Embeddium前置",
+        "Forge",
+        "前置与兼容",
+        "库/前置",
+        "配置"
+      ],
+      "note": null,
+      "description": "为 Sodium/Embeddium 生态提供设置界面 API。"
+    },
+    {
+      "filename": "solcarrot-1.20.1-1.15.1.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "饮食奖励"
+      ],
+      "tags": [
+        "均衡饮食",
+        "生命加成",
+        "生存与战斗"
+      ],
+      "note": null,
+      "description": "显示玩家已食用食物的种类增益，帮助追踪多样饮食奖励。"
+    },
+    {
+      "filename": "sophisticatedbackpacks-1.20.1-3.24.24.1538.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "背包"
+      ],
+      "tags": [
+        "仓储与物流",
+        "升级",
+        "整理",
+        "移动存储",
+        "背包"
+      ],
+      "note": null,
+      "description": "加入功能强大的多层升级背包，可自动整理、过滤、补给与拾取。"
+    },
+    {
+      "filename": "sophisticatedcore-1.20.1-1.3.5.1505.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置"
+      ],
+      "tags": [
+        "Sophisticated系列前置",
+        "前置与兼容",
+        "库/前置",
+        "矿物"
+      ],
+      "note": null,
+      "description": "Sophisticated 系列模组通用前置库。"
+    },
+    {
+      "filename": "sophisticatedstorage-1.20.1-1.4.25.1488.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "实体仓储"
+      ],
+      "tags": [
+        "仓储与物流",
+        "升级",
+        "存储",
+        "容器",
+        "整理"
+      ],
+      "note": null,
+      "description": "加入可升级箱子、桶和仓储方块，提供更灵活的储物方案。"
+    },
+    {
+      "filename": "sound-physics-remastered-forge-1.20.1-1.5.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "音频"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "沉浸",
+        "混响",
+        "音频",
+        "音频物理"
+      ],
+      "note": null,
+      "description": "重制环境声学系统，为声音加入混响、遮挡和空间传播效果。"
+    },
+    {
+      "filename": "spark-1.10.53-forge.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "性能分析"
+      ],
+      "tags": [
+        "Forge",
+        "Profiler",
+        "分析器",
+        "性能优化",
+        "服务器"
+      ],
+      "note": null,
+      "description": "性能分析与诊断工具，可用于分析 Tick、CPU 占用与内存问题。"
+    },
+    {
+      "filename": "structure_gel-1.20.1-2.16.2.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "结构前置"
+      ],
+      "tags": [
+        "前置",
+        "前置与兼容",
+        "结构生成"
+      ],
+      "note": null,
+      "description": "前置/兼容类模组，本身通常不提供完整独立玩法，主要为其他模组提供 API、配置、渲染、数据或兼容支持。"
+    },
+    {
+      "filename": "supermartijn642configlib-1.1.8-forge-mc1.20.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发",
+        "配置"
+      ],
+      "note": null,
+      "description": "SuperMartijn642 系模组配置前置库。"
+    },
+    {
+      "filename": "supermartijn642corelib-1.1.20-forge-mc1.20.1.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "库/前置",
+        "整合包开发",
+        "矿物"
+      ],
+      "note": null,
+      "description": "SuperMartijn642 系模组通用前置库。"
+    },
+    {
+      "filename": "tconjei-1.20.1-1.4.4.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "匠魂配方"
+      ],
+      "tags": [
+        "信息与界面",
+        "匠魂",
+        "匠魂生态",
+        "配方显示"
+      ],
+      "note": null,
+      "description": "为匠魂/现代匠魂在配方查看器中提供完整配方显示支持。"
+    },
+    {
+      "filename": "tconplanner-forge-1.20.1-1.4.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "匠魂规划"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "匠魂",
+        "匠魂生态",
+        "工具规划"
+      ],
+      "note": null,
+      "description": "匠魂配方/部件规划辅助模组，便于预先规划工具部件组合。"
+    },
+    {
+      "filename": "tconstruct_js-1.0.3.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "脚本开发"
+      ],
+      "tags": [
+        "KubeJS",
+        "事件",
+        "匠魂生态",
+        "整合包开发",
+        "脚本",
+        "脚本与配置",
+        "配方"
+      ],
+      "note": null,
+      "description": "脚本、配置或整合包开发相关模组，用于调整配方、事件、任务或整合包逻辑。"
+    },
+    {
+      "filename": "TerraBlender-forge-1.20.1-3.0.1.7.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "世界生成前置库，用于把多个模组生物群系更平滑地混入主世界。"
+    },
+    {
+      "filename": "time-in-a-bottle-4.0.4-mc1.20.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "时间工具"
+      ],
+      "tags": [
+        "便捷",
+        "信息与界面",
+        "时间加速"
+      ],
+      "note": null,
+      "description": "加入时间瓶，可加速选中机器或方块实体的运行速度。"
+    },
+    {
+      "filename": "Tinker-Things-1.20.1-1.3.3.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "TCon附属"
+      ],
+      "tags": [
+        "匠魂",
+        "匠魂生态",
+        "生存与战斗",
+        "装备",
+        "饰品"
+      ],
+      "note": null,
+      "description": "匠魂附属模组，补充额外材料、部件或工具内容。"
+    },
+    {
+      "filename": "tinkerleveling-0.4.0.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "TCon附属"
+      ],
+      "tags": [
+        "匠魂",
+        "匠魂生态",
+        "升级",
+        "成长",
+        "生存与战斗"
+      ],
+      "note": null,
+      "description": "为匠魂工具加入经验与升级系统。"
+    },
+    {
+      "filename": "TinkersKatanas_v1.3.5.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "TCon附属"
+      ],
+      "tags": [
+        "匠魂",
+        "匠魂生态",
+        "武器",
+        "生存与战斗"
+      ],
+      "note": null,
+      "description": "为匠魂体系加入武士刀/刀类工具与相关材料玩法。"
+    },
+    {
+      "filename": "titanium-1.20.1-3.8.32.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发"
+      ],
+      "note": null,
+      "description": "多模组使用的通用前置库。"
+    },
+    {
+      "filename": "tomeofblood-1.20.1-0.4.4-all.jar",
+      "primary": "魔法",
+      "subcategories": [
+        "血魔法附属"
+      ],
+      "tags": [
+        "Blood Magic",
+        "文档",
+        "附属",
+        "魔法"
+      ],
+      "note": null,
+      "description": "血魔法附属模组，补充法术书、仪式或额外内容。"
+    },
+    {
+      "filename": "ToolBelt-1.20.1-1.20.02.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "工具管理"
+      ],
+      "tags": [
+        "仓储与物流",
+        "便携",
+        "工具栏",
+        "快捷切换"
+      ],
+      "note": null,
+      "description": "加入工具腰带，可快速切换与管理常用工具。"
+    },
+    {
+      "filename": "toomanyrecipeviewers-0.7.0+mc.20.1.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "配方查询"
+      ],
+      "tags": [
+        "信息与界面",
+        "查看器",
+        "配方",
+        "配方冲突兼容"
+      ],
+      "note": null,
+      "description": "配方查看器兼容/桥接模组，用于协调多个配方查看系统共存。"
+    },
+    {
+      "filename": "torchmaster-20.1.9.jar",
+      "primary": "生存与战斗",
+      "subcategories": [
+        "功能方块"
+      ],
+      "tags": [
+        "火把",
+        "生存与战斗",
+        "防刷怪"
+      ],
+      "note": null,
+      "description": "加入防刷怪火把等工具，便于控制怪物生成。"
+    },
+    {
+      "filename": "touhoulittlemaid-1.5.0-forge+mc1.20.1-release.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "伙伴"
+      ],
+      "tags": [
+        "Forge",
+        "伙伴",
+        "冒险",
+        "女仆",
+        "战斗辅助",
+        "生活"
+      ],
+      "note": null,
+      "description": "加入可雇佣的东方风格女仆伙伴，支持战斗、家务与互动。"
+    },
+    {
+      "filename": "trashcans-1.0.18b-forge-mc1.20.jar",
+      "primary": "仓储与物流",
+      "subcategories": [
+        "废物处理"
+      ],
+      "tags": [
+        "Forge",
+        "仓储与物流",
+        "垃圾桶",
+        "流体处理",
+        "物品处理"
+      ],
+      "note": null,
+      "description": "加入垃圾桶方块，可销毁物品、流体或能量。"
+    },
+    {
+      "filename": "trashslot-forge-1.20-15.1.0.jar",
+      "primary": "信息与界面",
+      "subcategories": [
+        "物品管理"
+      ],
+      "tags": [
+        "Forge",
+        "信息与界面",
+        "垃圾槽",
+        "背包整理"
+      ],
+      "note": null,
+      "description": "在背包界面加入垃圾槽，用于快速丢弃物品。"
+    },
+    {
+      "filename": "TravelersTitles-1.20-Forge-4.0.2.jar",
+      "primary": "地图与传送",
+      "subcategories": [
+        "探索反馈"
+      ],
+      "tags": [
+        "Forge",
+        "区域标题",
+        "地图与传送",
+        "沉浸"
+      ],
+      "note": null,
+      "description": "进入生物群系或地区时显示标题字幕，强化探索氛围。"
+    },
+    {
+      "filename": "trenzalore-forge-3.3.10+mc1.20.1-all.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置/开发"
+      ],
+      "tags": [
+        "API",
+        "Forge",
+        "兼容",
+        "前置与兼容",
+        "前置库",
+        "整合包开发",
+        "矿物"
+      ],
+      "note": null,
+      "description": "未知（未检索到足够可靠的公开说明，或该模组可能为整合包私有/定制内容）。"
+    },
+    {
+      "filename": "twilightdelight-2.0.13.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "食物附属"
+      ],
+      "tags": [
+        "光照",
+        "农业与烹饪",
+        "农夫乐事附属",
+        "暮色料理"
+      ],
+      "note": null,
+      "description": "农夫乐事与暮色森林联动附属，加入暮色食材和料理。"
+    },
+    {
+      "filename": "twilightforest-1.20.1-4.3.2508-universal.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "新维度",
+        "RPG"
+      ],
+      "tags": [
+        "BOSS",
+        "光照",
+        "冒险",
+        "副本",
+        "探索",
+        "暮色森林",
+        "矿物"
+      ],
+      "note": null,
+      "description": "加入大型暮色维度，包含地牢、Boss、装备与流程化探索。"
+    },
+    {
+      "filename": "vintageimprovements-1.20.1-0.3.5.0.jar",
+      "primary": "科技",
+      "subcategories": [
+        "Create附属",
+        "机械工艺"
+      ],
+      "tags": [
+        "Create",
+        "工业",
+        "机械加工",
+        "科技",
+        "科技附属"
+      ],
+      "note": null,
+      "description": "机械动力/工业向扩展模组，补充更复古工业风的机器与加工线路。"
+    },
+    {
+      "filename": "vintage_kubejs-1.20.1-1.0.0rc-2.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "脚本开发"
+      ],
+      "tags": [
+        "KubeJS",
+        "事件",
+        "整合包开发",
+        "脚本",
+        "脚本与配置",
+        "配方"
+      ],
+      "note": null,
+      "description": "脚本、配置或整合包开发相关模组，用于调整配方、事件、任务或整合包逻辑。"
+    },
+    {
+      "filename": "waystones-forge-1.20-14.1.6.jar",
+      "primary": "地图与传送",
+      "subcategories": [
+        "传送"
+      ],
+      "tags": [
+        "Forge",
+        "传送网络",
+        "地图与传送",
+        "快速旅行"
+      ],
+      "note": null,
+      "description": "加入传送石碑网络，允许玩家在已激活地点间快速传送。"
+    },
+    {
+      "filename": "XaerosWorldMap_1.39.12_Forge_1.20.jar",
+      "primary": "地图与传送",
+      "subcategories": [
+        "地图"
+      ],
+      "tags": [
+        "Forge",
+        "世界地图",
+        "世界生成",
+        "地图",
+        "地图与传送",
+        "导航"
+      ],
+      "note": null,
+      "description": "提供可放大浏览的世界地图。"
+    },
+    {
+      "filename": "Xaeros_Minimap_25.2.10_Forge_1.20.jar",
+      "primary": "地图与传送",
+      "subcategories": [
+        "地图"
+      ],
+      "tags": [
+        "Forge",
+        "地图",
+        "地图与传送",
+        "导航",
+        "小地图"
+      ],
+      "note": null,
+      "description": "提供地图、定位、路径点或传送相关功能，方便探索与移动。"
+    },
+    {
+      "filename": "xplus-autofish-1.3.2-forge-mc1.20.1.jar",
+      "primary": "农业与烹饪",
+      "subcategories": [
+        "自动化"
+      ],
+      "tags": [
+        "Forge",
+        "农业与烹饪",
+        "挂机",
+        "钓鱼"
+      ],
+      "note": null,
+      "description": "提供自动钓鱼功能的辅助模组。"
+    },
+    {
+      "filename": "YeetusExperimentus-Forge-2.3.1-build.6+mc1.20.1.jar",
+      "primary": "性能优化",
+      "subcategories": [
+        "实验特性"
+      ],
+      "tags": [
+        "Forge",
+        "性能优化",
+        "界面",
+        "跳过实验警告"
+      ],
+      "note": null,
+      "description": "移除或关闭“实验性设置”世界创建警告。"
+    },
+    {
+      "filename": "YungsApi-1.20-Forge-4.0.6.jar",
+      "primary": "前置与兼容",
+      "subcategories": [
+        "前置"
+      ],
+      "tags": [
+        "Forge",
+        "YUNG前置",
+        "前置与兼容",
+        "库/前置"
+      ],
+      "note": null,
+      "description": "YUNG’s 系结构模组通用前置库。"
+    },
+    {
+      "filename": "YungsExtras-1.20-Forge-4.0.3.jar",
+      "primary": "冒险",
+      "subcategories": [
+        "结构"
+      ],
+      "tags": [
+        "Forge",
+        "冒险",
+        "探索",
+        "结构"
+      ],
+      "note": null,
+      "description": "YUNG’s 系额外结构/世界生成补充内容模组。"
+    },
+    {
+      "filename": "[Tinkers' Ponder]tponder-1.1.jar",
+      "primary": "脚本与配置",
+      "subcategories": [
+        "Ponder内容"
+      ],
+      "tags": [
+        "Ponder",
+        "匠魂",
+        "匠魂生态",
+        "教程",
+        "脚本与配置"
+      ],
+      "note": null,
+      "description": "为匠魂/现代匠魂补充类似 Ponder 的教学演示场景。"
+    }
+  ]
+}

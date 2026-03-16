@@ -1,4 +1,5 @@
 import 'package:ctnh_wiki/features/handbook/data/handbook_data.dart';
+import 'package:ctnh_wiki/features/handbook/view/widgets/mod_catalog_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,8 @@ class HandbookTab extends StatelessWidget {
               height: 1.6,
             ),
           ),
+          const SizedBox(height: 24),
+          const ModCatalogPanel(),
           const SizedBox(height: 24),
           isCompact
               ? Column(

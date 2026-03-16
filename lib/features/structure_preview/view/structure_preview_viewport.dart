@@ -15,6 +15,7 @@ class StructurePreviewViewport extends StatefulWidget {
     super.key,
     required this.structure,
     required this.size,
+    this.visiblePartIds,
     this.selectionController,
     this.stepController,
     this.onHoveredPartChanged,
@@ -23,6 +24,7 @@ class StructurePreviewViewport extends StatefulWidget {
 
   final StructurePreviewDefinition structure;
   final Size size;
+  final Set<String>? visiblePartIds;
   final StructureSelectionController? selectionController;
   final StructureStepController? stepController;
   final ValueChanged<String?>? onHoveredPartChanged;
@@ -53,8 +55,22 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
   StructureStepController? get _stepController => widget.stepController;
 
   Set<String>? get _visiblePartIds {
-    final visiblePartIds = _stepController?.visiblePartIds;
-    return visiblePartIds == null ? null : {...visiblePartIds};
+    final stepVisiblePartIds = _stepController?.visiblePartIds;
+    final widgetVisiblePartIds = widget.visiblePartIds;
+
+    if (stepVisiblePartIds == null && widgetVisiblePartIds == null) {
+      return null;
+    }
+    if (stepVisiblePartIds == null) {
+      return {...widgetVisiblePartIds!};
+    }
+    if (widgetVisiblePartIds == null) {
+      return {...stepVisiblePartIds};
+    }
+
+    return stepVisiblePartIds
+        .where(widgetVisiblePartIds.contains)
+        .toSet();
   }
 
   Set<String> get _focusedPartIds {
@@ -104,10 +120,16 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
       return;
     }
 
+    final visiblePartIdsChanged = !_samePartSets(
+      oldWidget.visiblePartIds,
+      widget.visiblePartIds,
+    );
+
     if (oldWidget.size != widget.size ||
         oldWidget.structure != widget.structure ||
         oldSelectionController != newSelectionController ||
-        oldWidget.stepController != widget.stepController) {
+        oldWidget.stepController != widget.stepController ||
+        visiblePartIdsChanged) {
       _disposeViewer();
       _createViewer();
     }

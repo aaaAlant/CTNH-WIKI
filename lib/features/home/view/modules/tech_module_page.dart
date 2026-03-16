@@ -1,8 +1,11 @@
 import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
 import 'package:ctnh_wiki/features/home/data/tech_structure_preview_data.dart';
+import 'package:ctnh_wiki/features/structure_preview/controllers/structure_filter_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_selection_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_step_controller.dart';
+import 'package:ctnh_wiki/features/structure_preview/services/structure_preview_filter_resolver.dart';
 import 'package:ctnh_wiki/features/structure_preview/view/structure_preview_viewport.dart';
+import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_filter_panel.dart';
 import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_part_detail_card.dart';
 import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_step_timeline.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +18,19 @@ class TechModulePage extends StatefulWidget {
 }
 
 class _TechModulePageState extends State<TechModulePage> {
+  static const _filterResolver = StructurePreviewFilterResolver();
+
   late final StructureSelectionController _selectionController;
   late final StructureStepController _stepController;
+  late final StructureFilterController _filterController;
+
+  Set<String> get _visiblePartIds {
+    return _filterResolver.resolveVisiblePartIds(
+      definition: techStructurePreviewDefinition,
+      stepController: _stepController,
+      filterController: _filterController,
+    );
+  }
 
   @override
   void initState() {
@@ -27,48 +41,69 @@ class _TechModulePageState extends State<TechModulePage> {
           ? 0
           : techStructurePreviewDefinition.steps.length - 1,
     );
-    _selectionController = StructureSelectionController(
-      initialPartId: _resolveStepSelection(),
+    _filterController = StructureFilterController(
+      parts: techStructurePreviewDefinition.parts,
     );
-    _stepController.addListener(_syncSelectionWithStep);
+    _selectionController = StructureSelectionController(
+      initialPartId: _resolveVisibleSelection(_visiblePartIds),
+    );
+    _stepController.addListener(_handlePresentationChanged);
+    _filterController.addListener(_handlePresentationChanged);
   }
 
   @override
   void dispose() {
-    _stepController.removeListener(_syncSelectionWithStep);
+    _stepController.removeListener(_handlePresentationChanged);
+    _filterController.removeListener(_handlePresentationChanged);
     _selectionController.dispose();
     _stepController.dispose();
+    _filterController.dispose();
     super.dispose();
   }
 
-  void _syncSelectionWithStep() {
-    final visiblePartIds = _stepController.visiblePartIds;
+  void _handlePresentationChanged() {
+    _syncSelectionWithVisibility();
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _syncSelectionWithVisibility() {
+    final visiblePartIds = _visiblePartIds;
     final currentPartId = _selectionController.selectedPartId;
-    if (currentPartId != null &&
-        visiblePartIds != null &&
-        visiblePartIds.contains(currentPartId)) {
+    if (currentPartId != null && visiblePartIds.contains(currentPartId)) {
       return;
     }
 
-    _selectionController.selectPart(_resolveStepSelection());
+    _selectionController.selectPart(_resolveVisibleSelection(visiblePartIds));
   }
 
-  String? _resolveStepSelection() {
+  String? _resolveVisibleSelection(Set<String> visiblePartIds) {
     final focusedPartIds = _stepController.focusedPartIds;
-    if (focusedPartIds.isNotEmpty) {
-      return focusedPartIds.first;
+    for (final partId in focusedPartIds) {
+      if (visiblePartIds.contains(partId)) {
+        return partId;
+      }
     }
 
-    final visiblePartIds = _stepController.visiblePartIds;
-    if (visiblePartIds != null && visiblePartIds.isNotEmpty) {
-      return visiblePartIds.first;
+    final currentStepPartIds = _filterResolver.resolveCurrentStepPartIds(
+      _stepController,
+    );
+    if (_filterController.showOnlyCurrentStepParts) {
+      for (final partId in currentStepPartIds) {
+        if (visiblePartIds.contains(partId)) {
+          return partId;
+        }
+      }
     }
 
-    if (techStructurePreviewDefinition.parts.isEmpty) {
-      return null;
+    for (final part in techStructurePreviewDefinition.parts) {
+      if (visiblePartIds.contains(part.id)) {
+        return part.id;
+      }
     }
 
-    return techStructurePreviewDefinition.parts.first.id;
+    return null;
   }
 
   @override
@@ -88,22 +123,23 @@ class _TechModulePageState extends State<TechModulePage> {
         const SizedBox(height: 24),
         _TechPreviewShowcase(
           isCompact: isCompact,
+          visiblePartIds: _visiblePartIds,
           selectionController: _selectionController,
           stepController: _stepController,
+          filterController: _filterController,
         ),
         const SizedBox(height: 20),
         const _HighlightTile(
           title: '结构预览已接入步骤系统',
-          description: '科技模块示例现在会按步骤逐层展示底座、动力、机器和显示单元，并同步控制 3D 结构里的可见部件。',
+          description: '科技模块示例会按步骤逐层展示底座、动力、机器和显示单元，并同步控制 3D 结构里的可见部件。',
         ),
         const _HighlightTile(
-          title: '悬停、选中与说明联动',
-          description: '鼠标悬停部件时会先给出轻量高亮提示，点击后再固定选中并在右侧展示详细说明，交互层级已经拆开。',
+          title: '图层与过滤已落第一版',
+          description: '现在可以按部件分类过滤结构，也可以切到“只看当前步骤相关部件”，用于快速缩小观察范围。',
         ),
         const _HighlightTile(
-          title: '已具备继续扩展的骨架',
-          description:
-              '当前结构数据、步骤控制、点击命中、悬停高亮和 block 渲染映射都已经接通，后续可以继续往图层过滤与更多方块外观扩展。',
+          title: '下一步转向说明面板扩展',
+          description: '过滤系统落地后，后续最值得继续补的是完整说明面板，把结构、步骤和选中部件信息整理成更清晰的阅读入口。',
         ),
       ],
     );
@@ -163,13 +199,17 @@ class _ModuleHeader extends StatelessWidget {
 class _TechPreviewShowcase extends StatefulWidget {
   const _TechPreviewShowcase({
     required this.isCompact,
+    required this.visiblePartIds,
     required this.selectionController,
     required this.stepController,
+    required this.filterController,
   });
 
   final bool isCompact;
+  final Set<String> visiblePartIds;
   final StructureSelectionController selectionController;
   final StructureStepController stepController;
+  final StructureFilterController filterController;
 
   @override
   State<_TechPreviewShowcase> createState() => _TechPreviewShowcaseState();
@@ -191,6 +231,7 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
   @override
   Widget build(BuildContext context) {
     final hoveredPart = techStructurePreviewDefinition.partById(_hoveredPartId);
+    final visiblePartCount = widget.visiblePartIds.length;
 
     final previewCard = LayoutBuilder(
       builder: (context, constraints) {
@@ -204,6 +245,7 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
             StructurePreviewViewport(
               structure: techStructurePreviewDefinition,
               size: Size(maxWidth, previewHeight),
+              visiblePartIds: widget.visiblePartIds,
               selectionController: widget.selectionController,
               stepController: widget.stepController,
               onHoveredPartChanged: _handleHoveredPartChanged,
@@ -252,11 +294,17 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
               bottom: 14,
               child: IgnorePointer(
                 child: AnimatedBuilder(
-                  animation: widget.stepController,
+                  animation: Listenable.merge([
+                    widget.stepController,
+                    widget.filterController,
+                  ]),
                   builder: (context, _) {
                     final currentStep = widget.stepController.currentStep;
                     final label = hoveredPart != null
                         ? '悬停部件：${hoveredPart.displayName}。点击后可在右侧固定查看详情。'
+                        : widget.filterController.showOnlyCurrentStepParts &&
+                              currentStep != null
+                        ? '当前过滤为“只看步骤 ${currentStep.title}”相关部件，方便聚焦当前搭建动作。'
                         : currentStep == null
                         ? '悬停或点击结构中的部件，右侧会同步显示该部件的说明。'
                         : '当前步骤：${currentStep.title}。可切换下方步骤条查看逐步搭建过程。';
@@ -292,15 +340,13 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
       animation: Listenable.merge([
         widget.selectionController,
         widget.stepController,
+        widget.filterController,
       ]),
       builder: (context, _) {
         final selectedPart = techStructurePreviewDefinition.partById(
           widget.selectionController.selectedPartId,
         );
         final currentStep = widget.stepController.currentStep;
-        final visiblePartCount =
-            widget.stepController.visiblePartIds?.length ??
-            techStructurePreviewDefinition.parts.length;
 
         return Container(
           width: double.infinity,
@@ -352,9 +398,18 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
                     label:
                         '步骤 ${widget.stepController.currentIndex + 1}/${widget.stepController.stepCount}',
                   ),
+                  if (widget.filterController.hasActiveFilter)
+                    const _PreviewTag(label: '过滤已启用'),
                   if (hoveredPart != null)
                     _PreviewTag(label: '悬停 ${hoveredPart.displayName}'),
                 ],
+              ),
+              const SizedBox(height: 18),
+              StructureFilterPanel(
+                structure: techStructurePreviewDefinition,
+                controller: widget.filterController,
+                stepController: widget.stepController,
+                visiblePartCount: visiblePartCount,
               ),
               const SizedBox(height: 18),
               const _SectionLabel(label: '当前步骤'),
@@ -375,7 +430,7 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
               ...[
                 ...techPreviewApiBullets,
                 '支持鼠标悬停高亮，与点击选中和步骤焦点分离处理。',
-                '已接入步骤控制器，支持按阶段控制结构显示范围和当前焦点。',
+                '支持按部件分类过滤结构，也可以切换到仅查看当前步骤相关部件。',
               ].map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
@@ -387,7 +442,7 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
               const SizedBox(height: 10),
               ...[
                 ...techPreviewRoadmap,
-                '继续补齐图层过滤、更多 block 外观注册和更完整的结构说明面板。',
+                '继续补齐更完整的结构说明面板，把结构简介、步骤说明和选中部件信息整合成统一入口。',
               ].map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
