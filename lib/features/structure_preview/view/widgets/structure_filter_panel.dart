@@ -21,10 +21,7 @@ class StructureFilterPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: Listenable.merge([
-        controller,
-        if (stepController != null) stepController!,
-      ]),
+      animation: Listenable.merge([controller, stepController]),
       builder: (context, _) {
         final sortedCategories = controller.availableCategories.toList()
           ..sort(
@@ -161,7 +158,7 @@ class StructureFilterPanel extends StatelessWidget {
 
   String _categoryLabel(StructurePartCategory category) {
     return switch (category) {
-      StructurePartCategory.foundation => '底座',
+      StructurePartCategory.foundation => '基础',
       StructurePartCategory.casing => '外壳',
       StructurePartCategory.power => '动力',
       StructurePartCategory.machine => '机器',

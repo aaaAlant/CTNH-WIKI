@@ -5,7 +5,7 @@ class StructurePartDetailCard extends StatelessWidget {
   const StructurePartDetailCard({
     super.key,
     required this.part,
-    this.emptyLabel = '点击左侧结构中的部件后，这里会显示详细说明。',
+    this.emptyLabel = '点击或悬停左侧结构中的部件，这里会显示该部件的说明、朝向和状态。',
   });
 
   final StructurePreviewPart? part;
@@ -82,14 +82,14 @@ class StructurePartDetailCard extends StatelessWidget {
 
   String _categoryLabel(StructurePartCategory category) {
     return switch (category) {
-      StructurePartCategory.foundation => '基础底座',
-      StructurePartCategory.casing => '框架外壳',
-      StructurePartCategory.power => '动力传输',
-      StructurePartCategory.machine => '核心机器',
-      StructurePartCategory.controller => '控制单元',
-      StructurePartCategory.display => '显示部件',
-      StructurePartCategory.transport => '支撑连接',
-      StructurePartCategory.decoration => '装饰部件',
+      StructurePartCategory.foundation => '基础',
+      StructurePartCategory.casing => '外壳',
+      StructurePartCategory.power => '动力',
+      StructurePartCategory.machine => '机器',
+      StructurePartCategory.controller => '控制',
+      StructurePartCategory.display => '显示',
+      StructurePartCategory.transport => '连接',
+      StructurePartCategory.decoration => '装饰',
     };
   }
 

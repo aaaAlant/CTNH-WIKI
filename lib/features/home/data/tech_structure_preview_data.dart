@@ -9,13 +9,14 @@ final techStructurePreviewDefinition = StructurePreviewDefinition(
   metadata: const StructurePreviewMetadata(
     title: '黄铜动力试验平台',
     summary: '一个用于验证多方块结构预览链路的科技示例结构。',
-    description: '该结构使用正式的结构数据模型描述部件、分类、步骤和场景配置，当前仍使用原生几何体作为临时可视化方案。',
+    description:
+        '该结构以动力轴、齿轮和紧凑机组为例，当前已经接入正式的结构数据模型、步骤系统、筛选系统和说明面板，后续可逐步替换为真实方块材质与模型。',
     module: StructurePreviewModule.tech,
     status: StructurePreviewStatus.inProgress,
-    tags: ['power', 'kinetics', 'prototype', 'multiblock'],
+    tags: ['科技', '动力传输', '原型', '多方块'],
     versionRange: StructureVersionRange(
       minVersion: 'v1.4.1b',
-      note: '当前为首页科技模块预览示例',
+      note: '当前为首页科技模块的预览示例',
     ),
     source: '首页 / 科技模块',
   ),
@@ -32,7 +33,7 @@ final techStructurePreviewDefinition = StructurePreviewDefinition(
     StructurePreviewStep(
       id: 'foundation',
       title: '铺设平台',
-      description: '先搭出底座和预览平台，保证后续机器和动力轴有稳定支撑。',
+      description: '先搭出底座与展示平台，保证后续机器与动力轴有稳定支撑。',
       revealedPartIds: [
         'tile-0-0',
         'tile-0-1',
@@ -65,7 +66,7 @@ final techStructurePreviewDefinition = StructurePreviewDefinition(
     StructurePreviewStep(
       id: 'power',
       title: '接入动力轴与齿轮',
-      description: '先确定动力传递方向，再安装双轴与齿轮作为结构骨架。',
+      description: '先明确动力传递方向，再安装双轴与齿轮，形成结构骨架。',
       revealedPartIds: [
         'axle-top',
         'axle-bottom',
@@ -85,7 +86,7 @@ final techStructurePreviewDefinition = StructurePreviewDefinition(
     StructurePreviewStep(
       id: 'displays',
       title: '补充读数与监视单元',
-      description: '最后补上显示部件，让结构具备“正在工作”的可视化信号。',
+      description: '最后补上显示部件，让结构具备正在工作的可视化信号。',
       revealedPartIds: ['display-top', 'display-bottom'],
       focusedPartIds: ['display-top', 'display-bottom'],
     ),
@@ -93,15 +94,15 @@ final techStructurePreviewDefinition = StructurePreviewDefinition(
 );
 
 const techPreviewApiBullets = [
-  '当前示例已经改为正式结构定义，场景元数据、部件信息和步骤信息都在同一套模型里维护。',
-  '每个部件都具备独立的 block id、分类、说明和标签，后续可以直接接选中、高亮和说明面板。',
-  '渲染层仍然保持独立，当前由适配器把正式模型转换成 three_js 所需的 scene data。',
+  '示例已经切换到正式结构定义，场景元数据、部件信息和步骤信息都在同一套模型里维护。',
+  '选中、悬停、步骤切换和筛选系统都复用同一套 part 元数据，后续接说明或入口不会重复造数据。',
+  '渲染层保持独立，当前通过适配器把正式结构模型转换成 three_js 所需的 scene 数据。',
 ];
 
 const techPreviewRoadmap = [
-  '接入 block id -> 材质 / 模型映射',
-  '加入部件点击选中与说明联动',
-  '支持按步骤和类别过滤显示结构',
+  '接入关联词条、任务概览和版本记录等页面入口。',
+  '扩展 block registry，支持更完整的六面贴图与特殊模型。',
+  '补充性能优化、降级策略和自动化测试覆盖。',
 ];
 
 List<StructurePreviewPart> _buildTechStructurePreviewParts() {
@@ -179,7 +180,7 @@ List<StructurePreviewPart> _buildTechStructurePreviewParts() {
       id: 'gear-top',
       blockId: 'create:large_cogwheel',
       displayName: '上层大齿轮',
-      description: '示意科技结构中显眼的机械传动部件。',
+      description: '示意科技结构中最显眼的机械传动部件之一。',
       category: StructurePartCategory.power,
       position: StructureVector3(-1.75, 0.95, -0.95),
       tags: ['gear', 'power'],
@@ -245,7 +246,7 @@ List<StructurePreviewPart> _buildTechStructurePreviewParts() {
       id: 'machine-c',
       blockId: 'ctnh:prototype_machine_c',
       displayName: '加工机组 C',
-      description: '下侧核心设备之一，用于示例机组的紧凑布置。',
+      description: '下侧核心设备之一，用于示例机组的紧凑布局。',
       category: StructurePartCategory.machine,
       position: StructureVector3(1.35, 0.58, 0.95),
       tags: ['machine', 'core'],

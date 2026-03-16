@@ -1,436 +1,256 @@
 # 多方块结构预览模块说明
 
-## 1. 模块定位
+## 1. 模块目标
 
-“多方块结构预览”用于在 Flutter 页面内嵌一个可交互的 3D 结构视口，展示配方、多方块机器或阶段性搭建结构。目标不是做完整 Minecraft 世界渲染器，而是做一个受控、可说明、可扩展的结构预览组件。
+“多方块结构预览”用于在 Flutter 页面中嵌入一个可交互的 3D 结构预览区，向玩家展示某个多方块结构由哪些部件组成、应该按什么步骤搭建，以及每个关键部件承担什么作用。
 
-当前技术路线：
+当前实现定位是：
 
-- 页面层：Flutter 原生 UI
-- 3D 层：`three_js`
-- 数据层：结构定义、部件定义、步骤定义、block 注册表
-- 交互层：选中、悬停、步骤切换、图层过滤
+- 在页面内提供一个可旋转、可缩放、可选中的 `three_js` 预览窗口
+- 用正式的数据模型描述结构元信息、部件、步骤和场景配置
+- 将说明、筛选、步骤和部件详情统一到同一套结构数据上
 
----
+## 2. 当前实现状态
 
-## 2. 当前已完成能力
+当前已经完成的能力：
 
-### 2.1 基础视口
+- 正式结构定义模型
+- three_js 预览视口
+- 部件点击选中与说明联动
+- 悬停高亮
+- 步骤切换与按步骤显示部件
+- 分类过滤与“只看当前步骤”过滤
+- `blockId -> registry -> visuals` 的基础映射链路
+- 首页科技模块中的完整示例
+- 独立的结构说明面板
 
-- 已接入 `three_js`
-- 已封装 `StructurePreviewViewport`
-- 已支持旋转、缩放和基础灯光
-- 已支持测试环境和无 3D 环境下的 fallback
+当前仍在推进的方向：
 
-### 2.2 正式数据模型
+- 真实方块贴图与特殊模型
+- 关联词条 / 任务概览 / 版本记录等入口联动
+- 更强的图层控制与性能优化
+- 更完整的降级与测试方案
 
-- 已完成 `StructurePreviewDefinition`
-- 已完成 `StructurePreviewMetadata`
-- 已完成 `StructurePreviewPart`
-- 已完成 `StructurePreviewStep`
-- 已完成舞台和相机配置模型
-
-### 2.3 场景构建与渲染
-
-- 已完成 `StructurePreviewSceneBuilder`
-- 已完成 primitive 场景构建
-- 已完成 `blockId -> registry -> visuals` 回退链路
-- 已完成单贴图和六面贴图材质支持
-- 已完成贴图缓存和像素风采样配置
-
-### 2.4 交互
-
-- 已完成点击命中
-- 已完成选中高亮
-- 已完成步骤焦点高亮
-- 已完成悬停高亮
-- 已完成选中部件与右侧说明联动
-- 已完成步骤切换与结构显隐联动
-- 已完成图层与过滤第一版
-
-### 2.5 页面示例
-
-- 首页科技模块已接入正式示例
-- 示例当前覆盖：
-  - 结构渲染
-  - 步骤系统
-  - 选中联动
-  - 悬停提示
-  - block registry 渲染映射
-  - 分类过滤
-  - 仅看当前步骤相关部件
-
----
-
-## 3. 当前目录职责
+## 3. 当前架构
 
 ### 3.1 数据模型
 
-- `lib/features/structure_preview/models/structure_preview_definition.dart`
-  - 整个结构的统一入口
-- `lib/features/structure_preview/models/structure_preview_metadata.dart`
-  - 标题、摘要、描述、标签、状态等元数据
-- `lib/features/structure_preview/models/structure_preview_part.dart`
-  - 单个逻辑部件定义
-- `lib/features/structure_preview/models/structure_preview_step.dart`
-  - 步骤定义
-- `lib/features/structure_preview/models/structure_preview_scene.dart`
-  - 渲染层使用的低层 scene 数据
-- `lib/features/structure_preview/models/structure_block.dart`
-  - block 注册表条目定义
+核心模型位于 `lib/features/structure_preview/models/`：
+
+- `structure_preview_definition.dart`
+  - 结构总定义，包含结构 id、元数据、相机、部件、步骤和舞台配置
+- `structure_preview_metadata.dart`
+  - 结构标题、摘要、描述、模块、状态、标签、版本范围、来源
+- `structure_preview_part.dart`
+  - 单个部件定义，包含 `partId`、`blockId`、名称、说明、分类、位置、朝向、状态和视觉定义
+- `structure_preview_step.dart`
+  - 步骤标题、说明、当前步骤显示哪些部件、聚焦哪些部件
+- `structure_block.dart`
+  - `blockId` 对应的默认视觉定义
+- `structure_preview_scene.dart`
+  - 渲染层使用的低层 scene 数据结构
 
 ### 3.2 控制器
 
-- `lib/features/structure_preview/controllers/structure_selection_controller.dart`
-  - 管理当前选中部件
-- `lib/features/structure_preview/controllers/structure_step_controller.dart`
-  - 管理步骤索引、可见部件和焦点部件
-- `lib/features/structure_preview/controllers/structure_filter_controller.dart`
-  - 管理当前分类过滤状态和“仅看当前步骤相关部件”开关
+控制器位于 `lib/features/structure_preview/controllers/`：
+
+- `structure_selection_controller.dart`
+  - 管理当前选中的部件
+- `structure_step_controller.dart`
+  - 管理当前步骤、步数切换和按步骤可见部件
+- `structure_filter_controller.dart`
+  - 管理分类过滤和“只看当前步骤相关部件”
 
 ### 3.3 服务层
 
-- `lib/features/structure_preview/services/structure_preview_scene_builder.dart`
-  - 将正式结构定义转换成渲染场景
-- `lib/features/structure_preview/services/structure_hit_test_service.dart`
-  - 使用 `Raycaster` 做部件命中检测
-- `lib/features/structure_preview/services/structure_texture_cache.dart`
-  - 负责纹理加载与缓存
-- `lib/features/structure_preview/services/structure_preview_filter_resolver.dart`
-  - 把步骤可见性与过滤控制器合并成最终可见部件集合
+服务位于 `lib/features/structure_preview/services/`：
+
+- `structure_preview_scene_builder.dart`
+  - 把正式结构定义转换成 three_js 使用的 scene 数据
+- `structure_hit_test_service.dart`
+  - 使用 `Raycaster` 做命中检测
+- `structure_texture_cache.dart`
+  - 纹理缓存
+- `structure_preview_filter_resolver.dart`
+  - 结合步骤与过滤器计算当前可见部件集合
 
 ### 3.4 渲染层
 
-- `lib/features/structure_preview/three_js/structure_preview_renderer.dart`
-  - 初始化场景、相机、灯光、控制器、mesh
-  - 管理选中、悬停、步骤焦点三种高亮状态
-  - 管理 interactive objects 列表
-  - 管理材质构建与刷新
+渲染层位于 `lib/features/structure_preview/three_js/structure_preview_renderer.dart`，当前负责：
+
+- 创建 scene、camera、lights、controls
+- 根据 scene 数据构建 mesh
+- 维护 hover / selected / focused 三类高亮状态
+- 应用默认材质、贴图材质和方块视觉定义
 
 ### 3.5 视图层
 
-- `lib/features/structure_preview/view/structure_preview_viewport.dart`
-  - Flutter 与 3D 的桥接层
-  - 接线 selection controller
-  - 接线 step controller
-  - 接收外部 `visiblePartIds`
-  - 绑定 pointer move/down/leave
-  - 把 hover / selection 结果回传页面
-- `lib/features/structure_preview/view/widgets/structure_part_detail_card.dart`
-  - 显示当前选中部件详情
-- `lib/features/structure_preview/view/widgets/structure_step_timeline.dart`
-  - 显示步骤切换条
-- `lib/features/structure_preview/view/widgets/structure_filter_panel.dart`
-  - 显示过滤状态、分类过滤和当前步骤过滤入口
+视图相关文件位于 `lib/features/structure_preview/view/`：
 
-### 3.6 数据入口与示例
+- `structure_preview_viewport.dart`
+  - Flutter 页面内嵌 3D 视口
+- `widgets/structure_step_timeline.dart`
+  - 步骤切换条
+- `widgets/structure_filter_panel.dart`
+  - 过滤面板
+- `widgets/structure_part_detail_card.dart`
+  - 部件详情卡
+- `widgets/structure_insight_panel.dart`
+  - 结构说明面板
 
-- `lib/features/structure_preview/data/structure_block_registry.dart`
-  - 维护 `blockId -> StructureBlockDefinition`
+当前首页科技模块示例位于：
+
 - `lib/features/home/data/tech_structure_preview_data.dart`
-  - 科技模块的结构预览示例
 - `lib/features/home/view/modules/tech_module_page.dart`
-  - 科技模块页面接入
 
----
+## 4. 功能拆分
 
-## 4. 当前核心数据模型
+### 4.1 结构定义与场景数据
 
-### 4.1 `StructurePreviewDefinition`
+已完成。
 
-字段职责：
+当前已经能够用一套正式模型描述：
 
-- `id`：结构唯一标识
-- `metadata`：结构元数据
-- `camera`：相机预设
-- `parts`：所有逻辑部件
-- `steps`：步骤列表
-- `stage`：舞台背景与灯光配置
+- 结构级元数据
+- 部件级信息
+- 步骤级信息
+- 相机与舞台配置
 
-它是页面层、渲染层、步骤系统的统一输入对象。
+### 4.2 部件选中与悬停
 
-### 4.2 `StructurePreviewPart`
+已完成。
 
-一个 part 表示一个逻辑部件，而不是单个 mesh。
+当前行为：
 
-当前支持：
+- 鼠标悬停部件时，3D 结构高亮
+- 点击部件后，选中状态锁定
+- 右侧说明面板同步更新当前部件信息
 
-- `id`
-- `blockId`
-- `displayName`
-- `description`
-- `category`
-- `position`
-- `rotation`
-- `facing`
-- `state`
-- `tags`
-- `visuals`
+### 4.3 步骤系统
 
-说明：
+已完成。
 
-- 一个 part 可以展开成一个或多个 primitive
-- `visuals` 为空时，会根据 `blockId` 到 registry 找默认外观
+当前行为：
 
-### 4.3 `StructurePreviewStep`
+- 可按步骤切换结构显示
+- 当前步骤可定义聚焦部件
+- 时间轴与说明面板同步展示当前步骤
 
-当前支持：
+### 4.4 方块注册表与视觉映射
 
-- `id`
-- `title`
-- `description`
-- `revealedPartIds`
-- `focusedPartIds`
+已完成第一版。
 
-职责：
+当前能力：
 
-- 定义某一步新增显示哪些部件
-- 定义当前步骤重点强调哪些部件
+- `part.visuals` 为空时，会退回到 `blockId` 对应的默认视觉定义
+- 已接通基础贴图与材质缓存链路
 
-### 4.4 `StructureMaterialStyle`
+后续还要继续补：
 
-当前支持：
+- 六面贴图命名规范
+- 更复杂的 block visual factory
+- 非完整立方体的特殊模型
 
-- `color`
-- `metalness`
-- `roughness`
-- `opacity`
-- `mapAsset`
-- `faceTextures`
-- `pixelated`
-- `alphaTest`
-- `doubleSided`
+### 4.5 图层与过滤系统
 
-职责：
+已完成第一版。
 
-- 把“结构数据”与“渲染材质”解耦
-- 为像 Minecraft 一样的方块贴图提供正式接口
+当前能力：
 
-### 4.5 `StructureBlockDefinition`
+- 按分类显示 / 隐藏部件
+- 只看当前步骤相关部件
+- 过滤后同步修正当前选中部件
 
-当前支持：
+### 4.6 说明面板
 
-- `blockId`
-- `displayName`
-- `visuals`
+已完成第一版。
 
-职责：
+当前说明面板已经包含：
 
-- 为 block 提供统一默认渲染定义
-- 避免在页面示例里直接写死视觉 primitive
+- 结构概览
+- 当前可见部件统计
+- 过滤状态
+- 当前步骤摘要
+- 当前部件详情
+- 已接入能力清单
+- 下一步扩展清单
+- 预留入口占位
 
----
+## 5. 后续需要分别实现的功能
 
-## 5. 当前已打通的功能链路
+下面这些能力建议继续拆开实现：
 
-### 5.1 选中链路
-
-1. 用户点击视口
-2. `StructureHitTestService` 使用 `Raycaster` 做命中检测
-3. 命中结果返回 `partId`
-4. `StructureSelectionController` 更新当前选中部件
-5. `StructurePreviewRenderer` 刷新对应 mesh 高亮
-6. 页面刷新 `StructurePartDetailCard`
-
-### 5.2 悬停链路
-
-1. 用户在视口内移动鼠标
-2. `StructurePreviewViewport` 监听 `pointermove`
-3. `StructureHitTestService` 返回当前命中的 `partId`
-4. `StructurePreviewRenderer` 刷新 hover 高亮
-5. 页面接收 `onHoveredPartChanged`
-6. 科技模块顶部提示条同步显示当前悬停部件名称
-
-说明：
-
-- hover 与 selected 分离
-- hover 是轻量反馈
-- selected 是固定选中态
-- focused 是步骤系统提供的阶段焦点态
-
-当前高亮优先级：
-
-1. selected
-2. hovered
-3. focused
-
-### 5.3 步骤链路
-
-1. 用户在 `StructureStepTimeline` 中切换步骤
-2. `StructureStepController` 更新当前步骤索引
-3. 视口根据步骤重新计算可见部件
-4. 需要时重建场景
-5. 渲染器刷新当前焦点部件高亮
-6. 页面同步刷新步骤说明
-
-### 5.4 block 渲染链路
-
-1. `StructurePreviewSceneBuilder` 处理 part 数据
-2. 如果 part 未直接声明 `visuals`，则按 `blockId` 查询 `StructureBlockRegistry`
-3. registry 返回默认 visuals
-4. 渲染器根据材质配置创建材质
-5. 如果材质定义里有贴图，则通过 `StructureTextureCache` 加载
-6. 渲染器生成单材质或六面材质
-
-### 5.5 过滤链路
-
-1. 页面通过 `StructureFilterController` 维护分类过滤和当前步骤过滤开关
-2. `StructurePreviewFilterResolver` 将过滤状态与步骤可见范围合并
-3. `TechModulePage` 将最终 `visiblePartIds` 传给 `StructurePreviewViewport`
-4. `StructurePreviewViewport` 在场景构建时只保留允许显示的部件
-5. 若当前选中部件被过滤掉，页面会自动重新选择一个仍然可见的部件
-6. 右侧过滤面板同步展示当前过滤状态和部件数量
-
----
-
-## 6. 当前页面示例的职责
-
-首页科技模块中的示例目前承担这些职责：
-
-- 验证 `three_js + Flutter` 的集成方式
-- 验证正式结构定义是否足够支撑渲染和页面说明
-- 验证“点击部件 -> 右侧详情联动”
-- 验证“悬停部件 -> 顶部提示反馈”
-- 验证“步骤切换 -> 结构显隐和焦点更新”
-- 验证“过滤控制 -> 结构范围缩小 -> 选中状态修正”
-- 验证“blockId -> registry -> material/texture” 的正式渲染链路
-
-因此它已经不是一次性 demo，而是正式组件的原型版本。
-
----
-
-## 7. 还需要分别实现的功能模块
-
-### 7.1 更完整的说明面板
-
-目标：
-
-- 从“部件详情卡”扩展成完整的结构说明入口
+### 5.1 页面入口联动
 
 需要实现：
 
-- 结构简介
-- 当前步骤说明
-- 当前选中部件详情
-- 关联词条 / 任务 / 版本入口
-- 可能的材料与依赖信息
+- 从结构说明面板跳转到图鉴词条
+- 从结构说明面板跳转到任务概览
+- 从结构说明面板查看对应版本差异
 
-### 7.2 更完整的 block 外观注册
+依赖：
 
-目标：
+- 结构级或部件级的关联数据字段
+- 页面路由与目标数据源
 
-- 让 registry 真正承载大部分预览方块外观
-
-需要实现：
-
-- 常规立方方块贴图方案
-- 顶/底/侧不同贴图的方块
-- 带透明通道的贴图方块
-- 多 primitive 组合方块
-- 后续非立方体模型入口
-
-### 7.3 非完整方块与复杂模型
-
-目标：
-
-- 支持管道、齿轮、支架、面板等结构件
+### 5.2 真实方块视觉
 
 需要实现：
 
-- 组合几何工厂
-- 朝向和旋转规则
-- 未来 glTF 或其他模型接入入口
+- 方块六面贴图
+- 像素风采样配置
+- 更完整的 `blockId -> material / texture / model` 注册表
+- 机械部件、管道、面板等特殊模型
 
-### 7.4 性能优化
+依赖：
 
-目标：
+- 贴图资源
+- 面朝向约定
+- 非立方体方块的建模方案
 
-- 保证结构复杂度提升后仍可用
-
-需要实现：
-
-- 几何与材质复用
-- 贴图缓存策略细化
-- 场景重建最小化
-- hover / selection 刷新范围最小化
-- 评估 `InstancedMesh`
-
-### 7.5 测试与稳定性
-
-目标：
-
-- 保证非 3D 环境、测试环境和后续扩展时都稳定
+### 5.3 图层系统增强
 
 需要实现：
 
-- fallback UI 测试
-- scene builder 测试
-- selection controller 测试
-- step controller 测试
-- filter controller 测试
-- block registry 测试
-- 页面联动测试
+- 更细粒度的图层开关
+- 基础层 / 机器层 / 连线层 / 装饰层分层显示
+- 半透明幽灵部件与步骤对比显示
 
----
+### 5.4 性能优化
 
-## 8. 建议的后续实施顺序
+需要实现：
+
+- 重复方块的合批或实例化
+- 不可见面剔除
+- 更稳定的纹理缓存策略
+- 大结构场景下的降级方案
+
+### 5.5 测试与降级
+
+需要实现：
+
+- scene builder 的单元测试
+- filter / selection / step controller 的单元测试
+- 无 3D 环境时的 fallback 预览卡
+- 多平台兼容性验证
+
+## 6. 推荐的下一阶段顺序
 
 建议按下面顺序继续推进：
 
-1. 更完整的说明面板
-2. 更完整的 block 外观注册
-3. 非完整方块与复杂模型
+1. 页面入口联动
+2. 真实方块视觉
+3. 图层系统增强
 4. 性能优化
-5. 测试补齐
+5. 测试与降级
 
-原因：
+## 7. 当前结论
 
-- 当前交互基础链路已经闭合
-- 过滤系统已经让结构“更可用”
-- 下一步最值得补的是“更好读”，也就是完整说明入口
+目前这套“多方块结构预览”已经不是临时 demo，而是一套可以继续扩展的正式框架：
 
----
+- 结构数据层已经稳定
+- three_js 渲染层已经可复用
+- 页面交互链路已经贯通
+- 说明面板已经具备继续接真实内容的承载能力
 
-## 9. 当前阶段验收标准
-
-当前版本如果满足以下条件，即可视为“过滤系统第一阶段完成”：
-
-- 科技模块内可以正常显示 3D 结构
-- 结构可旋转、缩放
-- 鼠标悬停部件时会出现轻量高亮
-- 点击部件后会出现固定选中高亮
-- 选中详情卡会同步更新
-- 下方步骤条可以切换步骤
-- 切换步骤后结构会按阶段显示
-- 当前步骤焦点部件会高亮
-- 可以按分类隐藏 / 显示部件
-- 可以切换到“只看当前步骤相关部件”
-- 当前过滤状态会同步反映在右侧说明区域
-- 部分 block 已经通过 registry 渲染
-- 页面在无 3D 环境下仍有 fallback
-- `dart analyze .` 通过
-
----
-
-## 10. 当前需要你后续提供的输入
-
-为了继续往 Minecraft 风格方块渲染扩展，后面需要你逐步提供：
-
-- 正式的方块材质贴图
-- 六个面的命名约定
-- 哪些方块是完整立方体
-- 哪些方块需要特殊模型或组合几何
-- 结构数据中各类 `blockId` 的命名规范
-
----
-
-## 11. 下一步建议
-
-下一步建议直接开始做“更完整的说明面板”，先补一层最小可用能力：
-
-- 结构简介与当前步骤说明分区
-- 当前选中部件详情扩展
-- 过滤状态摘要与步骤说明整合
-- 后续关联词条 / 任务 / 版本入口预留
-
-这一层补完之后，多方块结构预览就会从“能看、能点、能过滤”进入“能快速读懂结构”的阶段。
+接下来重点不再是“能不能显示一个 3D 结构”，而是把这套框架继续扩成真正能服务图鉴、任务概览和版本说明的结构预览系统。

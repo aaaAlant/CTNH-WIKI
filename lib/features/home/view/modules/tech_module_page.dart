@@ -5,8 +5,7 @@ import 'package:ctnh_wiki/features/structure_preview/controllers/structure_selec
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_step_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/services/structure_preview_filter_resolver.dart';
 import 'package:ctnh_wiki/features/structure_preview/view/structure_preview_viewport.dart';
-import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_filter_panel.dart';
-import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_part_detail_card.dart';
+import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_insight_panel.dart';
 import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_step_timeline.dart';
 import 'package:flutter/material.dart';
 
@@ -130,16 +129,16 @@ class _TechModulePageState extends State<TechModulePage> {
         ),
         const SizedBox(height: 20),
         const _HighlightTile(
-          title: '结构预览已接入步骤系统',
-          description: '科技模块示例会按步骤逐层展示底座、动力、机器和显示单元，并同步控制 3D 结构里的可见部件。',
+          title: '正式结构模型',
+          description: '科技示例现在通过正式的结构定义驱动，部件、步骤、筛选和说明面板都围绕同一套数据组织。',
         ),
         const _HighlightTile(
-          title: '图层与过滤已落第一版',
-          description: '现在可以按部件分类过滤结构，也可以切到“只看当前步骤相关部件”，用于快速缩小观察范围。',
+          title: '交互链路已接通',
+          description: '左侧 3D 预览已经支持悬停、选中、步骤切换和分类过滤，右侧说明区会同步展示当前结构状态。',
         ),
         const _HighlightTile(
-          title: '下一步转向说明面板扩展',
-          description: '过滤系统落地后，后续最值得继续补的是完整说明面板，把结构、步骤和选中部件信息整理成更清晰的阅读入口。',
+          title: '下一步进入真实渲染',
+          description: '说明面板已经成型，接下来可以继续扩展 block 注册表、六面贴图和特殊模型，让结构外观更接近真实方块。',
         ),
       ],
     );
@@ -231,7 +230,6 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
   @override
   Widget build(BuildContext context) {
     final hoveredPart = techStructurePreviewDefinition.partById(_hoveredPartId);
-    final visiblePartCount = widget.visiblePartIds.length;
 
     final previewCard = LayoutBuilder(
       builder: (context, constraints) {
@@ -276,7 +274,7 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        'three_js 原生预览',
+                        'three_js 原型预览',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -299,16 +297,6 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
                     widget.filterController,
                   ]),
                   builder: (context, _) {
-                    final currentStep = widget.stepController.currentStep;
-                    final label = hoveredPart != null
-                        ? '悬停部件：${hoveredPart.displayName}。点击后可在右侧固定查看详情。'
-                        : widget.filterController.showOnlyCurrentStepParts &&
-                              currentStep != null
-                        ? '当前过滤为“只看步骤 ${currentStep.title}”相关部件，方便聚焦当前搭建动作。'
-                        : currentStep == null
-                        ? '悬停或点击结构中的部件，右侧会同步显示该部件的说明。'
-                        : '当前步骤：${currentStep.title}。可切换下方步骤条查看逐步搭建过程。';
-
                     return Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -319,7 +307,11 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
-                        label,
+                        _buildPreviewHint(
+                          hoveredPart: hoveredPart,
+                          stepController: widget.stepController,
+                          filterController: widget.filterController,
+                        ),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -336,125 +328,15 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
       },
     );
 
-    final notesCard = AnimatedBuilder(
-      animation: Listenable.merge([
-        widget.selectionController,
-        widget.stepController,
-        widget.filterController,
-      ]),
-      builder: (context, _) {
-        final selectedPart = techStructurePreviewDefinition.partById(
-          widget.selectionController.selectedPartId,
-        );
-        final currentStep = widget.stepController.currentStep;
-
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: const Color(0xFFFFFCF6),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFFE7DCCB)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '多方块结构预览',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF201A16),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                techStructurePreviewDefinition.metadata.description,
-                style: const TextStyle(
-                  fontSize: 14,
-                  height: 1.7,
-                  color: Color(0xFF5F554D),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                techStructurePreviewDefinition.metadata.summary,
-                style: const TextStyle(
-                  fontSize: 13,
-                  height: 1.6,
-                  color: Color(0xFF7A6D63),
-                ),
-              ),
-              const SizedBox(height: 18),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  _PreviewTag(
-                    label: '${techStructurePreviewDefinition.parts.length} 个部件',
-                  ),
-                  _PreviewTag(label: '$visiblePartCount 个已显示'),
-                  _PreviewTag(
-                    label:
-                        '步骤 ${widget.stepController.currentIndex + 1}/${widget.stepController.stepCount}',
-                  ),
-                  if (widget.filterController.hasActiveFilter)
-                    const _PreviewTag(label: '过滤已启用'),
-                  if (hoveredPart != null)
-                    _PreviewTag(label: '悬停 ${hoveredPart.displayName}'),
-                ],
-              ),
-              const SizedBox(height: 18),
-              StructureFilterPanel(
-                structure: techStructurePreviewDefinition,
-                controller: widget.filterController,
-                stepController: widget.stepController,
-                visiblePartCount: visiblePartCount,
-              ),
-              const SizedBox(height: 18),
-              const _SectionLabel(label: '当前步骤'),
-              const SizedBox(height: 10),
-              _StepSummaryCard(
-                currentIndex: widget.stepController.currentIndex,
-                totalCount: widget.stepController.stepCount,
-                stepTitle: currentStep?.title ?? '未配置步骤',
-                stepDescription: currentStep?.description ?? '当前结构还没有步骤说明。',
-              ),
-              const SizedBox(height: 18),
-              const _SectionLabel(label: '当前选中部件'),
-              const SizedBox(height: 10),
-              StructurePartDetailCard(part: selectedPart),
-              const SizedBox(height: 18),
-              const _SectionLabel(label: '当前已落地能力'),
-              const SizedBox(height: 10),
-              ...[
-                ...techPreviewApiBullets,
-                '支持鼠标悬停高亮，与点击选中和步骤焦点分离处理。',
-                '支持按部件分类过滤结构，也可以切换到仅查看当前步骤相关部件。',
-              ].map(
-                (item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: _BulletRow(text: item),
-                ),
-              ),
-              const SizedBox(height: 18),
-              const _SectionLabel(label: '下一步扩展'),
-              const SizedBox(height: 10),
-              ...[
-                '扩展结构说明面板',
-                '补齐更多 block 外观注册',
-                '支持更复杂的非立方体结构件',
-                '继续补齐更完整的结构说明面板，把结构简介、步骤说明和选中部件信息整合成统一入口。',
-              ].map(
-                (item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: _BulletRow(text: item),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+    final notesCard = StructureInsightPanel(
+      structure: techStructurePreviewDefinition,
+      selectionController: widget.selectionController,
+      stepController: widget.stepController,
+      filterController: widget.filterController,
+      visiblePartCount: widget.visiblePartIds.length,
+      hoveredPartId: _hoveredPartId,
+      capabilityBullets: techPreviewApiBullets,
+      roadmapBullets: techPreviewRoadmap,
     );
 
     return Container(
@@ -495,138 +377,27 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
       ),
     );
   }
-}
 
-class _StepSummaryCard extends StatelessWidget {
-  const _StepSummaryCard({
-    required this.currentIndex,
-    required this.totalCount,
-    required this.stepTitle,
-    required this.stepDescription,
-  });
+  String _buildPreviewHint({
+    required StructureStepController stepController,
+    required StructureFilterController filterController,
+    required hoveredPart,
+  }) {
+    final currentStep = stepController.currentStep;
 
-  final int currentIndex;
-  final int totalCount;
-  final String stepTitle;
-  final String stepDescription;
+    if (hoveredPart != null) {
+      return '悬停：${hoveredPart.displayName}。点击可锁定该部件，并在右侧查看详细说明。';
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F2E8),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE6D9C8)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '步骤 ${currentIndex + 1}/$totalCount',
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.1,
-              color: Color(0xFF9C6A2B),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            stepTitle,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF201A16),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            stepDescription,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.65,
-              color: Color(0xFF4E443D),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+    if (filterController.showOnlyCurrentStepParts && currentStep != null) {
+      return '当前仅显示步骤“${currentStep.title}”相关部件，可配合右侧过滤面板查看不同分类。';
+    }
 
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.label});
+    if (currentStep == null) {
+      return '拖动可旋转视角，滚轮可缩放。点击部件后，右侧说明面板会同步展示详细信息。';
+    }
 
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w800,
-        letterSpacing: 1.1,
-        color: Color(0xFF9C6A2B),
-      ),
-    );
-  }
-}
-
-class _PreviewTag extends StatelessWidget {
-  const _PreviewTag({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3E5D0),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          color: Color(0xFF5C4531),
-        ),
-      ),
-    );
-  }
-}
-
-class _BulletRow extends StatelessWidget {
-  const _BulletRow({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 7),
-          child: Icon(Icons.circle, size: 7, color: Color(0xFFC88A3D)),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.6,
-              color: Color(0xFF4E443D),
-            ),
-          ),
-        ),
-      ],
-    );
+    return '当前处于步骤“${currentStep.title}”。可拖动视角或点击部件，查看对应的结构说明。';
   }
 }
 
