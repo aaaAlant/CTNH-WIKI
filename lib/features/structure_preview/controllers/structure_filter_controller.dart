@@ -5,13 +5,9 @@ class StructureFilterController extends ChangeNotifier {
   StructureFilterController({
     required Iterable<StructurePreviewPart> parts,
     bool showOnlyCurrentStepParts = false,
-  }) : _availableCategories = {
-         ...parts.map((part) => part.category),
-       },
+  }) : _availableCategories = {...parts.map((part) => part.category)},
        _showOnlyCurrentStepParts = showOnlyCurrentStepParts,
-       _visibleCategories = {
-         ...parts.map((part) => part.category),
-       };
+       _visibleCategories = {...parts.map((part) => part.category)};
 
   final Set<StructurePartCategory> _availableCategories;
   final Set<StructurePartCategory> _visibleCategories;

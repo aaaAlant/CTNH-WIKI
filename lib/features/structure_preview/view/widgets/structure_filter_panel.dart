@@ -27,9 +27,10 @@ class StructureFilterPanel extends StatelessWidget {
       ]),
       builder: (context, _) {
         final sortedCategories = controller.availableCategories.toList()
-          ..sort((left, right) => _categoryLabel(left).compareTo(
-            _categoryLabel(right),
-          ));
+          ..sort(
+            (left, right) =>
+                _categoryLabel(left).compareTo(_categoryLabel(right)),
+          );
 
         return Container(
           width: double.infinity,

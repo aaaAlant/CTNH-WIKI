@@ -39,15 +39,14 @@ class StructurePreviewFilterResolver {
     return visiblePartIds;
   }
 
-  Set<String> resolveCurrentStepPartIds(StructureStepController? stepController) {
+  Set<String> resolveCurrentStepPartIds(
+    StructureStepController? stepController,
+  ) {
     final currentStep = stepController?.currentStep;
     if (currentStep == null) {
       return const <String>{};
     }
 
-    return {
-      ...currentStep.revealedPartIds,
-      ...currentStep.focusedPartIds,
-    };
+    return {...currentStep.revealedPartIds, ...currentStep.focusedPartIds};
   }
 }

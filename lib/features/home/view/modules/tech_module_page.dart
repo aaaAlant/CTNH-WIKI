@@ -441,7 +441,9 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
               const _SectionLabel(label: '下一步扩展'),
               const SizedBox(height: 10),
               ...[
-                ...techPreviewRoadmap,
+                '扩展结构说明面板',
+                '补齐更多 block 外观注册',
+                '支持更复杂的非立方体结构件',
                 '继续补齐更完整的结构说明面板，把结构简介、步骤说明和选中部件信息整合成统一入口。',
               ].map(
                 (item) => Padding(

@@ -68,9 +68,7 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
       return {...stepVisiblePartIds};
     }
 
-    return stepVisiblePartIds
-        .where(widgetVisiblePartIds.contains)
-        .toSet();
+    return stepVisiblePartIds.where(widgetVisiblePartIds.contains).toSet();
   }
 
   Set<String> get _focusedPartIds {
