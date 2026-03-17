@@ -1,9 +1,11 @@
-import 'package:ctnh_wiki/features/handbook/data/mod_catalog_repository.dart';
+﻿import 'package:ctnh_wiki/features/handbook/data/mod_catalog_repository.dart';
 import 'package:ctnh_wiki/features/handbook/models/mod_catalog_entry.dart';
 import 'package:flutter/material.dart';
 
 class ModCatalogPanel extends StatefulWidget {
-  const ModCatalogPanel({super.key});
+  const ModCatalogPanel({super.key, this.framed = true});
+
+  final bool framed;
 
   @override
   State<ModCatalogPanel> createState() => _ModCatalogPanelState();
@@ -49,12 +51,14 @@ class _ModCatalogPanelState extends State<ModCatalogPanel> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFCF7),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFE5D9C8)),
-      ),
+      padding: widget.framed ? const EdgeInsets.all(22) : EdgeInsets.zero,
+      decoration: widget.framed
+          ? BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(color: const Color(0xFFE5D9C8)),
+            )
+          : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -124,9 +128,9 @@ class _ModCatalogPanelState extends State<ModCatalogPanel> {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  Text(
-                    '当前页面直接读取 `assets/ModsList.json`，按 `mods` 数组构建列表，展示分类、标签、说明和文件名等字段；文件名解析只作为缺失字段的兜底。',
-                    style: const TextStyle(
+                  const Text(
+                    '这里展示当前整合包已收录的 Mod 及基础说明。页面会直接读取 JSON 数据中的分类、标签、描述和文件名等字段。',
+                    style: TextStyle(
                       fontSize: 13,
                       height: 1.65,
                       color: Color(0xFF6A6058),
@@ -142,7 +146,7 @@ class _ModCatalogPanelState extends State<ModCatalogPanel> {
                   Container(
                     height: isCompact ? 520 : 620,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: const Color(0xFFFFFCF7),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(color: const Color(0xFFE7DCCB)),
                     ),
@@ -203,7 +207,7 @@ class _ModCatalogHeader extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Text(
-          '这里展示当前整合包已收录的 Mod 与基础说明。数据源改为正式 JSON 后，页面会直接读取分类、标签和说明字段，不再只依赖文件名猜测。',
+          '这里集中展示整合包中的 Mod、基础分类、标签以及补充说明，方便后续继续扩展成更完整的图鉴入口。',
           style: TextStyle(
             fontSize: 14,
             height: 1.65,
@@ -260,7 +264,7 @@ class _ModEntryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFCF7),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: const Color(0xFFE7DCCB)),
       ),
@@ -493,7 +497,7 @@ class _EmptyState extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(24),
         child: Text(
-          '没有匹配到结果，可以换个关键词再试。',
+          '没有匹配结果，可以换个关键词再试。',
           style: TextStyle(fontSize: 14, height: 1.6, color: Color(0xFF6F655D)),
           textAlign: TextAlign.center,
         ),

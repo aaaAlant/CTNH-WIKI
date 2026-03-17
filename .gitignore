@@ -1,4 +1,4 @@
-# Miscellaneous
+﻿# Miscellaneous
 *.class
 *.log
 *.pyc
@@ -43,3 +43,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local source data
+/data/
+
+# Local Python environments
+/.venv/
+/venv/
+**/__pycache__/
+/tool/quest_static_pipeline/.venv/
+/tool/quest_static_pipeline/.pytest_cache/
+/tool/quest_static_pipeline/.mypy_cache/
+/web/assets/generated/
+/assets/generated/quests/icons

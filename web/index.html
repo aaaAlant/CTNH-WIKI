@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
   <!--
@@ -132,9 +132,25 @@
       applyCursorPath(nextSelection);
     };
 
+    window.appCtrlWheelZoomSuppressed = false;
+    window.setCtrlWheelZoomSuppressed = function (enabled) {
+      window.appCtrlWheelZoomSuppressed = !!enabled;
+    };
+
+    window.addEventListener(
+      'wheel',
+      function (event) {
+        if (window.appCtrlWheelZoomSuppressed && event.ctrlKey) {
+          event.preventDefault();
+        }
+      },
+      { passive: false }
+    );
     window.setAppCursorTheme('tech');
   </script>
   <script src="https://cdn.jsdelivr.net/gh/Knightro63/flutter_angle/assets/gles_bindings.js"></script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
+
+

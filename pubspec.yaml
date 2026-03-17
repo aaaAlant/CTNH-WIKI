@@ -28,6 +28,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/ModsList.json
+    - assets/generated/quests/
     - assets/images/home/
     - assets/images/home/team/
     - assets/icons/app/

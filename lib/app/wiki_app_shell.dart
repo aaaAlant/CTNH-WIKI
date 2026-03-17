@@ -1,9 +1,8 @@
-import 'package:ctnh_wiki/data/wiki_tabs_data.dart';
+﻿import 'package:ctnh_wiki/data/wiki_tabs_data.dart';
 import 'package:ctnh_wiki/features/guides/view/guides_tutorial_tab.dart';
 import 'package:ctnh_wiki/features/handbook/view/handbook_tab.dart';
 import 'package:ctnh_wiki/features/home/view/home_tab.dart';
 import 'package:ctnh_wiki/features/shared/widgets/background_texture.dart';
-import 'package:ctnh_wiki/features/tasks/view/tasks_overview_tab.dart';
 import 'package:ctnh_wiki/features/versions/view/version_list_tab.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +19,6 @@ class _WikiAppShellState extends State<WikiAppShell> {
   static const _pages = [
     HomeTab(),
     HandbookTab(),
-    TasksOverviewTab(),
     GuidesTutorialTab(),
     VersionListTab(),
   ];
