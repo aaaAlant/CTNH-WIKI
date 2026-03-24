@@ -1,256 +1,165 @@
-# 多方块结构预览模块说明
+﻿# 多方块结构预览模块说明
 
-## 1. 模块目标
+## 1. 当前目标
 
-“多方块结构预览”用于在 Flutter 页面中嵌入一个可交互的 3D 结构预览区，向玩家展示某个多方块结构由哪些部件组成、应该按什么步骤搭建，以及每个关键部件承担什么作用。
+“多方块结构预览”用于在 Flutter 页面里嵌入一个可交互的 3D 结构窗口，向玩家展示：
 
-当前实现定位是：
+- 一个多方块结构由哪些方块组成
+- 它们在空间里如何分布
+- 应该按什么顺序搭建
+- 点击任意关键方块后，对应说明是什么
 
-- 在页面内提供一个可旋转、可缩放、可选中的 `three_js` 预览窗口
-- 用正式的数据模型描述结构元信息、部件、步骤和场景配置
-- 将说明、筛选、步骤和部件详情统一到同一套结构数据上
+当前实现已经不再只是手工摆几个演示方块，而是开始支持从机器 `pattern` 自动生成结构。
 
-## 2. 当前实现状态
+## 2. 当前已完成能力
 
-当前已经完成的能力：
+### 2.1 结构模型与 three_js 预览
+
+已完成：
 
 - 正式结构定义模型
 - three_js 预览视口
-- 部件点击选中与说明联动
-- 悬停高亮
-- 步骤切换与按步骤显示部件
-- 分类过滤与“只看当前步骤”过滤
-- `blockId -> registry -> visuals` 的基础映射链路
-- 首页科技模块中的完整示例
-- 独立的结构说明面板
+- 相机旋转、缩放
+- 部件选中与悬停高亮
+- 步骤切换
+- 分类过滤
+- 说明面板联动
 
-当前仍在推进的方向：
+核心目录：
 
-- 真实方块贴图与特殊模型
-- 关联词条 / 任务概览 / 版本记录等入口联动
-- 更强的图层控制与性能优化
-- 更完整的降级与测试方案
+- `lib/features/structure_preview/models/`
+- `lib/features/structure_preview/services/`
+- `lib/features/structure_preview/three_js/`
+- `lib/features/structure_preview/view/`
 
-## 3. 当前架构
+### 2.2 方块注册与贴图映射
 
-### 3.1 数据模型
+已完成：
 
-核心模型位于 `lib/features/structure_preview/models/`：
+- `blockId -> visuals` 的注册表
+- 单贴图材质
+- 六面贴图材质
+- 像素风贴图采样
+- 贴图缓存
 
-- `structure_preview_definition.dart`
-  - 结构总定义，包含结构 id、元数据、相机、部件、步骤和舞台配置
-- `structure_preview_metadata.dart`
-  - 结构标题、摘要、描述、模块、状态、标签、版本范围、来源
-- `structure_preview_part.dart`
-  - 单个部件定义，包含 `partId`、`blockId`、名称、说明、分类、位置、朝向、状态和视觉定义
-- `structure_preview_step.dart`
-  - 步骤标题、说明、当前步骤显示哪些部件、聚焦哪些部件
-- `structure_block.dart`
-  - `blockId` 对应的默认视觉定义
-- `structure_preview_scene.dart`
-  - 渲染层使用的低层 scene 数据结构
+核心文件：
 
-### 3.2 控制器
+- `lib/features/structure_preview/data/structure_block_registry.dart`
+- `lib/features/structure_preview/services/structure_texture_cache.dart`
 
-控制器位于 `lib/features/structure_preview/controllers/`：
+### 2.3 pattern 自动建模
 
-- `structure_selection_controller.dart`
-  - 管理当前选中的部件
-- `structure_step_controller.dart`
-  - 管理当前步骤、步数切换和按步骤可见部件
-- `structure_filter_controller.dart`
-  - 管理分类过滤和“只看当前步骤相关部件”
+新增完成：
 
-### 3.3 服务层
+- 可把 `FactoryBlockPattern.start().aisle(...).where(...)` 这一类结构模式转成预览部件
+- 支持按 `symbol` 映射到真实方块定义或空气跳过
+- 自动生成三维坐标与部件 id
+- 自动产出 `symbol -> partIds`，供步骤系统直接复用
 
-服务位于 `lib/features/structure_preview/services/`：
+核心文件：
 
-- `structure_preview_scene_builder.dart`
-  - 把正式结构定义转换成 three_js 使用的 scene 数据
-- `structure_hit_test_service.dart`
-  - 使用 `Raycaster` 做命中检测
-- `structure_texture_cache.dart`
-  - 纹理缓存
-- `structure_preview_filter_resolver.dart`
-  - 结合步骤与过滤器计算当前可见部件集合
+- `lib/features/structure_preview/services/multiblock_pattern_builder.dart`
 
-### 3.4 渲染层
+当前 builder 支持：
 
-渲染层位于 `lib/features/structure_preview/three_js/structure_preview_renderer.dart`，当前负责：
+- 多个 `aisle`
+- 每个 `aisle` 多行字符串
+- `skip` 符号
+- 自定义方块 id、分类、标签、朝向、旋转
+- 配置行序和 aisle 朝向
 
-- 创建 scene、camera、lights、controls
-- 根据 scene 数据构建 mesh
-- 维护 hover / selected / focused 三类高亮状态
-- 应用默认材质、贴图材质和方块视觉定义
+## 3. 新增示例：工业土高炉
 
-### 3.5 视图层
+当前首页科技模块已经接入了一个真实多方块示例：工业土高炉。
 
-视图相关文件位于 `lib/features/structure_preview/view/`：
-
-- `structure_preview_viewport.dart`
-  - Flutter 页面内嵌 3D 视口
-- `widgets/structure_step_timeline.dart`
-  - 步骤切换条
-- `widgets/structure_filter_panel.dart`
-  - 过滤面板
-- `widgets/structure_part_detail_card.dart`
-  - 部件详情卡
-- `widgets/structure_insight_panel.dart`
-  - 结构说明面板
-
-当前首页科技模块示例位于：
+相关文件：
 
 - `lib/features/home/data/tech_structure_preview_data.dart`
-- `lib/features/home/view/modules/tech_module_page.dart`
+- `lib/features/structure_preview/data/structure_block_registry.dart`
+- `data/machine/machine_primitive_bricks.png`
+- `data/machine/overlay_front.png`
+- `data/machine/overlay_front_active.png`
 
-## 4. 功能拆分
+### 3.1 当前结构来源
 
-### 4.1 结构定义与场景数据
+当前土高炉结构直接来自你提供的 pattern：
 
-已完成。
+```java
+.pattern(definition -> FactoryBlockPattern.start()
+    .aisle("XXX", "XXX", "XXX", "XXX")
+    .aisle("XXX", "X&X", "X#X", "X#X")
+    .aisle("XXX", "XYX", "XXX", "XXX")
+    .where('X', blocks(CASING_PRIMITIVE_BRICKS.get()))
+    .where('#', Predicates.air())
+    .where('&', Predicates.air().or(...))
+    .where('Y', Predicates.controller(blocks(definition.getBlock())))
+    .build())
+```
 
-当前已经能够用一套正式模型描述：
+### 3.2 当前解析结果
 
-- 结构级元数据
-- 部件级信息
-- 步骤级信息
-- 相机与舞台配置
+当前预览按下面的规则构建：
 
-### 4.2 部件选中与悬停
+- `X`：土高炉砖块
+- `Y`：工业土高炉控制器
+- `#`：空气，不建模
+- `&`：空气/雪，不建模
 
-已完成。
+当前结构尺寸：
 
-当前行为：
+- 宽度 3
+- 高度 4
+- 深度 3
 
-- 鼠标悬停部件时，3D 结构高亮
-- 点击部件后，选中状态锁定
-- 右侧说明面板同步更新当前部件信息
+### 3.3 当前外观实现
 
-### 4.3 步骤系统
+已完成：
 
-已完成。
+- 砖体使用 `machine_primitive_bricks.png`
+- 控制器主体仍沿用砖体贴图
+- 控制器正面叠加 `overlay_front_active.png`
 
-当前行为：
+当前实现方式不是运行时拼贴图片，而是：
 
-- 可按步骤切换结构显示
-- 当前步骤可定义聚焦部件
-- 时间轴与说明面板同步展示当前步骤
+- 基础方块走 registry 里的贴图立方体
+- 控制器额外增加一个很薄的前脸 overlay 几何层
 
-### 4.4 方块注册表与视觉映射
+这样做的好处是简单、稳定，而且对现有渲染层侵入小。
 
-已完成第一版。
+## 4. 当前关键假设
 
-当前能力：
+这次土高炉预览有一个明确假设：
 
-- `part.visuals` 为空时，会退回到 `blockId` 对应的默认视觉定义
-- 已接通基础贴图与材质缓存链路
+- pattern 的行顺序当前按“从下到上”解释
+- aisle 顺序当前按“从后到前”解释
+- 控制器 `Y` 因此位于结构正面中心
 
-后续还要继续补：
+这个假设是为了让控制器朝向和预览视角更符合机器阅读习惯。
 
-- 六面贴图命名规范
-- 更复杂的 block visual factory
-- 非完整立方体的特殊模型
+如果你后面确认 GT/CTNH 实际 pattern 的坐标规则不同，我们只需要调整 builder 的两个方向参数，不需要重写整个结构定义。
 
-### 4.5 图层与过滤系统
+## 5. 下一阶段建议
 
-已完成第一版。
+建议继续按下面顺序推进：
 
-当前能力：
+1. 给控制器补 `inactive / active` 状态切换
+2. 给 pattern builder 增加可选的符号级覆写视觉
+3. 把更多机器 pattern 接进同一套 builder
+4. 把多方块预览接到机器图鉴页，而不是只放在首页科技模块
+5. 增加“显示空气腔体轮廓”或“显示内部空间”的辅助模式
 
-- 按分类显示 / 隐藏部件
-- 只看当前步骤相关部件
-- 过滤后同步修正当前选中部件
+## 6. 当前结论
 
-### 4.6 说明面板
+现在这套多方块预览已经具备两层能力：
 
-已完成第一版。
+- 可以展示 3D 结构
+- 可以从真实机器 pattern 自动建模
 
-当前说明面板已经包含：
+这意味着后面扩展别的多方块机器时，工作重点会从“手工摆方块坐标”转成：
 
-- 结构概览
-- 当前可见部件统计
-- 过滤状态
-- 当前步骤摘要
-- 当前部件详情
-- 已接入能力清单
-- 下一步扩展清单
-- 预留入口占位
+- 提供 pattern
+- 提供方块贴图或模型
+- 配置 symbol 映射
+- 配置步骤和说明
 
-## 5. 后续需要分别实现的功能
-
-下面这些能力建议继续拆开实现：
-
-### 5.1 页面入口联动
-
-需要实现：
-
-- 从结构说明面板跳转到图鉴词条
-- 从结构说明面板跳转到任务概览
-- 从结构说明面板查看对应版本差异
-
-依赖：
-
-- 结构级或部件级的关联数据字段
-- 页面路由与目标数据源
-
-### 5.2 真实方块视觉
-
-需要实现：
-
-- 方块六面贴图
-- 像素风采样配置
-- 更完整的 `blockId -> material / texture / model` 注册表
-- 机械部件、管道、面板等特殊模型
-
-依赖：
-
-- 贴图资源
-- 面朝向约定
-- 非立方体方块的建模方案
-
-### 5.3 图层系统增强
-
-需要实现：
-
-- 更细粒度的图层开关
-- 基础层 / 机器层 / 连线层 / 装饰层分层显示
-- 半透明幽灵部件与步骤对比显示
-
-### 5.4 性能优化
-
-需要实现：
-
-- 重复方块的合批或实例化
-- 不可见面剔除
-- 更稳定的纹理缓存策略
-- 大结构场景下的降级方案
-
-### 5.5 测试与降级
-
-需要实现：
-
-- scene builder 的单元测试
-- filter / selection / step controller 的单元测试
-- 无 3D 环境时的 fallback 预览卡
-- 多平台兼容性验证
-
-## 6. 推荐的下一阶段顺序
-
-建议按下面顺序继续推进：
-
-1. 页面入口联动
-2. 真实方块视觉
-3. 图层系统增强
-4. 性能优化
-5. 测试与降级
-
-## 7. 当前结论
-
-目前这套“多方块结构预览”已经不是临时 demo，而是一套可以继续扩展的正式框架：
-
-- 结构数据层已经稳定
-- three_js 渲染层已经可复用
-- 页面交互链路已经贯通
-- 说明面板已经具备继续接真实内容的承载能力
-
-接下来重点不再是“能不能显示一个 3D 结构”，而是把这套框架继续扩成真正能服务图鉴、任务概览和版本说明的结构预览系统。
+这条链路已经可以作为正式框架继续扩展。

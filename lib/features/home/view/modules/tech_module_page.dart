@@ -1,8 +1,9 @@
-import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
+﻿import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
 import 'package:ctnh_wiki/features/home/data/tech_structure_preview_data.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_filter_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_selection_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_step_controller.dart';
+import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_part.dart';
 import 'package:ctnh_wiki/features/structure_preview/services/structure_preview_filter_resolver.dart';
 import 'package:ctnh_wiki/features/structure_preview/view/structure_preview_viewport.dart';
 import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_insight_panel.dart';
@@ -129,16 +130,19 @@ class _TechModulePageState extends State<TechModulePage> {
         ),
         const SizedBox(height: 20),
         const _HighlightTile(
-          title: '正式结构模型',
-          description: '科技示例现在通过正式的结构定义驱动，部件、步骤、筛选和说明面板都围绕同一套数据组织。',
+          title: 'pattern 自动建模已接通',
+          description:
+              '当前土高炉示例已经通过 aisle pattern 自动展开成结构部件，不再需要手写每个方块的空间坐标。',
         ),
         const _HighlightTile(
-          title: '交互链路已接通',
-          description: '左侧 3D 预览已经支持悬停、选中、步骤切换和分类过滤，右侧说明区会同步展示当前结构状态。',
+          title: '真实贴图已接入',
+          description:
+              '砖体使用土高炉砖块贴图，控制器正面叠加 overlay 贴图，预览外观已经从演示方块升级为真实机器结构。',
         ),
         const _HighlightTile(
-          title: '下一步进入真实渲染',
-          description: '说明面板已经成型，接下来可以继续扩展 block 注册表、六面贴图和特殊模型，让结构外观更接近真实方块。',
+          title: '下一步继续扩展更多机器',
+          description:
+              '接下来可以继续把更多 GT/CTNH 多方块 pattern 接到同一套 builder 上，并逐步补齐控制器状态与特殊模型。',
         ),
       ],
     );
@@ -274,7 +278,7 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        'three_js 原型预览',
+                        'three_js 结构预览',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -379,25 +383,25 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
   }
 
   String _buildPreviewHint({
+    required StructurePreviewPart? hoveredPart,
     required StructureStepController stepController,
     required StructureFilterController filterController,
-    required hoveredPart,
   }) {
     final currentStep = stepController.currentStep;
 
     if (hoveredPart != null) {
-      return '悬停：${hoveredPart.displayName}。点击可锁定该部件，并在右侧查看详细说明。';
+      return '当前悬停：${hoveredPart.displayName}。点击后可以锁定该部件，并在右侧查看说明。';
     }
 
     if (filterController.showOnlyCurrentStepParts && currentStep != null) {
-      return '当前仅显示步骤“${currentStep.title}”相关部件，可配合右侧过滤面板查看不同分类。';
+      return '当前只显示步骤“${currentStep.title}”相关部件，可以配合过滤面板继续查看不同分类。';
     }
 
     if (currentStep == null) {
-      return '拖动可旋转视角，滚轮可缩放。点击部件后，右侧说明面板会同步展示详细信息。';
+      return '拖动可旋转视角，滚轮可缩放。点击任意方块后，右侧说明面板会同步更新。';
     }
 
-    return '当前处于步骤“${currentStep.title}”。可拖动视角或点击部件，查看对应的结构说明。';
+    return '当前步骤：${currentStep.title}。可以拖动视角或点击部件，查看对应的结构说明。';
   }
 }
 

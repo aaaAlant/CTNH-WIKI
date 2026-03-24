@@ -1,310 +1,99 @@
-import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_definition.dart';
+﻿import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_definition.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_metadata.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_part.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_scene.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_step.dart';
+import 'package:ctnh_wiki/features/structure_preview/services/multiblock_pattern_builder.dart';
+
+final _primitiveBlastFurnacePattern = MultiblockPatternBuilder(
+  aisles: const [
+    ['XXX', 'XXX', 'XXX', 'XXX'],
+    ['XXX', 'X&X', 'X#X', 'X#X'],
+    ['XXX', 'XYX', 'XXX', 'XXX'],
+  ],
+  aislesFromBackToFront: true,
+  rowsFromTopToBottom: false,
+  symbols: const {
+    'X': MultiblockPatternSymbolDefinition.part(
+      blockId: 'ctnhcore:machine_primitive_bricks',
+      displayName: '土高炉砖块',
+      description: '土高炉的主体炉墙，负责形成 3x4x3 的砖体外壳。',
+      category: StructurePartCategory.casing,
+      partIdPrefix: 'primitive-bricks',
+      tags: ['casing', 'shell'],
+    ),
+    'Y': MultiblockPatternSymbolDefinition.part(
+      blockId: 'ctnhcore:industrial_primitive_blast_furnace',
+      displayName: '工业土高炉控制器',
+      description: '前方中央的控制器方块，用来定义结构朝向并作为交互入口。',
+      category: StructurePartCategory.controller,
+      partIdPrefix: 'primitive-blast-furnace-controller',
+      tags: ['controller', 'front'],
+    ),
+    '#': MultiblockPatternSymbolDefinition.skip(),
+    '&': MultiblockPatternSymbolDefinition.skip(),
+  },
+).build();
+
+final _primitiveBlastFurnaceCasingIds = _primitiveBlastFurnacePattern
+    .partIdsForSymbol('X');
+final _primitiveBlastFurnaceControllerIds = _primitiveBlastFurnacePattern
+    .partIdsForSymbol('Y');
 
 final techStructurePreviewDefinition = StructurePreviewDefinition(
-  id: 'tech-multiblock-preview',
+  id: 'primitive-blast-furnace-preview',
   metadata: const StructurePreviewMetadata(
-    title: '黄铜动力试验平台',
-    summary: '一个用于验证多方块结构预览链路的科技示例结构。',
+    title: '工业土高炉',
+    summary: '基于 GT 多方块 pattern 自动展开的 3x4x3 砖体结构预览。',
     description:
-        '该结构以动力轴、齿轮和紧凑机组为例，当前已经接入正式的结构数据模型、步骤系统、筛选系统和说明面板，后续可逐步替换为真实方块材质与模型。',
+        '这个示例不再是手工摆放的原型块，而是直接把多方块 pattern 转成结构部件。当前已经接入真实砖块贴图和控制器前脸 overlay，可以用来验证 pattern 驱动的自动建模链路。',
     module: StructurePreviewModule.tech,
     status: StructurePreviewStatus.inProgress,
-    tags: ['科技', '动力传输', '原型', '多方块'],
+    tags: ['科技', '多方块', '土高炉', 'pattern', 'GT'],
     versionRange: StructureVersionRange(
       minVersion: 'v1.4.1b',
-      note: '当前为首页科技模块的预览示例',
+      note: '首页科技模块的首个真实多方块示例。',
     ),
     source: '首页 / 科技模块',
   ),
   camera: const StructureCameraConfig(
-    position: StructureVector3(5.8, 5.2, 6.1),
-    target: StructureVector3(0.4, 0.6, 0.2),
-    minDistance: 5,
-    maxDistance: 16,
-    autoRotateSpeed: 0.55,
+    position: StructureVector3(5.6, 4.6, 6.2),
+    target: StructureVector3(0, 1.3, 0.8),
+    minDistance: 4.5,
+    maxDistance: 14,
+    autoRotateSpeed: 0.48,
   ),
   stage: const StructurePreviewStage(),
-  parts: _buildTechStructurePreviewParts(),
-  steps: const [
+  parts: _primitiveBlastFurnacePattern.parts,
+  steps: [
     StructurePreviewStep(
-      id: 'foundation',
-      title: '铺设平台',
-      description: '先搭出底座与展示平台，保证后续机器与动力轴有稳定支撑。',
+      id: 'shell',
+      title: '搭建砖体外壳',
+      description: '先按照 3x4x3 的轮廓把土高炉砖块搭好，中间保持烟道空间。',
+      revealedPartIds: _primitiveBlastFurnaceCasingIds,
+      focusedPartIds: _primitiveBlastFurnaceCasingIds.take(1).toList(),
+    ),
+    StructurePreviewStep(
+      id: 'controller',
+      title: '放置控制器',
+      description: '最后在正面中央放上工业土高炉控制器，完成结构识别。',
       revealedPartIds: [
-        'tile-0-0',
-        'tile-0-1',
-        'tile-0-2',
-        'tile-0-3',
-        'tile-0-4',
-        'tile-1-0',
-        'tile-1-1',
-        'tile-1-2',
-        'tile-1-3',
-        'tile-1-4',
-        'tile-2-0',
-        'tile-2-1',
-        'tile-2-2',
-        'tile-2-3',
-        'tile-2-4',
-        'tile-3-0',
-        'tile-3-1',
-        'tile-3-2',
-        'tile-3-3',
-        'tile-3-4',
-        'tile-4-0',
-        'tile-4-1',
-        'tile-4-2',
-        'tile-4-3',
-        'tile-4-4',
+        ..._primitiveBlastFurnaceCasingIds,
+        ..._primitiveBlastFurnaceControllerIds,
       ],
-      focusedPartIds: ['tile-2-2'],
-    ),
-    StructurePreviewStep(
-      id: 'power',
-      title: '接入动力轴与齿轮',
-      description: '先明确动力传递方向，再安装双轴与齿轮，形成结构骨架。',
-      revealedPartIds: [
-        'axle-top',
-        'axle-bottom',
-        'gear-top',
-        'gear-bottom',
-        'support-top',
-      ],
-      focusedPartIds: ['gear-top', 'gear-bottom'],
-    ),
-    StructurePreviewStep(
-      id: 'machines',
-      title: '摆放机器主体',
-      description: '将主体设备按预定位置摆放，形成一个紧凑的科技试验单元。',
-      revealedPartIds: ['machine-a', 'machine-b', 'machine-c', 'machine-d'],
-      focusedPartIds: ['machine-a', 'machine-c'],
-    ),
-    StructurePreviewStep(
-      id: 'displays',
-      title: '补充读数与监视单元',
-      description: '最后补上显示部件，让结构具备正在工作的可视化信号。',
-      revealedPartIds: ['display-top', 'display-bottom'],
-      focusedPartIds: ['display-top', 'display-bottom'],
+      focusedPartIds: _primitiveBlastFurnaceControllerIds,
     ),
   ],
 );
 
 const techPreviewApiBullets = [
-  '示例已经切换到正式结构定义，场景元数据、部件信息和步骤信息都在同一套模型里维护。',
-  '选中、悬停、步骤切换和筛选系统都复用同一套 part 元数据，后续接说明或入口不会重复造数据。',
-  '渲染层保持独立，当前通过适配器把正式结构模型转换成 three_js 所需的 scene 数据。',
+  '当前示例已经切换成基于 aisle pattern 自动展开的真实多方块结构，后续不需要再手写每个方块坐标。',
+  '结构中的砖体与控制器使用 block registry 提供的贴图定义，控制器前脸额外叠加了 overlay 贴图。',
+  '选中、悬停、步骤切换和过滤仍然复用同一套结构数据，说明面板和 3D 预览会自动同步。',
 ];
 
 const techPreviewRoadmap = [
-  '接入关联词条、任务概览和版本记录等页面入口。',
-  '扩展 block registry，支持更完整的六面贴图与特殊模型。',
-  '补充性能优化、降级策略和自动化测试覆盖。',
+  '继续把更多 GT/CTNH 多方块 pattern 接入同一个自动建模器。',
+  '补充控制器 inactive/active 状态切换，以及更多特殊方块的叠层贴图。',
+  '把结构预览和机器图鉴、任务概览页面真正联动起来。',
 ];
-
-List<StructurePreviewPart> _buildTechStructurePreviewParts() {
-  final parts = <StructurePreviewPart>[];
-
-  for (var x = 0; x < 5; x++) {
-    for (var z = 0; z < 5; z++) {
-      final isLightTile = (x + z).isEven;
-      parts.add(
-        StructurePreviewPart(
-          id: 'tile-$x-$z',
-          blockId: 'ctnh:lab_floor_tile',
-          displayName: '试验平台地砖',
-          description: '用于承载当前结构的展示底座，不参与后续交互逻辑。',
-          category: StructurePartCategory.foundation,
-          position: StructureVector3(x - 2, -0.2, z - 2),
-          tags: const ['floor', 'base'],
-          visuals: [
-            StructurePartVisual.cuboid(
-              id: 'body',
-              size: const StructureVector3(1, 0.4, 1),
-              material: StructureMaterialStyle(
-                color: isLightTile ? 0xFFF7F7F2 : 0xFFE1E5E8,
-                roughness: 0.95,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
-  parts.addAll(const [
-    StructurePreviewPart(
-      id: 'axle-top',
-      blockId: 'create:shaft',
-      displayName: '上层动力轴',
-      description: '负责把上层转动力从左侧齿轮传递到机器主体。',
-      category: StructurePartCategory.power,
-      position: StructureVector3(-0.2, 0.95, -0.95),
-      tags: ['shaft', 'power', 'upper'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'body',
-          size: StructureVector3(4.7, 0.2, 0.2),
-          material: StructureMaterialStyle(
-            color: 0xFF8F959C,
-            metalness: 0.45,
-            roughness: 0.35,
-          ),
-        ),
-      ],
-    ),
-    StructurePreviewPart(
-      id: 'axle-bottom',
-      blockId: 'create:shaft',
-      displayName: '下层动力轴',
-      description: '与上层动力轴共同构成双通道动力传输示例。',
-      category: StructurePartCategory.power,
-      position: StructureVector3(0.3, 0.95, 0.95),
-      tags: ['shaft', 'power', 'lower'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'body',
-          size: StructureVector3(4.4, 0.2, 0.2),
-          material: StructureMaterialStyle(
-            color: 0xFF8F959C,
-            metalness: 0.45,
-            roughness: 0.35,
-          ),
-        ),
-      ],
-    ),
-    StructurePreviewPart(
-      id: 'gear-top',
-      blockId: 'create:large_cogwheel',
-      displayName: '上层大齿轮',
-      description: '示意科技结构中最显眼的机械传动部件之一。',
-      category: StructurePartCategory.power,
-      position: StructureVector3(-1.75, 0.95, -0.95),
-      tags: ['gear', 'power'],
-      visuals: [
-        StructurePartVisual.cylinder(
-          id: 'body',
-          radiusTop: 0.82,
-          radiusBottom: 0.82,
-          height: 0.16,
-          rotation: StructureRotation(0, 0, 90),
-          material: StructureMaterialStyle(
-            color: 0xFF8B5C2E,
-            metalness: 0.08,
-            roughness: 0.78,
-          ),
-        ),
-      ],
-    ),
-    StructurePreviewPart(
-      id: 'gear-bottom',
-      blockId: 'create:large_cogwheel',
-      displayName: '下层大齿轮',
-      description: '与上层大齿轮一起形成双轴动力的视觉锚点。',
-      category: StructurePartCategory.power,
-      position: StructureVector3(-1.55, 0.95, 0.95),
-      tags: ['gear', 'power'],
-      visuals: [
-        StructurePartVisual.cylinder(
-          id: 'body',
-          radiusTop: 0.82,
-          radiusBottom: 0.82,
-          height: 0.16,
-          rotation: StructureRotation(0, 0, 90),
-          material: StructureMaterialStyle(
-            color: 0xFF8B5C2E,
-            metalness: 0.08,
-            roughness: 0.78,
-          ),
-        ),
-      ],
-    ),
-    StructurePreviewPart(
-      id: 'machine-a',
-      blockId: 'ctnh:prototype_machine_a',
-      displayName: '加工机组 A',
-      description: '示例中的机器主体，用于占位未来真实方块模型。',
-      category: StructurePartCategory.machine,
-      position: StructureVector3(0.8, 0.58, -0.95),
-      tags: ['machine', 'core'],
-      visuals: [],
-    ),
-    StructurePreviewPart(
-      id: 'machine-b',
-      blockId: 'ctnh:prototype_machine_b',
-      displayName: '加工机组 B',
-      description: '与 A 共同组成上侧设备组合。',
-      category: StructurePartCategory.machine,
-      position: StructureVector3(1.85, 0.58, -0.95),
-      tags: ['machine'],
-      visuals: [],
-    ),
-    StructurePreviewPart(
-      id: 'machine-c',
-      blockId: 'ctnh:prototype_machine_c',
-      displayName: '加工机组 C',
-      description: '下侧核心设备之一，用于示例机组的紧凑布局。',
-      category: StructurePartCategory.machine,
-      position: StructureVector3(1.35, 0.58, 0.95),
-      tags: ['machine', 'core'],
-      visuals: [],
-    ),
-    StructurePreviewPart(
-      id: 'machine-d',
-      blockId: 'ctnh:prototype_machine_d',
-      displayName: '加工机组 D',
-      description: '下侧设备补位，用于呈现紧密排布的科技平台。',
-      category: StructurePartCategory.machine,
-      position: StructureVector3(0.35, 0.58, 0.95),
-      tags: ['machine'],
-      visuals: [],
-    ),
-    StructurePreviewPart(
-      id: 'display-top',
-      blockId: 'ctnh:monitor_top',
-      displayName: '上层读数面板',
-      description: '示例中的监视单元，后续可替换为真实显示部件模型。',
-      category: StructurePartCategory.display,
-      position: StructureVector3(0.35, 0.58, -1.45),
-      tags: ['display', 'monitor'],
-      visuals: [],
-    ),
-    StructurePreviewPart(
-      id: 'display-bottom',
-      blockId: 'ctnh:monitor_side',
-      displayName: '侧向读数面板',
-      description: '作为侧向可视化信号源，表示可联动的特殊部件。',
-      category: StructurePartCategory.display,
-      position: StructureVector3(2.1, 0.58, -0.3),
-      rotation: StructureRotation(0, -90, 0),
-      tags: ['display', 'monitor'],
-      visuals: [],
-    ),
-    StructurePreviewPart(
-      id: 'support-top',
-      blockId: 'create:metal_bracket',
-      displayName: '上层连杆',
-      description: '作为动力轴与主体设备之间的示意支撑件。',
-      category: StructurePartCategory.transport,
-      position: StructureVector3(1.35, 1.1, 0),
-      rotation: StructureRotation(0, 90, 0),
-      tags: ['support', 'bridge'],
-      visuals: [
-        StructurePartVisual.cuboid(
-          id: 'body',
-          size: StructureVector3(2, 0.22, 0.22),
-          material: StructureMaterialStyle(
-            color: 0xFFA9B0B5,
-            metalness: 0.35,
-            roughness: 0.42,
-          ),
-        ),
-      ],
-    ),
-  ]);
-
-  return parts;
-}
