@@ -3,11 +3,8 @@ import 'package:ctnh_wiki/features/home/data/tech_structure_preview_data.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_filter_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_selection_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_step_controller.dart';
-import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_part.dart';
 import 'package:ctnh_wiki/features/structure_preview/services/structure_preview_filter_resolver.dart';
 import 'package:ctnh_wiki/features/structure_preview/view/structure_preview_viewport.dart';
-import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_insight_panel.dart';
-import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_step_timeline.dart';
 import 'package:flutter/material.dart';
 
 class TechModulePage extends StatefulWidget {
@@ -126,23 +123,6 @@ class _TechModulePageState extends State<TechModulePage> {
           visiblePartIds: _visiblePartIds,
           selectionController: _selectionController,
           stepController: _stepController,
-          filterController: _filterController,
-        ),
-        const SizedBox(height: 20),
-        const _HighlightTile(
-          title: 'pattern 自动建模已接通',
-          description:
-              '当前土高炉示例已经通过 aisle pattern 自动展开成结构部件，不再需要手写每个方块的空间坐标。',
-        ),
-        const _HighlightTile(
-          title: '真实贴图已接入',
-          description:
-              '砖体使用土高炉砖块贴图，控制器正面叠加 overlay 贴图，预览外观已经从演示方块升级为真实机器结构。',
-        ),
-        const _HighlightTile(
-          title: '下一步继续扩展更多机器',
-          description:
-              '接下来可以继续把更多 GT/CTNH 多方块 pattern 接到同一套 builder 上，并逐步补齐控制器状态与特殊模型。',
         ),
       ],
     );
@@ -199,153 +179,24 @@ class _ModuleHeader extends StatelessWidget {
   }
 }
 
-class _TechPreviewShowcase extends StatefulWidget {
+class _TechPreviewShowcase extends StatelessWidget {
   const _TechPreviewShowcase({
     required this.isCompact,
     required this.visiblePartIds,
     required this.selectionController,
     required this.stepController,
-    required this.filterController,
   });
 
   final bool isCompact;
   final Set<String> visiblePartIds;
   final StructureSelectionController selectionController;
   final StructureStepController stepController;
-  final StructureFilterController filterController;
-
-  @override
-  State<_TechPreviewShowcase> createState() => _TechPreviewShowcaseState();
-}
-
-class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
-  String? _hoveredPartId;
-
-  void _handleHoveredPartChanged(String? partId) {
-    if (!mounted || _hoveredPartId == partId) {
-      return;
-    }
-
-    setState(() {
-      _hoveredPartId = partId;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    final hoveredPart = techStructurePreviewDefinition.partById(_hoveredPartId);
-
-    final previewCard = LayoutBuilder(
-      builder: (context, constraints) {
-        final maxWidth = constraints.maxWidth.isFinite
-            ? constraints.maxWidth
-            : MediaQuery.sizeOf(context).width;
-        final previewHeight = widget.isCompact ? 280.0 : 360.0;
-
-        return Stack(
-          children: [
-            StructurePreviewViewport(
-              structure: techStructurePreviewDefinition,
-              size: Size(maxWidth, previewHeight),
-              visiblePartIds: widget.visiblePartIds,
-              selectionController: widget.selectionController,
-              stepController: widget.stepController,
-              onHoveredPartChanged: _handleHoveredPartChanged,
-            ),
-            Positioned(
-              top: 14,
-              left: 14,
-              child: IgnorePointer(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.46),
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.14),
-                    ),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.view_in_ar_rounded,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'three_js 结构预览',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 14,
-              right: 14,
-              bottom: 14,
-              child: IgnorePointer(
-                child: AnimatedBuilder(
-                  animation: Listenable.merge([
-                    widget.stepController,
-                    widget.filterController,
-                  ]),
-                  builder: (context, _) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.42),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        _buildPreviewHint(
-                          hoveredPart: hoveredPart,
-                          stepController: widget.stepController,
-                          filterController: widget.filterController,
-                        ),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    final notesCard = StructureInsightPanel(
-      structure: techStructurePreviewDefinition,
-      selectionController: widget.selectionController,
-      stepController: widget.stepController,
-      filterController: widget.filterController,
-      visiblePartCount: widget.visiblePartIds.length,
-      hoveredPartId: _hoveredPartId,
-      capabilityBullets: techPreviewApiBullets,
-      roadmapBullets: techPreviewRoadmap,
-    );
-
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(widget.isCompact ? 18 : 20),
+      padding: EdgeInsets.all(isCompact ? 18 : 20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFFF8EEE1), Color(0xFFF5EBE0), Color(0xFFEDE4D9)],
@@ -355,53 +206,23 @@ class _TechPreviewShowcaseState extends State<_TechPreviewShowcase> {
         borderRadius: BorderRadius.circular(28),
         border: Border.all(color: const Color(0xFFE3D7C7)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          widget.isCompact
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    previewCard,
-                    const SizedBox(height: 16),
-                    notesCard,
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 11, child: previewCard),
-                    const SizedBox(width: 18),
-                    Expanded(flex: 9, child: notesCard),
-                  ],
-                ),
-          const SizedBox(height: 18),
-          StructureStepTimeline(controller: widget.stepController),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final maxWidth = constraints.maxWidth.isFinite
+              ? constraints.maxWidth
+              : MediaQuery.sizeOf(context).width;
+          final previewHeight = isCompact ? 280.0 : 360.0;
+
+          return StructurePreviewViewport(
+            structure: techStructurePreviewDefinition,
+            size: Size(maxWidth, previewHeight),
+            visiblePartIds: visiblePartIds,
+            selectionController: selectionController,
+            stepController: stepController,
+          );
+        },
       ),
     );
-  }
-
-  String _buildPreviewHint({
-    required StructurePreviewPart? hoveredPart,
-    required StructureStepController stepController,
-    required StructureFilterController filterController,
-  }) {
-    final currentStep = stepController.currentStep;
-
-    if (hoveredPart != null) {
-      return '当前悬停：${hoveredPart.displayName}。点击后可以锁定该部件，并在右侧查看说明。';
-    }
-
-    if (filterController.showOnlyCurrentStepParts && currentStep != null) {
-      return '当前只显示步骤“${currentStep.title}”相关部件，可以配合过滤面板继续查看不同分类。';
-    }
-
-    if (currentStep == null) {
-      return '拖动可旋转视角，滚轮可缩放。点击任意方块后，右侧说明面板会同步更新。';
-    }
-
-    return '当前步骤：${currentStep.title}。可以拖动视角或点击部件，查看对应的结构说明。';
   }
 }
 
