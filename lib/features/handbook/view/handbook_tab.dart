@@ -1,7 +1,8 @@
 ﻿import 'package:ctnh_wiki/features/handbook/view/widgets/mod_catalog_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
-import 'package:ctnh_wiki/features/tasks/view/widgets/tasks_overview_board.dart';
+// Hidden for now. Keep the original implementation for later restoration.
+// import 'package:ctnh_wiki/features/tasks/view/widgets/tasks_overview_board.dart';
 import 'package:flutter/material.dart';
 
 class HandbookTab extends StatelessWidget {
@@ -15,7 +16,7 @@ class HandbookTab extends StatelessWidget {
         SectionTitle(eyebrow: 'Entries', title: '图鉴'),
         SizedBox(height: 12),
         Text(
-          '图鉴页现在拆成三个独立的大块：MOD 列表、机器图鉴和任务概览。每一块都作为同级信息区出现，和开发追踪页里的工作计划、版本列表是同一种组织方式。',
+          '图鉴页当前先展示 MOD 列表，机器图鉴和任务概览的实现代码已保留，后续需要时可以直接恢复。',
           style: TextStyle(
             fontSize: 16,
             color: Color(0xFF5F554D),
@@ -24,10 +25,11 @@ class HandbookTab extends StatelessWidget {
         ),
         SizedBox(height: 24),
         ContentPanel(child: ModCatalogPanel(framed: false)),
-        SizedBox(height: 24),
-        ContentPanel(child: _MachineHandbookPanel()),
-        SizedBox(height: 24),
-        ContentPanel(child: TasksOverviewBoard(framed: false)),
+        // Hidden for now. Keep the original section code instead of deleting it.
+        // SizedBox(height: 24),
+        // ContentPanel(child: _MachineHandbookPanel()),
+        // SizedBox(height: 24),
+        // ContentPanel(child: TasksOverviewBoard(framed: false)),
       ],
     );
   }
