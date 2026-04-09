@@ -1,5 +1,6 @@
-﻿import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
+import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
 import 'package:ctnh_wiki/features/home/data/tech_structure_preview_data.dart';
+import 'package:ctnh_wiki/features/shared/widgets/subsection_title.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_filter_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_selection_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_step_controller.dart';
@@ -21,13 +22,11 @@ class _TechModulePageState extends State<TechModulePage> {
   late final StructureStepController _stepController;
   late final StructureFilterController _filterController;
 
-  Set<String> get _visiblePartIds {
-    return _filterResolver.resolveVisiblePartIds(
-      definition: techStructurePreviewDefinition,
-      stepController: _stepController,
-      filterController: _filterController,
-    );
-  }
+  Set<String> get _visiblePartIds => _filterResolver.resolveVisiblePartIds(
+    definition: techStructurePreviewDefinition,
+    stepController: _stepController,
+    filterController: _filterController,
+  );
 
   @override
   void initState() {
@@ -71,13 +70,11 @@ class _TechModulePageState extends State<TechModulePage> {
     if (currentPartId != null && visiblePartIds.contains(currentPartId)) {
       return;
     }
-
     _selectionController.selectPart(_resolveVisibleSelection(visiblePartIds));
   }
 
   String? _resolveVisibleSelection(Set<String> visiblePartIds) {
-    final focusedPartIds = _stepController.focusedPartIds;
-    for (final partId in focusedPartIds) {
+    for (final partId in _stepController.focusedPartIds) {
       if (visiblePartIds.contains(partId)) {
         return partId;
       }
@@ -118,6 +115,8 @@ class _TechModulePageState extends State<TechModulePage> {
           description: techHomeModule.description,
         ),
         const SizedBox(height: 24),
+        const SubsectionTitle(eyebrow: 'Preview', title: '结构预览'),
+        const SizedBox(height: 12),
         _TechPreviewShowcase(
           isCompact: isCompact,
           visiblePartIds: _visiblePartIds,
@@ -221,51 +220,6 @@ class _TechPreviewShowcase extends StatelessWidget {
             stepController: stepController,
           );
         },
-      ),
-    );
-  }
-}
-
-class _HighlightTile extends StatelessWidget {
-  const _HighlightTile({required this.title, required this.description});
-
-  final String title;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE7DCCB)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF201A16),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              description,
-              style: const TextStyle(
-                fontSize: 14,
-                height: 1.6,
-                color: Color(0xFF5F554D),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

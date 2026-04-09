@@ -18,7 +18,6 @@ const homeStats = [
 
 const aboutUsEyebrow = 'About';
 const aboutUsTitle = '关于我们';
-const aboutUsDescription = '团队介绍';
 
 const homeCoreMembers = [
   HomeTeamMember(

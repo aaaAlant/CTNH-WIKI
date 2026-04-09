@@ -7,6 +7,7 @@ import 'package:ctnh_wiki/features/home/view/modules/magic_module_page.dart';
 import 'package:ctnh_wiki/features/home/view/modules/tech_module_page.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
+import 'package:ctnh_wiki/features/shared/widgets/subsection_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,6 +56,8 @@ class _HomeTabState extends State<HomeTab> {
           },
         ),
         const SizedBox(height: 24),
+        const SectionTitle(eyebrow: aboutUsEyebrow, title: aboutUsTitle),
+        const SizedBox(height: 16),
         AboutUsSection(isCompact: isCompact),
       ],
     );
@@ -72,102 +75,6 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final heroCopy = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          homeHero.title,
-          style: TextStyle(
-            fontSize: isCompact ? 42 : 60,
-            fontWeight: FontWeight.w800,
-            height: isCompact ? 1.0 : 0.95,
-            letterSpacing: isCompact ? -1.1 : -1.8,
-            color: const Color(0xFF201A16),
-          ),
-        ),
-        const SizedBox(height: 24),
-        Text(
-          homeHero.description,
-          style: const TextStyle(
-            fontSize: 16,
-            height: 1.7,
-            color: Color(0xFF4C433D),
-          ),
-        ),
-        const SizedBox(height: 24),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            const AccentButton(label: '交流渠道', filled: true),
-            const AccentButton(label: 'Bug反馈'),
-            const AccentButton(label: '加入我们'),
-            IconButton(
-              onPressed: () =>
-                  _openUrl('https://www.mcmod.cn/modpack/897.html'),
-              tooltip: 'MC百科',
-              icon: Image.asset(
-                'assets/icons/home/mc-wiki-logo.png',
-                width: 30,
-              ),
-            ),
-            IconButton(
-              onPressed: () => _openUrl('https://pd.qq.com/s/pel4yyss?b=5'),
-              tooltip: 'QQ频道',
-              icon: SvgPicture.asset(
-                'assets/icons/home/tencent-qq-logo.svg',
-                width: 25,
-              ),
-            ),
-            IconButton(
-              onPressed: () =>
-                  _openUrl('https://github.com/CTNH-Team/Create-New-Horizon'),
-              tooltip: 'GitHub',
-              icon: SvgPicture.asset(
-                'assets/icons/home/github-logo.svg',
-                width: 30,
-                colorFilter: const ColorFilter.mode(
-                  Colors.black,
-                  BlendMode.srcIn,
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: () => _openUrl(
-                'https://www.curseforge.com/minecraft/modpacks/ctnh',
-              ),
-              tooltip: 'CurseForge',
-              icon: SvgPicture.asset(
-                'assets/icons/home/curseforge-logo.svg',
-                width: 30,
-                colorFilter: const ColorFilter.mode(
-                  Colors.black,
-                  BlendMode.srcIn,
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: () =>
-                  _openUrl('https://discord.com/invite/jQpvUDsVX8'),
-              tooltip: 'Discord',
-              icon: SvgPicture.asset(
-                'assets/icons/home/discord-logo.svg',
-                width: 30,
-              ),
-            ),
-            // IconButton(
-            //   onPressed: () => _openUrl('https://oopz.cn/i/eTjBvw'),
-            //   tooltip: 'oopz',
-            //   icon: SvgPicture.asset(
-            //     'assets/icons/home/oopz-logo.png',
-            //     width: 30,
-            //   ),
-            // ),
-          ],
-        ),
-      ],
-    );
-
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(isCompact ? 22 : 30),
@@ -186,7 +93,93 @@ class HeroSection extends StatelessWidget {
           ),
         ],
       ),
-      child: heroCopy,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            homeHero.title,
+            style: TextStyle(
+              fontSize: isCompact ? 42 : 60,
+              fontWeight: FontWeight.w800,
+              height: isCompact ? 1.0 : 0.95,
+              letterSpacing: isCompact ? -1.1 : -1.8,
+              color: const Color(0xFF201A16),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            homeHero.description,
+            style: const TextStyle(
+              fontSize: 16,
+              height: 1.7,
+              color: Color(0xFF4C433D),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              const AccentButton(label: '交流渠道', filled: true),
+              const AccentButton(label: 'Bug反馈'),
+              const AccentButton(label: '加入我们'),
+              IconButton(
+                onPressed: () =>
+                    _openUrl('https://www.mcmod.cn/modpack/897.html'),
+                tooltip: 'MC 百科',
+                icon: Image.asset(
+                  'assets/icons/home/mc-wiki-logo.png',
+                  width: 30,
+                ),
+              ),
+              IconButton(
+                onPressed: () => _openUrl('https://pd.qq.com/s/pel4yyss?b=5'),
+                tooltip: 'QQ 频道',
+                icon: SvgPicture.asset(
+                  'assets/icons/home/tencent-qq-logo.svg',
+                  width: 25,
+                ),
+              ),
+              IconButton(
+                onPressed: () =>
+                    _openUrl('https://github.com/CTNH-Team/Create-New-Horizon'),
+                tooltip: 'GitHub',
+                icon: SvgPicture.asset(
+                  'assets/icons/home/github-logo.svg',
+                  width: 30,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.black,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () => _openUrl(
+                  'https://www.curseforge.com/minecraft/modpacks/ctnh',
+                ),
+                tooltip: 'CurseForge',
+                icon: SvgPicture.asset(
+                  'assets/icons/home/curseforge-logo.svg',
+                  width: 30,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.black,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () =>
+                    _openUrl('https://discord.com/invite/jQpvUDsVX8'),
+                tooltip: 'Discord',
+                icon: SvgPicture.asset(
+                  'assets/icons/home/discord-logo.svg',
+                  width: 30,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -478,85 +471,53 @@ class AboutUsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionTitle(eyebrow: aboutUsEyebrow, title: aboutUsTitle),
+          const SubsectionTitle(eyebrow: 'Team', title: '主要成员'),
+          const SizedBox(height: 8),
+          const Text(
+            '按参与整合包制作的时间排序。当前成员列表仍在持续补充中。',
+            style: TextStyle(
+              fontSize: 13,
+              height: 1.6,
+              color: Color(0xFF7A6F64),
+            ),
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 14,
+            runSpacing: 14,
+            children: homeCoreMembers
+                .map(
+                  (member) => TeamMemberCard(
+                    member: member,
+                    onOpenContact: () {
+                      if (member.contactUrl.isNotEmpty) {
+                        _openContact(member.contactUrl);
+                      }
+                    },
+                  ),
+                )
+                .toList(),
+          ),
+          const SizedBox(height: 20),
+          const SubsectionTitle(eyebrow: 'Thanks', title: '致谢'),
           const SizedBox(height: 12),
-          const Text(
-            aboutUsDescription,
-            style: TextStyle(
-              fontSize: 16,
-              height: 1.7,
-              color: Color(0xFF5F554D),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFFCF6),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: const Color(0xFFE2D7C6)),
+            ),
+            child: const Text(
+              '致谢名单与特别贡献说明会继续拆分整理，后续可直接在这里补充独立卡片或感谢列表。',
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.7,
+                color: Color(0xFF5F554D),
+              ),
             ),
           ),
-          const SizedBox(height: 16),
-          Row( 
-            children: [
-              const Text(
-                '主要成员',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF201A16),
-                ),
-              ),
-              SizedBox(width: 8),
-              Tooltip(
-                message: '按参与整合包制作的时间排序：(也许是不分先后排序或顺序颠倒）',
-                child: Icon(Icons.info),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return Wrap(
-                spacing: 14,
-                runSpacing: 14,
-                children: homeCoreMembers
-                    .map(
-                      (member) => TeamMemberCard(
-                        member: member,
-                        onOpenContact: () => {
-                          member.contactUrl.isNotEmpty
-                              ? _openContact(member.contactUrl)
-                              : null,
-                        },
-                      ),
-                    )
-                    .toList(),
-              );
-            },
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            '致谢',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF201A16),
-            ),
-          ),
-          const SizedBox(height: 14),
-          // LayoutBuilder(
-          //   builder: (context, constraints) {
-          //     return Wrap(
-          //       spacing: 14,
-          //       runSpacing: 14,
-          //       children: homeCoreMembers
-          //           .map(
-          //             (member) => TeamMemberCard(
-          //               member: member,
-          //               onOpenContact: () {
-          //                 if (member.contactUrl.isNotEmpty) {
-          //                   _openContact(member.contactUrl);
-          //                 }
-          //               },
-          //             ),
-          //           )
-          //           .toList(),
-          //     );
-          //   },
-          // ),
         ],
       ),
     );
@@ -573,12 +534,15 @@ class TeamMemberCard extends StatelessWidget {
   final HomeTeamMember member;
   final VoidCallback onOpenContact;
 
-  Future<void> _openContact(String url) async {
+  Future<void> _openAfd(String url) async {
     await launchUrl(Uri.parse(url), webOnlyWindowName: '_blank');
   }
 
   @override
   Widget build(BuildContext context) {
+    final hasAvatar = member.avatarPath.isNotEmpty;
+    final hasContact = member.contactUrl.isNotEmpty;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
@@ -591,19 +555,29 @@ class TeamMemberCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           InkWell(
-            onTap: member.contactUrl.isNotEmpty ? onOpenContact : null,
+            onTap: hasContact ? onOpenContact : null,
             borderRadius: BorderRadius.circular(999),
             child: Tooltip(
-              message: member.tooltip,
+              message: member.tooltip.isEmpty ? member.name : member.tooltip,
               child: ClipOval(
-                child: member.avatarPath.isNotEmpty
+                child: hasAvatar
                     ? Image.asset(
                         member.avatarPath,
                         width: 36,
                         height: 36,
                         fit: BoxFit.cover,
                       )
-                    : Icon(Icons.person),
+                    : Container(
+                        width: 36,
+                        height: 36,
+                        color: const Color(0xFFE6DCCF),
+                        alignment: Alignment.center,
+                        child: const Icon(
+                          Icons.person,
+                          size: 18,
+                          color: Color(0xFF6A5E55),
+                        ),
+                      ),
               ),
             ),
           ),
@@ -612,40 +586,46 @@ class TeamMemberCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(minHeight: 40),
-                child: Row(
-                  children: [
-                    Text(
-                      member.name,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF201A16),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    member.name,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF201A16),
+                    ),
+                  ),
+                  if (member.afdUrl != null && member.afdUrl!.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: TextButton(
+                        onPressed: () => _openAfd(member.afdUrl!),
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          '支持一下',
+                          style: TextStyle(color: Colors.black54),
+                        ),
                       ),
                     ),
-                    Container(
-                      child: member.afdUrl != null && member.afdUrl!.isNotEmpty
-                          ? TextButton(
-                              onPressed: () => _openContact(member.afdUrl!),
-                              child: Text(
-                                '支持一下',
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                            )
-                          : SizedBox(),
-                    ),
-                  ],
-                ),
+                ],
               ),
               Text(
-                  member.role,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    height: 1.3,
-                    color: Color(0xFF5F554D),
-                  ),
+                member.role,
+                style: const TextStyle(
+                  fontSize: 12,
+                  height: 1.3,
+                  color: Color(0xFF5F554D),
                 ),
+              ),
             ],
           ),
         ],

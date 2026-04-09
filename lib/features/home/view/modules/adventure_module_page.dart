@@ -1,4 +1,5 @@
 import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
+import 'package:ctnh_wiki/features/shared/widgets/subsection_title.dart';
 import 'package:flutter/material.dart';
 
 class AdventureModulePage extends StatelessWidget {
@@ -11,16 +12,19 @@ class AdventureModulePage extends StatelessWidget {
       tint: adventureHomeModule.tint,
       title: adventureHomeModule.title,
       description: adventureHomeModule.description,
-      children: const [
-        _HighlightTile(
+      sections: const [
+        _ModuleSubsection(
+          eyebrow: 'Adventure',
           title: '维度探索',
           description: '预留给维度、结构、地下城和阶段性探索目标的独立区块。',
         ),
-        _HighlightTile(
+        _ModuleSubsection(
+          eyebrow: 'Adventure',
           title: '战斗与生存',
           description: '后续可以拓展为装备、怪物、挑战路线和重要战斗节点说明。',
         ),
-        _HighlightTile(
+        _ModuleSubsection(
+          eyebrow: 'Adventure',
           title: '地图推进',
           description: '把冒险路线、关键地标和跨阶段任务串成更完整的推进页面。',
         ),
@@ -35,14 +39,14 @@ class _ModulePageFrame extends StatelessWidget {
     required this.tint,
     required this.title,
     required this.description,
-    required this.children,
+    required this.sections,
   });
 
   final IconData icon;
   final Color tint;
   final String title;
   final String description;
-  final List<Widget> children;
+  final List<Widget> sections;
 
   @override
   Widget build(BuildContext context) {
@@ -76,47 +80,42 @@ class _ModulePageFrame extends StatelessWidget {
             color: Color(0xFF5F554D),
           ),
         ),
-        const SizedBox(height: 20),
-        ...children,
+        const SizedBox(height: 24),
+        ...sections,
       ],
     );
   }
 }
 
-class _HighlightTile extends StatelessWidget {
-  const _HighlightTile({
+class _ModuleSubsection extends StatelessWidget {
+  const _ModuleSubsection({
+    required this.eyebrow,
     required this.title,
     required this.description,
   });
 
+  final String eyebrow;
   final String title;
   final String description;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE7DCCB)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF201A16),
-              ),
+      padding: const EdgeInsets.only(bottom: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SubsectionTitle(eyebrow: eyebrow, title: title),
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFFE7DCCB)),
             ),
-            const SizedBox(height: 8),
-            Text(
+            child: Text(
               description,
               style: const TextStyle(
                 fontSize: 14,
@@ -124,8 +123,8 @@ class _HighlightTile extends StatelessWidget {
                 color: Color(0xFF5F554D),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
