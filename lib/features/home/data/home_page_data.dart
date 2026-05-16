@@ -1,4 +1,5 @@
 import 'package:ctnh_wiki/features/home/models/home_module.dart';
+
 const homeHero = HomeHeroData(
   title: '欢迎来到《机械动力：新视野》整合包',
   description:
@@ -12,8 +13,7 @@ const homeExploreTitle = '科技、魔法与冒险';
 const homeStats = [
   HomeStat(value: '100,000+', label: '魔改配方'),
   HomeStat(value: '120+', label: '新增多方块机器'),
-  HomeStat(value: '200+', label: '全流程耗时'),
-  HomeStat(value: 'v1.4.1b - 260312', label: '最新版本'),
+  HomeStat(value: 'v1.4.3a', label: '最新版本'),
 ];
 
 const aboutUsEyebrow = 'About';
@@ -26,7 +26,7 @@ const homeCoreMembers = [
     tooltip: '',
     contactUrl: 'https://github.com/moguang2004',
     avatarPath: 'assets/images/home/team/moguang.jpg',
-    afdUrl:'https://afdian.com/a/mo_guang',
+    afdUrl: 'https://afdian.com/a/mo_guang',
   ),
   HomeTeamMember(
     name: 'Snow_city',
@@ -41,7 +41,7 @@ const homeCoreMembers = [
     tooltip: '2667023708@qq.com',
     contactUrl: '',
     avatarPath: 'assets/images/home/team/80802345.jpg',
-    afdUrl: 'https://afdian.com/a/lsl80802345'
+    afdUrl: 'https://afdian.com/a/lsl80802345',
   ),
   HomeTeamMember(
     name: 'Swinter',
@@ -56,7 +56,7 @@ const homeCoreMembers = [
     tooltip: '',
     contactUrl: 'https://www.mcmod.cn/author/34952.html',
     avatarPath: 'assets/images/home/team/白璃.png',
-    afdUrl:'https://afdian.com/a/Yuriko01',
+    afdUrl: 'https://afdian.com/a/Yuriko01',
   ),
   HomeTeamMember(
     name: 'mmyddd',

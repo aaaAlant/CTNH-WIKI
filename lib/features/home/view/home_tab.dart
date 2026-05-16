@@ -293,21 +293,40 @@ class QuickStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isCompact) {
-      return Column(
-        children: homeStats
-            .map(
-              (item) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: StatCard(value: item.value, label: item.label),
-              ),
-            )
-            .toList(),
-      );
-    }
-
     return LayoutBuilder(
       builder: (context, constraints) {
+        if (isCompact) {
+          final spacing = 12.0;
+          final useSingleColumn = constraints.maxWidth < 320;
+
+          if (useSingleColumn) {
+            return Column(
+              children: homeStats
+                  .map(
+                    (item) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: StatCard(value: item.value, label: item.label),
+                    ),
+                  )
+                  .toList(),
+            );
+          }
+
+          final cardWidth = (constraints.maxWidth - spacing) / 2;
+          return Wrap(
+            spacing: spacing,
+            runSpacing: spacing,
+            children: homeStats
+                .map(
+                  (item) => SizedBox(
+                    width: cardWidth,
+                    child: StatCard(value: item.value, label: item.label),
+                  ),
+                )
+                .toList(),
+          );
+        }
+
         if (constraints.maxWidth < 980) {
           return Wrap(
             spacing: 14,
@@ -634,15 +653,6 @@ class AboutUsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SubsectionTitle(eyebrow: 'Team', title: '主要成员'),
-          const SizedBox(height: 8),
-          const Text(
-            '按参与整合包制作的时间顺序展示。当前成员列表仍在持续补充中。',
-            style: TextStyle(
-              fontSize: 13,
-              height: 1.6,
-              color: WikiPalette.inkSoft,
-            ),
-          ),
           const SizedBox(height: 14),
           Wrap(
             spacing: 14,
@@ -671,7 +681,7 @@ class AboutUsSection extends StatelessWidget {
               radiusValue: 10,
             ),
             child: const Text(
-              '致谢名单与特别贡献说明会继续拆分整理，后续可以直接在这里补充独立卡片或感谢列表。',
+              '待补充',
               style: TextStyle(
                 fontSize: 14,
                 height: 1.7,

@@ -93,17 +93,7 @@ class _GuidesTutorialTabState extends State<GuidesTutorialTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SectionTitle(eyebrow: 'Guides', title: guidesTutorialTitle),
-            const SizedBox(height: 12),
-            const Text(
-              guidesTutorialDescription,
-              style: TextStyle(
-                fontSize: 16,
-                color: WikiPalette.inkSoft,
-                height: 1.6,
-              ),
-            ),
             const SizedBox(height: 10),
-            const _GuideFolderHint(),
             SizedBox(height: responsive.pageSectionGap),
             _GuideFilters(
               tags: catalog.allTags,
@@ -152,29 +142,6 @@ class _GuidesTutorialTabState extends State<GuidesTutorialTab> {
 
       return matchesTag && matchesQuery;
     }).toList();
-  }
-}
-
-class _GuideFolderHint extends StatelessWidget {
-  const _GuideFolderHint();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: WikiDecorations.slot(
-        color: WikiPalette.parchmentLight,
-        radiusValue: 8,
-      ),
-      child: const Text(
-        '注册表：assets/docs/guides/index.json  |  正文目录：assets/docs/guides/  |  只有在注册表中登记过的 .md 文档才会显示',
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          color: WikiPalette.inkSoft,
-        ),
-      ),
-    );
   }
 }
 

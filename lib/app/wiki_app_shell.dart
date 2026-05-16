@@ -2,10 +2,8 @@ import 'package:ctnh_wiki/app/responsive.dart';
 import 'package:ctnh_wiki/app/wiki_visuals.dart';
 import 'package:ctnh_wiki/data/wiki_tabs_data.dart';
 import 'package:ctnh_wiki/features/guides/view/guides_tutorial_tab.dart';
-import 'package:ctnh_wiki/features/handbook/view/handbook_tab.dart';
 import 'package:ctnh_wiki/features/home/view/home_tab.dart';
 import 'package:ctnh_wiki/features/shared/widgets/background_texture.dart';
-import 'package:ctnh_wiki/features/versions/view/version_list_tab.dart';
 import 'package:flutter/material.dart';
 
 class WikiAppShell extends StatefulWidget {
@@ -18,12 +16,7 @@ class WikiAppShell extends StatefulWidget {
 class _WikiAppShellState extends State<WikiAppShell> {
   int _selectedIndex = 0;
 
-  static const _pages = [
-    HomeTab(),
-    HandbookTab(),
-    GuidesTutorialTab(),
-    VersionListTab(),
-  ];
+  static const _pages = [HomeTab(), GuidesTutorialTab()];
 
   @override
   Widget build(BuildContext context) {
@@ -86,17 +79,20 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final compactShowLabel = responsive.width >= 330;
     final chips = List.generate(
       items.length,
       (index) => _NavChip(
         label: items[index].label,
         icon: items[index].icon,
+        showLabel: compactShowLabel || !responsive.isCompact,
         selected: index == selectedIndex,
         onTap: () => onSelected(index),
       ),
     );
 
     return Container(
+      width: double.infinity,
       padding: EdgeInsets.symmetric(
         horizontal: responsive.isCompact ? 14 : 22,
         vertical: 14,
@@ -106,17 +102,25 @@ class _TopBar extends StatelessWidget {
         radiusValue: responsive.isCompact ? 12 : 14,
       ),
       child: responsive.isCompact
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const _BrandLockup(),
-                const SizedBox(height: 12),
-                Wrap(spacing: 10, runSpacing: 10, children: chips),
+                const Expanded(child: _BrandLockup(isCompact: true)),
+                const SizedBox(width: 10),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var i = 0; i < chips.length; i++) ...[
+                      chips[i],
+                      if (i != chips.length - 1) const SizedBox(width: 10),
+                    ],
+                  ],
+                ),
               ],
             )
           : Row(
               children: [
-                const _BrandLockup(),
+                const _BrandLockup(isCompact: false),
                 const Spacer(),
                 ...chips.map(
                   (chip) => Padding(
@@ -131,12 +135,14 @@ class _TopBar extends StatelessWidget {
 }
 
 class _BrandLockup extends StatelessWidget {
-  const _BrandLockup();
+  const _BrandLockup({required this.isCompact});
+
+  final bool isCompact;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: isCompact ? MainAxisSize.max : MainAxisSize.min,
       children: [
         Container(
           width: 42,
@@ -148,22 +154,29 @@ class _BrandLockup extends StatelessWidget {
           child: Image.asset('assets/icons/app/logo-480x300.jpg', width: 42),
         ),
         const SizedBox(width: 12),
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'CTNH WIKI',
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.3,
-                color: WikiPalette.ink,
+        const Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'CTNH WIKI',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.3,
+                  color: WikiPalette.ink,
+                ),
               ),
-            ),
-            Text(
-              'Create : New Horizon',
-              style: TextStyle(fontSize: 11, color: WikiPalette.inkSoft),
-            ),
-          ],
+              Text(
+                'Create : New Horizon',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 11, color: WikiPalette.inkSoft),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -174,24 +187,32 @@ class _NavChip extends StatelessWidget {
   const _NavChip({
     required this.label,
     required this.icon,
+    required this.showLabel,
     required this.selected,
     required this.onTap,
   });
 
   final String label;
   final IconData icon;
+  final bool showLabel;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final iconOnly = !showLabel;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: EdgeInsets.symmetric(
+            horizontal: iconOnly ? 12 : (width < 380 ? 10 : 14),
+            vertical: 10,
+          ),
           decoration: selected
               ? WikiDecorations.darkFrame(radiusValue: 8)
               : WikiDecorations.slot(
@@ -200,21 +221,27 @@ class _NavChip extends StatelessWidget {
                 ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 icon,
                 size: 16,
                 color: selected ? WikiPalette.lineLight : WikiPalette.ink,
               ),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w900,
-                  color: selected ? WikiPalette.lineLight : WikiPalette.ink,
+              if (showLabel) ...[
+                const SizedBox(width: 8),
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: selected ? WikiPalette.lineLight : WikiPalette.ink,
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),
