@@ -2,6 +2,7 @@ import 'package:ctnh_wiki/app/responsive.dart';
 import 'package:ctnh_wiki/app/wiki_visuals.dart';
 import 'package:ctnh_wiki/features/guides/data/guide_markdown_repository.dart';
 import 'package:ctnh_wiki/features/guides/data/guides_tutorial_data.dart';
+import 'package:ctnh_wiki/features/guides/models/guide_markdown_catalog.dart';
 import 'package:ctnh_wiki/features/guides/models/guide_markdown_document.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
@@ -20,13 +21,22 @@ class GuidesTutorialTab extends StatefulWidget {
 class _GuidesTutorialTabState extends State<GuidesTutorialTab> {
   static const _repository = GuideMarkdownRepository();
 
-  late final Future<List<GuideMarkdownDocument>> _documentsFuture;
+  late final Future<GuideMarkdownCatalog> _catalogFuture;
+  final TextEditingController _searchController = TextEditingController();
+
   String? _selectedSlug;
+  String? _selectedTag;
 
   @override
   void initState() {
     super.initState();
-    _documentsFuture = _repository.loadDocuments();
+    _catalogFuture = _repository.loadCatalog();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   void _selectDocument(GuideMarkdownDocument document) {
@@ -38,10 +48,9 @@ class _GuidesTutorialTabState extends State<GuidesTutorialTab> {
   @override
   Widget build(BuildContext context) {
     final responsive = ResponsiveLayout.of(context);
-    final isCompact = responsive.width < 980;
 
-    return FutureBuilder<List<GuideMarkdownDocument>>(
-      future: _documentsFuture,
+    return FutureBuilder<GuideMarkdownCatalog>(
+      future: _catalogFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const ContentPanel(
@@ -60,21 +69,25 @@ class _GuidesTutorialTabState extends State<GuidesTutorialTab> {
           );
         }
 
-        final documents = snapshot.data ?? const <GuideMarkdownDocument>[];
-        if (documents.isEmpty) {
+        final catalog = snapshot.data;
+        if (catalog == null || catalog.documents.isEmpty) {
           return const ContentPanel(
             minHeight: 320,
             child: _GuidesStateMessage(
-              title: '还没有教程文档',
-              description: '把 .md 文件放进 assets/docs/guides/ 后，这里会自动显示。',
+              title: '还没有攻略教程',
+              description:
+                  '先把 Markdown 文件放进 assets/docs/guides/，再在 assets/docs/guides/index.json 里注册，页面就会自动显示。',
             ),
           );
         }
 
-        final selected = documents.firstWhere(
-          (doc) => doc.slug == _selectedSlug,
-          orElse: () => documents.first,
-        );
+        final filteredDocuments = _filterDocuments(catalog.documents);
+        final selected = filteredDocuments.isEmpty
+            ? null
+            : filteredDocuments.firstWhere(
+                (doc) => doc.slug == _selectedSlug,
+                orElse: () => filteredDocuments.first,
+              );
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,44 +105,53 @@ class _GuidesTutorialTabState extends State<GuidesTutorialTab> {
             const SizedBox(height: 10),
             const _GuideFolderHint(),
             SizedBox(height: responsive.pageSectionGap),
-            ContentPanel(
-              child: isCompact
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _GuideDocumentList(
-                          documents: documents,
-                          selectedSlug: selected.slug,
-                          onSelected: _selectDocument,
-                          compact: true,
-                        ),
-                        const SizedBox(height: 18),
-                        _GuideMarkdownViewer(document: selected),
-                      ],
-                    )
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 280,
-                          child: _GuideDocumentList(
-                            documents: documents,
-                            selectedSlug: selected.slug,
-                            onSelected: _selectDocument,
-                            compact: false,
-                          ),
-                        ),
-                        const SizedBox(width: 18),
-                        Expanded(
-                          child: _GuideMarkdownViewer(document: selected),
-                        ),
-                      ],
-                    ),
+            _GuideFilters(
+              tags: catalog.allTags,
+              selectedTag: _selectedTag,
+              searchController: _searchController,
+              onSearchChanged: (_) => setState(() {}),
+              onTagChanged: (tag) {
+                setState(() {
+                  _selectedTag = tag;
+                });
+              },
             ),
+            SizedBox(height: responsive.isCompact ? 16 : 20),
+            if (filteredDocuments.isEmpty)
+              const ContentPanel(
+                child: _GuidesStateMessage(
+                  title: '没有匹配的教程',
+                  description: '试试清空搜索词，或者切换标签筛选条件。',
+                ),
+              )
+            else ...[
+              _GuideCandidateFlow(
+                documents: filteredDocuments,
+                selectedSlug: selected!.slug,
+                onSelected: _selectDocument,
+              ),
+              SizedBox(height: responsive.isCompact ? 16 : 20),
+              ContentPanel(child: _GuideMarkdownViewer(document: selected)),
+            ],
           ],
         );
       },
     );
+  }
+
+  List<GuideMarkdownDocument> _filterDocuments(
+    List<GuideMarkdownDocument> documents,
+  ) {
+    final query = _searchController.text.trim().toLowerCase();
+
+    return documents.where((document) {
+      final matchesTag =
+          _selectedTag == null || document.tags.contains(_selectedTag);
+      final matchesQuery =
+          query.isEmpty || document.title.toLowerCase().contains(query);
+
+      return matchesTag && matchesQuery;
+    }).toList();
   }
 }
 
@@ -145,13 +167,162 @@ class _GuideFolderHint extends StatelessWidget {
         radiusValue: 8,
       ),
       child: const Text(
-        '文档目录：assets/docs/guides/  |  运行时会自动发现该目录中的 .md 文件',
+        '注册表：assets/docs/guides/index.json  |  正文目录：assets/docs/guides/  |  只有在注册表中登记过的 .md 文档才会显示',
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
           color: WikiPalette.inkSoft,
         ),
       ),
+    );
+  }
+}
+
+class _GuideFilters extends StatelessWidget {
+  const _GuideFilters({
+    required this.tags,
+    required this.selectedTag,
+    required this.searchController,
+    required this.onSearchChanged,
+    required this.onTagChanged,
+  });
+
+  final List<String> tags;
+  final String? selectedTag;
+  final TextEditingController searchController;
+  final ValueChanged<String> onSearchChanged;
+  final ValueChanged<String?> onTagChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return ContentPanel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            controller: searchController,
+            onChanged: onSearchChanged,
+            decoration: InputDecoration(
+              hintText: '搜索教程标题',
+              prefixIcon: const Icon(Icons.search_rounded),
+              filled: true,
+              fillColor: WikiPalette.parchmentLight,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: WikiPalette.purpleMuted,
+                  width: 1.6,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  color: WikiPalette.steel,
+                  width: 2,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          const Text(
+            '标签筛选',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w900,
+              color: WikiPalette.ink,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              _FilterChipButton(
+                label: '全部标签',
+                selected: selectedTag == null,
+                onTap: () => onTagChanged(null),
+              ),
+              ...tags.map(
+                (tag) => _FilterChipButton(
+                  label: tag,
+                  selected: selectedTag == tag,
+                  onTap: () => onTagChanged(tag),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilterChipButton extends StatelessWidget {
+  const _FilterChipButton({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(999),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: selected
+            ? WikiDecorations.darkFrame(radiusValue: 999)
+            : WikiDecorations.slot(
+                color: WikiPalette.parchmentLight,
+                radiusValue: 999,
+              ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w800,
+            color: selected ? WikiPalette.lineLight : WikiPalette.ink,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GuideCandidateFlow extends StatelessWidget {
+  const _GuideCandidateFlow({
+    required this.documents,
+    required this.selectedSlug,
+    required this.onSelected,
+  });
+
+  final List<GuideMarkdownDocument> documents;
+  final String selectedSlug;
+  final ValueChanged<GuideMarkdownDocument> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: documents
+          .map(
+            (document) => _GuideDocChip(
+              document: document,
+              selected: document.slug == selectedSlug,
+              onTap: () => onSelected(document),
+            ),
+          )
+          .toList(),
     );
   }
 }
@@ -190,80 +361,6 @@ class _GuidesStateMessage extends StatelessWidget {
   }
 }
 
-class _GuideDocumentList extends StatelessWidget {
-  const _GuideDocumentList({
-    required this.documents,
-    required this.selectedSlug,
-    required this.onSelected,
-    required this.compact,
-  });
-
-  final List<GuideMarkdownDocument> documents;
-  final String selectedSlug;
-  final ValueChanged<GuideMarkdownDocument> onSelected;
-  final bool compact;
-
-  @override
-  Widget build(BuildContext context) {
-    if (compact) {
-      return Wrap(
-        spacing: 10,
-        runSpacing: 10,
-        children: documents
-            .map(
-              (document) => _GuideDocChip(
-                document: document,
-                selected: document.slug == selectedSlug,
-                onTap: () => onSelected(document),
-              ),
-            )
-            .toList(),
-      );
-    }
-
-    return Container(
-      decoration: WikiDecorations.slot(
-        color: WikiPalette.parchmentLight,
-        radiusValue: 10,
-      ),
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '文档目录',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
-              color: WikiPalette.ink,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            '按文件名与 front matter 的 order 自动排序。',
-            style: TextStyle(
-              fontSize: 13,
-              height: 1.6,
-              color: WikiPalette.inkSoft,
-            ),
-          ),
-          const SizedBox(height: 14),
-          ...documents.map(
-            (document) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _GuideDocCard(
-                document: document,
-                selected: document.slug == selectedSlug,
-                onTap: () => onSelected(document),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _GuideDocChip extends StatelessWidget {
   const _GuideDocChip({
     required this.document,
@@ -281,6 +378,7 @@ class _GuideDocChip extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(999),
       child: Container(
+        constraints: const BoxConstraints(minHeight: 44),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: selected
             ? WikiDecorations.darkFrame(radiusValue: 999)
@@ -295,62 +393,6 @@ class _GuideDocChip extends StatelessWidget {
             fontWeight: FontWeight.w800,
             color: selected ? WikiPalette.lineLight : WikiPalette.ink,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _GuideDocCard extends StatelessWidget {
-  const _GuideDocCard({
-    required this.document,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final GuideMarkdownDocument document;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(14),
-        decoration: selected
-            ? WikiDecorations.darkFrame(radiusValue: 8)
-            : WikiDecorations.slot(
-                color: WikiPalette.parchment,
-                radiusValue: 8,
-              ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              document.title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: selected ? WikiPalette.lineLight : WikiPalette.ink,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              document.summary,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 13,
-                height: 1.6,
-                color: selected
-                    ? WikiPalette.lineLight.withValues(alpha: 0.88)
-                    : WikiPalette.inkSoft,
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -473,7 +515,17 @@ class _GuideMarkdownViewer extends StatelessWidget {
                 color: WikiPalette.ink,
               ),
             ),
-            const SizedBox(height: 6),
+            if (document.tags.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: document.tags
+                    .map((tag) => _ViewerMetaChip(label: tag))
+                    .toList(),
+              ),
+            ],
+            const SizedBox(height: 8),
             Text(
               document.assetPath,
               style: const TextStyle(
@@ -491,6 +543,31 @@ class _GuideMarkdownViewer extends StatelessWidget {
               onTapLink: _openLink,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ViewerMetaChip extends StatelessWidget {
+  const _ViewerMetaChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: WikiDecorations.slot(
+        color: WikiPalette.parchment,
+        radiusValue: 999,
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
+          color: WikiPalette.inkSoft,
         ),
       ),
     );

@@ -6,6 +6,7 @@ class GuideMarkdownDocument {
     required this.title,
     required this.summary,
     required this.order,
+    required this.tags,
     required this.markdownBody,
   });
 
@@ -15,5 +16,6 @@ class GuideMarkdownDocument {
   final String title;
   final String summary;
   final int order;
+  final List<String> tags;
   final String markdownBody;
 }

@@ -1,0 +1,52 @@
+{
+  "documents": [
+    {
+      "slug": "markdown-preview",
+      "assetPath": "assets/docs/guides/00-markdown-preview.md",
+      "title": "Markdown 语法预览",
+      "summary": "用于预览攻略教程板块当前支持的 Markdown 渲染效果。",
+      "order": 0,
+      "tags": ["预览", "Markdown", "框架"]
+    },
+    {
+      "slug": "starter-first-day",
+      "assetPath": "assets/docs/guides/01-starter-first-day.md",
+      "title": "开局第一天该做什么",
+      "summary": "一份偏行动导向的开局清单，帮助玩家快速建立最基础的资源循环。",
+      "order": 10,
+      "tags": ["开荒", "新手", "资源"]
+    },
+    {
+      "slug": "starter-storage-plan",
+      "assetPath": "assets/docs/guides/02-starter-storage-plan.md",
+      "title": "前期仓储与物流整理建议",
+      "summary": "围绕箱子、分类、物流方向给出一个前期不容易返工的整理思路。",
+      "order": 20,
+      "tags": ["新手", "物流", "AE2"]
+    },
+    {
+      "slug": "stage-power-ramp",
+      "assetPath": "assets/docs/guides/10-stage-power-ramp.md",
+      "title": "工业阶段前的发电爬坡",
+      "summary": "说明为什么会在工业阶段前突然缺电，以及应该先补哪几条线。",
+      "order": 30,
+      "tags": ["科技", "发电", "GregTech"]
+    },
+    {
+      "slug": "topic-botania-to-biomancy",
+      "assetPath": "assets/docs/guides/20-topic-botania-to-biomancy.md",
+      "title": "植物魔法与血肉重铸的交叉用途",
+      "summary": "用一个小专题示范多标签教程，方便测试标签和搜索是否协同工作。",
+      "order": 40,
+      "tags": ["魔法", "Biomancy", "Botania", "交叉联动"]
+    },
+    {
+      "slug": "topic-ae2-checklist",
+      "assetPath": "assets/docs/guides/21-topic-ae2-checklist.md",
+      "title": "AE2 接入前检查清单",
+      "summary": "列出接入 AE2 前建议先准备好的材料、空间与自动化接口。",
+      "order": 50,
+      "tags": ["AE2", "物流", "自动化", "科技"]
+    }
+  ]
+}

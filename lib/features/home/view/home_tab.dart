@@ -1,4 +1,4 @@
-import 'package:ctnh_wiki/app/responsive.dart';
+﻿import 'package:ctnh_wiki/app/responsive.dart';
 import 'package:ctnh_wiki/app/web_cursor.dart';
 import 'package:ctnh_wiki/app/wiki_visuals.dart';
 import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
@@ -140,12 +140,12 @@ class HeroSection extends StatelessWidget {
                 runSpacing: 12,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  const AccentButton(label: 'Bug鍙嶉', filled: true),
-                  const AccentButton(label: '鍔犲叆鎴戜滑'),
+                  const AccentButton(label: 'Bug反馈', filled: true),
+                  const AccentButton(label: '加入我们'),
                   IconButton(
                     onPressed: () =>
                         _openUrl('https://www.mcmod.cn/modpack/897.html'),
-                    tooltip: 'MC 鐧剧',
+                    tooltip: 'MC 百科',
                     style: _iconButtonStyle(),
                     icon: SizedBox.square(
                       dimension: 28,
@@ -161,7 +161,7 @@ class HeroSection extends StatelessWidget {
                   IconButton(
                     onPressed: () =>
                         _openUrl('https://pd.qq.com/s/pel4yyss?b=5'),
-                    tooltip: 'QQ 棰戦亾',
+                    tooltip: 'QQ 频道',
                     style: _iconButtonStyle(),
                     icon: SizedBox.square(
                       dimension: 28,

@@ -1,30 +1,67 @@
 import 'dart:convert';
 
+import 'package:ctnh_wiki/features/guides/models/guide_markdown_catalog.dart';
 import 'package:ctnh_wiki/features/guides/models/guide_markdown_document.dart';
 import 'package:flutter/services.dart';
 
 class GuideMarkdownRepository {
   const GuideMarkdownRepository();
 
-  static const _assetPrefix = 'assets/docs/guides/';
+  static const _registryPath = 'assets/docs/guides/index.json';
 
-  Future<List<GuideMarkdownDocument>> loadDocuments() async {
+  Future<GuideMarkdownCatalog> loadCatalog() async {
+    final registryRaw = await rootBundle.loadString(_registryPath);
+    final registryJson = jsonDecode(registryRaw);
+    if (registryJson is! Map<String, dynamic>) {
+      throw const FormatException('攻略教程注册表格式无效。');
+    }
+
     final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-    final markdownAssets =
-        manifest
-            .listAssets()
-            .where(
-              (path) =>
-                  path.startsWith(_assetPrefix) &&
-                  path.toLowerCase().endsWith('.md'),
-            )
-            .toList()
-          ..sort();
+    final registeredAssets = manifest.listAssets().toSet();
+
+    final rawDocuments = registryJson['documents'];
+    if (rawDocuments is! List) {
+      throw const FormatException('攻略教程注册表缺少 documents 列表。');
+    }
 
     final documents = <GuideMarkdownDocument>[];
-    for (final assetPath in markdownAssets) {
-      final raw = await rootBundle.loadString(assetPath);
-      documents.add(_parseDocument(assetPath, raw));
+    for (final item in rawDocuments) {
+      if (item is! Map<String, dynamic>) {
+        throw const FormatException('攻略教程注册项格式无效。');
+      }
+
+      final assetPath = (item['assetPath'] as String?)?.trim() ?? '';
+      if (assetPath.isEmpty) {
+        throw const FormatException('攻略教程注册项缺少 assetPath。');
+      }
+      if (!registeredAssets.contains(assetPath)) {
+        throw StateError('攻略教程资源未注册或不存在：$assetPath');
+      }
+
+      final markdownRaw = await rootBundle.loadString(assetPath);
+      final markdownBody = _stripFrontMatter(markdownRaw);
+      final fileName = assetPath.split('/').last;
+      final slug = ((item['slug'] as String?)?.trim().isNotEmpty ?? false)
+          ? (item['slug'] as String).trim()
+          : fileName.replaceAll(RegExp(r'\.md$', caseSensitive: false), '');
+
+      final title = (item['title'] as String?)?.trim();
+      if (title == null || title.isEmpty) {
+        throw StateError('攻略教程 "$assetPath" 缺少 title。');
+      }
+
+      documents.add(
+        GuideMarkdownDocument(
+          assetPath: assetPath,
+          fileName: fileName,
+          slug: slug,
+          title: title,
+          summary: ((item['summary'] as String?) ?? '').trim(),
+          order: _parseOrder(item['order']),
+          tags: _parseTags(item['tags']),
+          markdownBody: markdownBody,
+        ),
+      );
     }
 
     documents.sort((a, b) {
@@ -32,89 +69,51 @@ class GuideMarkdownRepository {
       if (orderCompare != 0) {
         return orderCompare;
       }
-      return a.fileName.compareTo(b.fileName);
+      return a.title.compareTo(b.title);
     });
 
-    return documents;
+    return GuideMarkdownCatalog(documents: documents);
   }
 
-  GuideMarkdownDocument _parseDocument(String assetPath, String raw) {
-    final fileName = assetPath.split('/').last;
-    final slug = fileName.replaceAll(
-      RegExp(r'\.md$', caseSensitive: false),
-      '',
-    );
-
-    final metadata = <String, String>{};
+  String _stripFrontMatter(String raw) {
     var body = raw.trim();
-
-    if (body.startsWith('---\n') || body.startsWith('---\r\n')) {
-      final lines = const LineSplitter().convert(body);
-      final closingIndex = lines.indexOf('---', 1);
-      if (closingIndex > 0) {
-        for (final line in lines.sublist(1, closingIndex)) {
-          final separatorIndex = line.indexOf(':');
-          if (separatorIndex <= 0) {
-            continue;
-          }
-          final key = line.substring(0, separatorIndex).trim();
-          final value = line.substring(separatorIndex + 1).trim();
-          metadata[key] = value;
-        }
-        body = lines.sublist(closingIndex + 1).join('\n').trim();
-      }
+    if (!(body.startsWith('---\n') || body.startsWith('---\r\n'))) {
+      return body;
     }
 
-    final title = metadata['title']?.trim().isNotEmpty == true
-        ? metadata['title']!.trim()
-        : _extractFirstHeading(body) ?? _titleFromFileName(fileName);
-
-    final summary = metadata['summary']?.trim().isNotEmpty == true
-        ? metadata['summary']!.trim()
-        : _extractSummary(body);
-
-    final order = int.tryParse(metadata['order'] ?? '') ?? 9999;
-
-    return GuideMarkdownDocument(
-      assetPath: assetPath,
-      fileName: fileName,
-      slug: slug,
-      title: title,
-      summary: summary,
-      order: order,
-      markdownBody: body,
-    );
-  }
-
-  String? _extractFirstHeading(String body) {
-    for (final line in const LineSplitter().convert(body)) {
-      final trimmed = line.trim();
-      if (trimmed.startsWith('# ')) {
-        return trimmed.substring(2).trim();
-      }
+    final lines = const LineSplitter().convert(body);
+    final closingIndex = lines.indexOf('---', 1);
+    if (closingIndex <= 0) {
+      return body;
     }
-    return null;
+
+    return lines.sublist(closingIndex + 1).join('\n').trim();
   }
 
-  String _extractSummary(String body) {
-    for (final line in const LineSplitter().convert(body)) {
-      final trimmed = line.trim();
-      if (trimmed.isEmpty || trimmed.startsWith('#')) {
-        continue;
-      }
-      return trimmed;
+  List<String> _parseTags(Object? rawTags) {
+    if (rawTags is! List) {
+      return const [];
     }
-    return '暂无摘要。';
+
+    final tags =
+        rawTags
+            .whereType<String>()
+            .map((tag) => tag.trim())
+            .where((tag) => tag.isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
+
+    return tags;
   }
 
-  String _titleFromFileName(String fileName) {
-    final withoutExtension = fileName.replaceAll(
-      RegExp(r'\.md$', caseSensitive: false),
-      '',
-    );
-    return withoutExtension
-        .replaceFirst(RegExp(r'^\d+[-_ ]*'), '')
-        .replaceAll('-', ' ')
-        .trim();
+  int _parseOrder(Object? rawOrder) {
+    if (rawOrder is int) {
+      return rawOrder;
+    }
+    if (rawOrder is String) {
+      return int.tryParse(rawOrder.trim()) ?? 9999;
+    }
+    return 9999;
   }
 }
