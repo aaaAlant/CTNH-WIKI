@@ -1,4 +1,5 @@
-﻿import 'package:ctnh_wiki/features/handbook/data/mod_catalog_repository.dart';
+import 'package:ctnh_wiki/app/wiki_visuals.dart';
+import 'package:ctnh_wiki/features/handbook/data/mod_catalog_repository.dart';
 import 'package:ctnh_wiki/features/handbook/models/mod_catalog_entry.dart';
 import 'package:flutter/material.dart';
 
@@ -48,15 +49,17 @@ class _ModCatalogPanelState extends State<ModCatalogPanel> {
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
     final isCompact = width < 900;
+    final isMedium = width >= 900 && width < 1100;
 
     return Container(
       width: double.infinity,
-      padding: widget.framed ? const EdgeInsets.all(22) : EdgeInsets.zero,
+      padding: widget.framed
+          ? EdgeInsets.all(isCompact ? 16 : (isMedium ? 20 : 22))
+          : EdgeInsets.zero,
       decoration: widget.framed
-          ? BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: const Color(0xFFE5D9C8)),
+          ? WikiDecorations.frame(
+              color: WikiPalette.parchment,
+              radiusValue: isCompact ? 10 : 12,
             )
           : null,
       child: Column(
@@ -77,7 +80,7 @@ class _ModCatalogPanelState extends State<ModCatalogPanel> {
                     const Expanded(child: _ModCatalogHeader()),
                     const SizedBox(width: 18),
                     SizedBox(
-                      width: 320,
+                      width: isMedium ? 280 : 320,
                       child: _SearchField(controller: _searchController),
                     ),
                   ],
@@ -144,11 +147,14 @@ class _ModCatalogPanelState extends State<ModCatalogPanel> {
                   ),
                   const SizedBox(height: 18),
                   Container(
-                    height: isCompact ? 520 : 620,
+                    height: isCompact ? 460 : (isMedium ? 540 : 620),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFFCF7),
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: const Color(0xFFE7DCCB)),
+                      color: WikiPalette.parchmentLight,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: WikiPalette.purpleMuted,
+                        width: 2,
+                      ),
                     ),
                     child: filteredEntries.isEmpty
                         ? const _EmptyState()
@@ -157,7 +163,7 @@ class _ModCatalogPanelState extends State<ModCatalogPanel> {
                             child: ListView.separated(
                               padding: const EdgeInsets.all(16),
                               itemCount: filteredEntries.length,
-                              separatorBuilder: (_, __) =>
+                              separatorBuilder: (_, _) =>
                                   const SizedBox(height: 12),
                               itemBuilder: (context, index) {
                                 return _ModEntryCard(
@@ -232,22 +238,28 @@ class _SearchField extends StatelessWidget {
         hintText: '搜索名称、分类、标签、加载器或文件名',
         prefixIcon: const Icon(Icons.search_rounded),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: WikiPalette.parchmentLight,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: Color(0xFFE2D6C3)),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: WikiPalette.purpleMuted,
+            width: 2,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: Color(0xFFE2D6C3)),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: WikiPalette.purpleMuted,
+            width: 2,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: Color(0xFF9A6F37)),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: WikiPalette.rust, width: 2),
         ),
       ),
     );
@@ -263,10 +275,9 @@ class _ModEntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE7DCCB)),
+      decoration: WikiDecorations.slot(
+        color: WikiPalette.parchmentLight,
+        radiusValue: 8,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,8 +293,8 @@ class _ModEntryCard extends StatelessWidget {
                       entry.displayName,
                       style: const TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF201A16),
+                        fontWeight: FontWeight.w900,
+                        color: WikiPalette.ink,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -291,8 +302,8 @@ class _ModEntryCard extends StatelessWidget {
                       entry.primaryCategory,
                       style: const TextStyle(
                         fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF8A6A37),
+                        fontWeight: FontWeight.w900,
+                        color: WikiPalette.rustDark,
                       ),
                     ),
                   ],
@@ -324,7 +335,7 @@ class _ModEntryCard extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 14,
                 height: 1.7,
-                color: Color(0xFF4E443D),
+                color: WikiPalette.inkSoft,
               ),
             ),
           ],
@@ -334,15 +345,15 @@ class _ModEntryCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF7EFE2),
-                borderRadius: BorderRadius.circular(14),
+                color: WikiPalette.slot,
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 '备注：${entry.note}',
                 style: const TextStyle(
                   fontSize: 13,
                   height: 1.6,
-                  color: Color(0xFF6C5948),
+                  color: WikiPalette.inkSoft,
                 ),
               ),
             ),
@@ -364,7 +375,7 @@ class _ModEntryCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 13,
               height: 1.6,
-              color: Color(0xFF6F655D),
+              color: WikiPalette.inkSoft,
             ),
           ),
         ],
@@ -393,14 +404,15 @@ class _LoaderBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: WikiPalette.purpleMuted),
       ),
       child: Text(
         loader,
         style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF4B433C),
+          color: WikiPalette.ink,
         ),
       ),
     );
@@ -417,15 +429,16 @@ class _MetaChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-        color: const Color(0xFFF4EBDD),
-        borderRadius: BorderRadius.circular(999),
+        color: const Color(0xFFD3B183),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: WikiPalette.purpleMuted),
       ),
       child: Text(
         label,
         style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF6B4F2D),
+          color: WikiPalette.ink,
         ),
       ),
     );
@@ -442,15 +455,16 @@ class _TagChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F2F4),
-        borderRadius: BorderRadius.circular(999),
+        color: const Color(0xFFB8B0BA),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: WikiPalette.purpleMuted),
       ),
       child: Text(
         label,
         style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF525A61),
+          color: WikiPalette.ink,
         ),
       ),
     );
@@ -474,7 +488,8 @@ class _StatChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: tone,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: WikiPalette.purpleMuted),
       ),
       child: Text(
         label,

@@ -14,25 +14,21 @@ const techHomeModule = HomeModule(
 const magicHomeModule = HomeModule(
   label: '魔法',
   title: '魔法体系',
-  subTitle: '植物魔法、血魔法3、新生魔艺等',
-  description: '聚焦魔法资源、仪式结构与跨模组联动，适合作为逐步建立独立于科技线的推进节奏。',
+  subTitle: '植物魔法、血魔法、血肉重铸等',
+  description: '聚焦魔法资源、仪式结构与跨模组联动，作为独立于科技主线的特色推进分支。',
   cursorTheme: HomeCursorTheme.magic,
   icon: Icons.auto_fix_high_rounded,
   tint: Color(0xFFD6CCE9),
 );
 
-const adventureHomeModule = HomeModule(
-  label: '冒险',
-  title: '冒险与探索',
-  subTitle: 'Alex 的洞穴、暮色森林、天境、星际等',
-  description: '集中整理维度探索、战斗、生存目标与地图推进内容，作为世界拓展和资源发现路线。',
+const logisticsHomeModule = HomeModule(
+  label: '物流',
+  title: '物流与存储',
+  subTitle: '应用能源2、无线传电、样板工作站与多方块结构',
+  description: '集中整理 AE2 及附属扩展的物流、存储、电力传输与多方块体系。',
   cursorTheme: HomeCursorTheme.adventure,
-  icon: Icons.explore_rounded,
+  icon: Icons.hub_rounded,
   tint: Color(0xFFE6D0A8),
 );
 
-const homeModules = [
-  techHomeModule,
-  magicHomeModule,
-  adventureHomeModule,
-];
+const homeModules = [techHomeModule, magicHomeModule, logisticsHomeModule];

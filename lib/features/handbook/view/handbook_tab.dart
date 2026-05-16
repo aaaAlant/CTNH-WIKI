@@ -1,4 +1,5 @@
-﻿import 'package:ctnh_wiki/features/handbook/view/widgets/mod_catalog_panel.dart';
+import 'package:ctnh_wiki/app/responsive.dart';
+import 'package:ctnh_wiki/features/handbook/view/widgets/mod_catalog_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
 // Hidden for now. Keep the original implementation for later restoration.
@@ -10,21 +11,19 @@ class HandbookTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final responsive = ResponsiveLayout.of(context);
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(eyebrow: 'Entries', title: '图鉴'),
-        SizedBox(height: 12),
-        Text(
+        const SectionTitle(eyebrow: 'Entries', title: '图鉴'),
+        const SizedBox(height: 12),
+        const Text(
           '图鉴页当前先展示 MOD 列表，机器图鉴和任务概览的实现代码已保留，后续需要时可以直接恢复。',
-          style: TextStyle(
-            fontSize: 16,
-            color: Color(0xFF5F554D),
-            height: 1.6,
-          ),
+          style: TextStyle(fontSize: 16, color: Color(0xFF5F554D), height: 1.6),
         ),
-        SizedBox(height: 24),
-        ContentPanel(child: ModCatalogPanel(framed: false)),
+        SizedBox(height: responsive.pageSectionGap),
+        const ContentPanel(child: ModCatalogPanel(framed: false)),
         // Hidden for now. Keep the original section code instead of deleting it.
         // SizedBox(height: 24),
         // ContentPanel(child: _MachineHandbookPanel()),
@@ -35,6 +34,7 @@ class HandbookTab extends StatelessWidget {
   }
 }
 
+// ignore: unused_element
 class _MachineHandbookPanel extends StatelessWidget {
   const _MachineHandbookPanel();
 

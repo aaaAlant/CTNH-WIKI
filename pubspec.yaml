@@ -13,6 +13,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.2.1
+  flutter_markdown_plus: ^1.0.7
   url_launcher: ^6.3.2
   intl: ^0.20.2
   three_js: ^0.2.7
@@ -29,8 +30,14 @@ flutter:
   assets:
     - assets/ModsList.json
     - assets/generated/quests/
+    - assets/docs/guides/
     - assets/images/home/
+    - assets/images/home/tech/
+    - assets/images/home/magic/
+    - assets/images/home/adventure/
     - assets/images/home/team/
+    - assets/images/wiki/formal/
+    - assets/images/gui/
     - assets/icons/app/
     - assets/icons/home/
 

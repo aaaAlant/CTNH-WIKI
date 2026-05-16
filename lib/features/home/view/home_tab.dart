@@ -1,10 +1,13 @@
+import 'package:ctnh_wiki/app/responsive.dart';
 import 'package:ctnh_wiki/app/web_cursor.dart';
+import 'package:ctnh_wiki/app/wiki_visuals.dart';
 import 'package:ctnh_wiki/features/home/data/home_modules_data.dart';
 import 'package:ctnh_wiki/features/home/data/home_page_data.dart';
 import 'package:ctnh_wiki/features/home/models/home_module.dart';
-import 'package:ctnh_wiki/features/home/view/modules/adventure_module_page.dart';
+import 'package:ctnh_wiki/features/home/view/modules/logistics_module_page.dart';
 import 'package:ctnh_wiki/features/home/view/modules/magic_module_page.dart';
 import 'package:ctnh_wiki/features/home/view/modules/tech_module_page.dart';
+import 'package:ctnh_wiki/features/shared/widgets/brass_gear_overlay.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
 import 'package:ctnh_wiki/features/shared/widgets/subsection_title.dart';
@@ -30,23 +33,23 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final isCompact = width < 900;
+    final responsive = ResponsiveLayout.of(context);
+    final isCompact = responsive.isCompact;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HeroSection(isCompact: isCompact),
-        const SizedBox(height: 24),
+        HeroSection(responsive: responsive),
+        SizedBox(height: responsive.pageSectionGap),
         QuickStats(isCompact: isCompact),
-        const SizedBox(height: 24),
+        SizedBox(height: responsive.pageSectionGap),
         const SectionTitle(
           eyebrow: homeExploreEyebrow,
           title: homeExploreTitle,
         ),
         const SizedBox(height: 16),
         ModuleSwitcher(
-          isCompact: isCompact,
+          isCompact: responsive.width < 920,
           selectedIndex: _selectedModuleIndex,
           onSelected: (index) {
             setState(() {
@@ -55,7 +58,8 @@ class _HomeTabState extends State<HomeTab> {
             WebCursorController.setTheme(homeModules[index].cursorTheme);
           },
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: responsive.pageSectionGap),
+        SizedBox(height: responsive.pageSectionGap),
         const SectionTitle(eyebrow: aboutUsEyebrow, title: aboutUsTitle),
         const SizedBox(height: 16),
         AboutUsSection(isCompact: isCompact),
@@ -65,116 +69,170 @@ class _HomeTabState extends State<HomeTab> {
 }
 
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key, required this.isCompact});
+  const HeroSection({super.key, required this.responsive});
 
-  final bool isCompact;
+  final ResponsiveLayout responsive;
 
   Future<void> _openUrl(String url) async {
     await launchUrl(Uri.parse(url), webOnlyWindowName: '_blank');
   }
 
+  ButtonStyle _iconButtonStyle() {
+    return IconButton.styleFrom(
+      backgroundColor: WikiPalette.parchmentLight,
+      side: const BorderSide(color: WikiPalette.purpleMuted, width: 2),
+      fixedSize: const Size.square(56),
+      minimumSize: const Size.square(56),
+      maximumSize: const Size.square(56),
+      padding: EdgeInsets.zero,
+      iconSize: 28,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isCompact = responsive.isCompact;
+    final heroFontSize = switch (responsive.tier) {
+      ResponsiveTier.compact => 34.0,
+      ResponsiveTier.medium => 48.0,
+      ResponsiveTier.expanded => 60.0,
+    };
+
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(isCompact ? 22 : 30),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(36),
-        gradient: const LinearGradient(
-          colors: [Color(0xFFF6E6C8), Color(0xFFEAE1D0), Color(0xFFD9E3D2)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 30,
-            offset: Offset(0, 18),
-          ),
-        ],
+      padding: EdgeInsets.all(isCompact ? 20 : responsive.panelPadding),
+      decoration: WikiDecorations.frame(
+        color: WikiPalette.parchment,
+        radiusValue: responsive.panelRadius,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Text(
-            homeHero.title,
-            style: TextStyle(
-              fontSize: isCompact ? 42 : 60,
-              fontWeight: FontWeight.w800,
-              height: isCompact ? 1.0 : 0.95,
-              letterSpacing: isCompact ? -1.1 : -1.8,
-              color: const Color(0xFF201A16),
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            homeHero.description,
-            style: const TextStyle(
-              fontSize: 16,
-              height: 1.7,
-              color: Color(0xFF4C433D),
-            ),
-          ),
-          const SizedBox(height: 24),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
+          const Positioned.fill(child: BrassGearOverlay(opacity: 0.1)),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AccentButton(label: '交流渠道', filled: true),
-              const AccentButton(label: 'Bug反馈'),
-              const AccentButton(label: '加入我们'),
-              IconButton(
-                onPressed: () =>
-                    _openUrl('https://www.mcmod.cn/modpack/897.html'),
-                tooltip: 'MC 百科',
-                icon: Image.asset(
-                  'assets/icons/home/mc-wiki-logo.png',
-                  width: 30,
+              Text(
+                homeHero.title,
+                style: TextStyle(
+                  fontSize: heroFontSize,
+                  fontWeight: FontWeight.w900,
+                  height: isCompact ? 1.0 : 0.95,
+                  letterSpacing: isCompact ? -0.9 : -1.8,
+                  color: WikiPalette.ink,
+                  shadows: const [
+                    Shadow(offset: Offset(1, 1), color: Color(0x44FFF4D7)),
+                  ],
                 ),
               ),
-              IconButton(
-                onPressed: () => _openUrl('https://pd.qq.com/s/pel4yyss?b=5'),
-                tooltip: 'QQ 频道',
-                icon: SvgPicture.asset(
-                  'assets/icons/home/tencent-qq-logo.svg',
-                  width: 25,
+              const SizedBox(height: 24),
+              Text(
+                homeHero.description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  height: 1.7,
+                  color: WikiPalette.inkSoft,
                 ),
               ),
-              IconButton(
-                onPressed: () =>
-                    _openUrl('https://github.com/CTNH-Team/Create-New-Horizon'),
-                tooltip: 'GitHub',
-                icon: SvgPicture.asset(
-                  'assets/icons/home/github-logo.svg',
-                  width: 30,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.black,
-                    BlendMode.srcIn,
+              const SizedBox(height: 24),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  const AccentButton(label: 'Bug鍙嶉', filled: true),
+                  const AccentButton(label: '鍔犲叆鎴戜滑'),
+                  IconButton(
+                    onPressed: () =>
+                        _openUrl('https://www.mcmod.cn/modpack/897.html'),
+                    tooltip: 'MC 鐧剧',
+                    style: _iconButtonStyle(),
+                    icon: SizedBox.square(
+                      dimension: 28,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/icons/home/mc-wiki-logo.png',
+                          width: 28,
+                          height: 28,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              IconButton(
-                onPressed: () => _openUrl(
-                  'https://www.curseforge.com/minecraft/modpacks/ctnh',
-                ),
-                tooltip: 'CurseForge',
-                icon: SvgPicture.asset(
-                  'assets/icons/home/curseforge-logo.svg',
-                  width: 30,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.black,
-                    BlendMode.srcIn,
+                  IconButton(
+                    onPressed: () =>
+                        _openUrl('https://pd.qq.com/s/pel4yyss?b=5'),
+                    tooltip: 'QQ 棰戦亾',
+                    style: _iconButtonStyle(),
+                    icon: SizedBox.square(
+                      dimension: 28,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          'assets/icons/home/tencent-qq-logo.svg',
+                          width: 25,
+                          height: 25,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              IconButton(
-                onPressed: () =>
-                    _openUrl('https://discord.com/invite/jQpvUDsVX8'),
-                tooltip: 'Discord',
-                icon: SvgPicture.asset(
-                  'assets/icons/home/discord-logo.svg',
-                  width: 30,
-                ),
+                  IconButton(
+                    onPressed: () => _openUrl(
+                      'https://github.com/CTNH-Team/Create-New-Horizon',
+                    ),
+                    tooltip: 'GitHub',
+                    style: _iconButtonStyle(),
+                    icon: SizedBox.square(
+                      dimension: 28,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          'assets/icons/home/github-logo.svg',
+                          width: 28,
+                          height: 28,
+                          colorFilter: const ColorFilter.mode(
+                            Colors.black,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => _openUrl(
+                      'https://www.curseforge.com/minecraft/modpacks/ctnh',
+                    ),
+                    tooltip: 'CurseForge',
+                    style: _iconButtonStyle(),
+                    icon: SizedBox.square(
+                      dimension: 28,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          'assets/icons/home/curseforge-logo.svg',
+                          width: 28,
+                          height: 28,
+                          colorFilter: const ColorFilter.mode(
+                            Colors.black,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () =>
+                        _openUrl('https://discord.com/invite/jQpvUDsVX8'),
+                    tooltip: 'Discord',
+                    style: _iconButtonStyle(),
+                    icon: SizedBox.square(
+                      dimension: 28,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          'assets/icons/home/discord-logo.svg',
+                          width: 28,
+                          height: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -192,22 +250,36 @@ class AccentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      decoration: BoxDecoration(
-        color: filled
-            ? const Color(0xFF201A16)
-            : Colors.white.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: filled ? const Color(0xFF201A16) : const Color(0xFFD4C8B7),
-        ),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontWeight: FontWeight.w700,
-          color: filled ? Colors.white : const Color(0xFF201A16),
+    return IntrinsicWidth(
+      child: SizedBox(
+        height: 56,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 120),
+          child: DecoratedBox(
+            decoration: filled
+                ? WikiDecorations.darkFrame(radiusValue: 8)
+                : WikiDecorations.slot(
+                    color: WikiPalette.parchmentLight,
+                    radiusValue: 8,
+                  ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Center(
+                widthFactor: 1,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: filled ? WikiPalette.lineLight : WikiPalette.ink,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -234,19 +306,38 @@ class QuickStats extends StatelessWidget {
       );
     }
 
-    return Row(
-      children: homeStats
-          .map(
-            (item) => Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  right: item == homeStats.last ? 0 : 14,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 980) {
+          return Wrap(
+            spacing: 14,
+            runSpacing: 14,
+            children: homeStats
+                .map(
+                  (item) => SizedBox(
+                    width: (constraints.maxWidth - 14) / 2,
+                    child: StatCard(value: item.value, label: item.label),
+                  ),
+                )
+                .toList(),
+          );
+        }
+
+        return Row(
+          children: homeStats
+              .map(
+                (item) => Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: item == homeStats.last ? 0 : 14,
+                    ),
+                    child: StatCard(value: item.value, label: item.label),
+                  ),
                 ),
-                child: StatCard(value: item.value, label: item.label),
-              ),
-            ),
-          )
-          .toList(),
+              )
+              .toList(),
+        );
+      },
     );
   }
 }
@@ -261,10 +352,9 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFCF6),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFE2D7C6)),
+      decoration: WikiDecorations.slot(
+        color: WikiPalette.parchmentLight,
+        radiusValue: 10,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,15 +364,22 @@ class StatCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w900,
-              color: Color(0xFF201A16),
+              color: WikiPalette.rustDark,
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF62574D),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            decoration: WikiDecorations.slot(
+              color: WikiPalette.slot,
+              radiusValue: 6,
+            ),
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontWeight: FontWeight.w900,
+                color: WikiPalette.ink,
+              ),
             ),
           ),
         ],
@@ -303,32 +400,29 @@ class ModuleSwitcher extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onSelected;
 
+  String? _backgroundAssetForIndex(int index) {
+    return switch (index) {
+      0 => 'assets/images/home/tech/module_background.png',
+      1 => 'assets/images/home/magic/module_background.png',
+      2 => 'assets/images/home/adventure/module_background.png',
+      _ => null,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final modulePage = switch (selectedIndex) {
       0 => const TechModulePage(),
       1 => const MagicModulePage(),
-      _ => const AdventureModulePage(),
+      _ => const LogisticsModulePage(),
     };
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(isCompact ? 20 : 24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFF6EBD7), Color(0xFFF2E6D8), Color(0xFFEAE6D9)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: const Color(0xFFDCCCB4), width: 1.2),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x12000000),
-            blurRadius: 18,
-            offset: Offset(0, 10),
-          ),
-        ],
+      decoration: WikiDecorations.frame(
+        color: WikiPalette.parchmentDark,
+        radiusValue: isCompact ? 10 : 12,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,6 +438,7 @@ class ModuleSwitcher extends StatelessWidget {
                       child: ModulePreviewCard(
                         module: homeModules[index],
                         selected: index == selectedIndex,
+                        backgroundAssetPath: _backgroundAssetForIndex(index),
                         onTap: () => onSelected(index),
                       ),
                     ),
@@ -360,6 +455,7 @@ class ModuleSwitcher extends StatelessWidget {
                         child: ModulePreviewCard(
                           module: homeModules[index],
                           selected: index == selectedIndex,
+                          backgroundAssetPath: _backgroundAssetForIndex(index),
                           onTap: () => onSelected(index),
                         ),
                       ),
@@ -370,10 +466,9 @@ class ModuleSwitcher extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(isCompact ? 20 : 24),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFCF6),
-              borderRadius: BorderRadius.circular(26),
-              border: Border.all(color: const Color(0xFFE8DDCC)),
+            decoration: WikiDecorations.slot(
+              color: WikiPalette.parchmentLight,
+              radiusValue: 10,
             ),
             child: modulePage,
           ),
@@ -388,66 +483,133 @@ class ModulePreviewCard extends StatelessWidget {
     super.key,
     required this.module,
     required this.selected,
+    this.backgroundAssetPath,
     required this.onTap,
   });
 
   final HomeModule module;
   final bool selected;
+  final String? backgroundAssetPath;
   final VoidCallback onTap;
+
+  List<Color> get _overlayColors {
+    if (backgroundAssetPath == null) {
+      return const [];
+    }
+
+    if (backgroundAssetPath!.contains('/tech/')) {
+      return const [Color(0xBF151922), Color(0xA6242A36), Color(0x73262D3A)];
+    }
+
+    return const [Color(0xE61A1E28), Color(0xCC252B38), Color(0x99262D3A)];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final minCardHeight = width < 920 ? 176.0 : 208.0;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(26),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: selected
-                ? const Color(0xFFFFFCF6)
-                : Colors.white.withValues(alpha: 0.92),
-            borderRadius: BorderRadius.circular(26),
-            border: Border.all(
-              color: selected
-                  ? const Color(0xFF201A16)
-                  : const Color(0xFFE4D9C8),
+        borderRadius: BorderRadius.circular(10),
+        child: SizedBox(
+          height: minCardHeight,
+          child: Container(
+            decoration: selected
+                ? WikiDecorations.darkFrame(radiusValue: 10)
+                : WikiDecorations.slot(
+                    color: WikiPalette.parchmentLight,
+                    radiusValue: 10,
+                  ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  if (backgroundAssetPath != null)
+                    Positioned.fill(
+                      child: Image.asset(
+                        backgroundAssetPath!,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                      ),
+                    ),
+                  if (backgroundAssetPath != null)
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: _overlayColors,
+                            stops: const [0.0, 0.44, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                  Positioned.fill(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            module.label,
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w900,
+                              color: backgroundAssetPath != null
+                                  ? WikiPalette.lineLight
+                                  : (selected
+                                        ? WikiPalette.lineLight
+                                        : WikiPalette.ink),
+                              shadows: backgroundAssetPath != null
+                                  ? const [
+                                      Shadow(
+                                        offset: Offset(0, 1),
+                                        blurRadius: 6,
+                                        color: Color(0xAA000000),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            module.subTitle,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 14,
+                              height: 1.6,
+                              color: backgroundAssetPath != null
+                                  ? WikiPalette.lineLight.withValues(alpha: 0.9)
+                                  : (selected
+                                        ? WikiPalette.lineLight.withValues(
+                                            alpha: 0.88,
+                                          )
+                                        : WikiPalette.inkSoft),
+                              shadows: backgroundAssetPath != null
+                                  ? const [
+                                      Shadow(
+                                        offset: Offset(0, 1),
+                                        blurRadius: 6,
+                                        color: Color(0x88000000),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: module.tint,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Icon(module.icon, color: const Color(0xFF201A16)),
-              ),
-              const SizedBox(height: 18),
-              Text(
-                module.label,
-                style: const TextStyle(
-                  fontSize: 21,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF201A16),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                module.subTitle,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 14,
-                  height: 1.6,
-                  color: Color(0xFF5F554D),
-                ),
-              ),
-            ],
           ),
         ),
       ),
@@ -474,11 +636,11 @@ class AboutUsSection extends StatelessWidget {
           const SubsectionTitle(eyebrow: 'Team', title: '主要成员'),
           const SizedBox(height: 8),
           const Text(
-            '按参与整合包制作的时间排序。当前成员列表仍在持续补充中。',
+            '按参与整合包制作的时间顺序展示。当前成员列表仍在持续补充中。',
             style: TextStyle(
               fontSize: 13,
               height: 1.6,
-              color: Color(0xFF7A6F64),
+              color: WikiPalette.inkSoft,
             ),
           ),
           const SizedBox(height: 14),
@@ -504,17 +666,16 @@ class AboutUsSection extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFCF6),
-              borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: const Color(0xFFE2D7C6)),
+            decoration: WikiDecorations.slot(
+              color: WikiPalette.parchmentLight,
+              radiusValue: 10,
             ),
             child: const Text(
-              '致谢名单与特别贡献说明会继续拆分整理，后续可直接在这里补充独立卡片或感谢列表。',
+              '致谢名单与特别贡献说明会继续拆分整理，后续可以直接在这里补充独立卡片或感谢列表。',
               style: TextStyle(
                 fontSize: 14,
                 height: 1.7,
-                color: Color(0xFF5F554D),
+                color: WikiPalette.inkSoft,
               ),
             ),
           ),
@@ -545,10 +706,9 @@ class TeamMemberCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFCF6),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE2D7C6)),
+      decoration: WikiDecorations.slot(
+        color: WikiPalette.parchmentLight,
+        radiusValue: 8,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -570,12 +730,12 @@ class TeamMemberCard extends StatelessWidget {
                     : Container(
                         width: 36,
                         height: 36,
-                        color: const Color(0xFFE6DCCF),
+                        color: WikiPalette.slot,
                         alignment: Alignment.center,
                         child: const Icon(
                           Icons.person,
                           size: 18,
-                          color: Color(0xFF6A5E55),
+                          color: WikiPalette.inkSoft,
                         ),
                       ),
               ),
@@ -593,8 +753,8 @@ class TeamMemberCard extends StatelessWidget {
                     member.name,
                     style: const TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF201A16),
+                      fontWeight: FontWeight.w900,
+                      color: WikiPalette.ink,
                     ),
                   ),
                   if (member.afdUrl != null && member.afdUrl!.isNotEmpty)
@@ -612,7 +772,7 @@ class TeamMemberCard extends StatelessWidget {
                         ),
                         child: const Text(
                           '支持一下',
-                          style: TextStyle(color: Colors.black54),
+                          style: TextStyle(color: WikiPalette.rustDark),
                         ),
                       ),
                     ),
@@ -623,7 +783,7 @@ class TeamMemberCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 12,
                   height: 1.3,
-                  color: Color(0xFF5F554D),
+                  color: WikiPalette.inkSoft,
                 ),
               ),
             ],

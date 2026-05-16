@@ -1,3 +1,4 @@
+import 'package:ctnh_wiki/app/wiki_visuals.dart';
 import 'package:ctnh_wiki/features/shared/widgets/content_panel.dart';
 import 'package:ctnh_wiki/features/shared/widgets/section_title.dart';
 import 'package:ctnh_wiki/features/versions/data/version_list_data.dart';
@@ -35,7 +36,8 @@ class _VersionListTabState extends State<VersionListTab> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    final isCompact = width < 1000;
+    final isCompact = width < 760;
+    final isMedium = width >= 760 && width < 1100;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +47,7 @@ class _VersionListTabState extends State<VersionListTab> {
         WorkPlanPreview(isCompact: isCompact),
         const SizedBox(height: 24),
         ContentPanel(
-          minHeight: 560,
+          minHeight: isCompact ? 0 : 560,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,10 +73,10 @@ class _VersionListTabState extends State<VersionListTab> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 240,
+                          width: isMedium ? 210 : 240,
                           child: ReleaseTimelineNav(onSelected: _jumpToRelease),
                         ),
-                        const SizedBox(width: 24),
+                        SizedBox(width: isMedium ? 18 : 24),
                         Expanded(
                           child: Column(
                             children: List.generate(
@@ -106,9 +108,12 @@ class WorkPlanPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isMedium = width >= 760 && width < 1100;
+
     return ContentPanel(
       child: Padding(
-        padding: EdgeInsets.all(isCompact ? 18 : 22),
+        padding: EdgeInsets.all(isCompact ? 16 : (isMedium ? 18 : 22)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -116,8 +121,8 @@ class WorkPlanPreview extends StatelessWidget {
               '工作计划',
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF201A16),
+                fontWeight: FontWeight.w900,
+                color: WikiPalette.ink,
               ),
             ),
             const SizedBox(height: 8),
@@ -126,7 +131,7 @@ class WorkPlanPreview extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 height: 1.6,
-                color: Color(0xFF5F554D),
+                color: WikiPalette.inkSoft,
               ),
             ),
             const SizedBox(height: 18),
@@ -294,9 +299,9 @@ class _CompactWorkPlanList extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFE6DDCF)),
+                  color: WikiPalette.parchmentLight,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: WikiPalette.purpleMuted, width: 2),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,8 +310,8 @@ class _CompactWorkPlanList extends StatelessWidget {
                       item.title,
                       style: const TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF201A16),
+                        fontWeight: FontWeight.w900,
+                        color: WikiPalette.ink,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -350,8 +355,8 @@ class _GanttBar extends StatelessWidget {
       height: 40,
       decoration: BoxDecoration(
         color: item.color.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: item.color.withValues(alpha: 0.35)),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: WikiPalette.purpleMuted, width: 2),
       ),
       child: Stack(
         children: [
@@ -360,7 +365,7 @@ class _GanttBar extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: item.color,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(6),
               ),
             ),
           ),
@@ -413,9 +418,9 @@ class ReleaseTimelineNav extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 24),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFCF6),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFE2D7C6)),
+        color: WikiPalette.parchmentLight,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: WikiPalette.purpleMuted, width: 2),
       ),
       child: Stack(
         children: [
@@ -563,15 +568,15 @@ class _CompactReleaseJumpBar extends StatelessWidget {
           label: Text(versionReleases[index].version),
           onPressed: () => onSelected(index),
           backgroundColor: versionReleases[index].isLatest
-              ? const Color(0xFF201A16)
-              : const Color(0xFFFFFCF6),
+              ? WikiPalette.mechanicalBlack
+              : WikiPalette.parchmentLight,
           labelStyle: TextStyle(
             fontWeight: FontWeight.w700,
             color: versionReleases[index].isLatest
                 ? Colors.white
-                : const Color(0xFF201A16),
+                : WikiPalette.ink,
           ),
-          side: const BorderSide(color: Color(0xFFE2D7C6)),
+          side: const BorderSide(color: WikiPalette.purpleMuted, width: 2),
         ),
       ),
     );
@@ -586,15 +591,15 @@ class ReleaseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    final isCompact = width < 1100;
+    final isCompact = width < 1180;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFCF6),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFE2D7C6)),
+        color: WikiPalette.parchmentLight,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: WikiPalette.purpleMuted, width: 2),
       ),
       child: isCompact
           ? Column(
@@ -807,9 +812,9 @@ class _ReleaseChangeTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE6DDCF)),
+          color: WikiPalette.parchmentLight,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: WikiPalette.purpleMuted, width: 2),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

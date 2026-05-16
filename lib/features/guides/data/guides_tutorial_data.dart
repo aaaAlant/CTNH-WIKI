@@ -1,9 +1,4 @@
 const guidesTutorialTitle = '攻略教程';
-const guidesTutorialDescription =
-    '这里用于整理开荒路线、专题攻略、多人协作规范和常见问题排查教程。后续可以继续细分为新手入门、阶段攻略和专题教程。';
 
-const guidesTutorialSections = [
-  ('新手入门', '适合第一次进入整合包的玩家，聚焦前几个小时的生存与基础资源获取。'),
-  ('阶段攻略', '按发展阶段整理关键目标、推荐顺序和容易卡住的节点。'),
-  ('专题教程', '沉淀发电、物流、魔法、自动化等单独系统的深入说明。'),
-];
+const guidesTutorialDescription =
+    '这里现在改成了 Markdown 驱动的教程页面。只需要把新的 .md 文档放进 assets/docs/guides/，页面就会自动发现、排序并渲染。';

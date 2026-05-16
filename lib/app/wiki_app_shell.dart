@@ -1,4 +1,6 @@
-﻿import 'package:ctnh_wiki/data/wiki_tabs_data.dart';
+import 'package:ctnh_wiki/app/responsive.dart';
+import 'package:ctnh_wiki/app/wiki_visuals.dart';
+import 'package:ctnh_wiki/data/wiki_tabs_data.dart';
 import 'package:ctnh_wiki/features/guides/view/guides_tutorial_tab.dart';
 import 'package:ctnh_wiki/features/handbook/view/handbook_tab.dart';
 import 'package:ctnh_wiki/features/home/view/home_tab.dart';
@@ -25,8 +27,7 @@ class _WikiAppShellState extends State<WikiAppShell> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final isCompact = width < 900;
+    final responsive = ResponsiveLayout.of(context);
 
     return Scaffold(
       body: Stack(
@@ -35,17 +36,19 @@ class _WikiAppShellState extends State<WikiAppShell> {
           SafeArea(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(
-                horizontal: isCompact ? 20 : 32,
-                vertical: isCompact ? 18 : 28,
+                horizontal: responsive.pageHorizontalPadding,
+                vertical: responsive.pageVerticalPadding,
               ),
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1280),
+                  constraints: BoxConstraints(
+                    maxWidth: responsive.maxContentWidth,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _TopBar(
-                        isCompact: isCompact,
+                        responsive: responsive,
                         items: wikiTabs,
                         selectedIndex: _selectedIndex,
                         onSelected: (index) {
@@ -54,7 +57,7 @@ class _WikiAppShellState extends State<WikiAppShell> {
                           });
                         },
                       ),
-                      SizedBox(height: isCompact ? 20 : 30),
+                      SizedBox(height: responsive.pageSectionGap),
                       IndexedStack(index: _selectedIndex, children: _pages),
                     ],
                   ),
@@ -70,13 +73,13 @@ class _WikiAppShellState extends State<WikiAppShell> {
 
 class _TopBar extends StatelessWidget {
   const _TopBar({
-    required this.isCompact,
+    required this.responsive,
     required this.items,
     required this.selectedIndex,
     required this.onSelected,
   });
 
-  final bool isCompact;
+  final ResponsiveLayout responsive;
   final List<WikiTabItem> items;
   final int selectedIndex;
   final ValueChanged<int> onSelected;
@@ -95,20 +98,19 @@ class _TopBar extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isCompact ? 16 : 22,
+        horizontal: responsive.isCompact ? 14 : 22,
         vertical: 14,
       ),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.72),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFD9CCB9)),
+      decoration: WikiDecorations.frame(
+        color: WikiPalette.parchmentDark,
+        radiusValue: responsive.isCompact ? 12 : 14,
       ),
-      child: isCompact
+      child: responsive.isCompact
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const _BrandLockup(),
-                const SizedBox(height: 14),
+                const SizedBox(height: 12),
                 Wrap(spacing: 10, runSpacing: 10, children: chips),
               ],
             )
@@ -139,7 +141,10 @@ class _BrandLockup extends StatelessWidget {
         Container(
           width: 42,
           height: 42,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+          decoration: WikiDecorations.slot(
+            color: WikiPalette.parchmentLight,
+            radiusValue: 8,
+          ),
           child: Image.asset('assets/icons/app/logo-480x300.jpg', width: 42),
         ),
         const SizedBox(width: 12),
@@ -151,12 +156,12 @@ class _BrandLockup extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.3,
-                color: Color(0xFF201A16),
+                color: WikiPalette.ink,
               ),
             ),
             Text(
               'Create : New Horizon',
-              style: TextStyle(fontSize: 11, color: Color(0xFF6E6359)),
+              style: TextStyle(fontSize: 11, color: WikiPalette.inkSoft),
             ),
           ],
         ),
@@ -184,33 +189,30 @@ class _NavChip extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(
-            color: selected ? const Color(0xFF201A16) : const Color(0xFFF7F1E7),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-              color: selected
-                  ? const Color(0xFF201A16)
-                  : const Color(0xFFE2D6C2),
-            ),
-          ),
+          decoration: selected
+              ? WikiDecorations.darkFrame(radiusValue: 8)
+              : WikiDecorations.slot(
+                  color: WikiPalette.parchmentLight,
+                  radiusValue: 8,
+                ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 icon,
                 size: 16,
-                color: selected ? Colors.white : const Color(0xFF2F2924),
+                color: selected ? WikiPalette.lineLight : WikiPalette.ink,
               ),
               const SizedBox(width: 8),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: selected ? Colors.white : const Color(0xFF2F2924),
+                  fontWeight: FontWeight.w900,
+                  color: selected ? WikiPalette.lineLight : WikiPalette.ink,
                 ),
               ),
             ],

@@ -1,3 +1,5 @@
+import 'package:ctnh_wiki/app/responsive.dart';
+import 'package:ctnh_wiki/app/wiki_visuals.dart';
 import 'package:flutter/material.dart';
 
 class SectionTitle extends StatelessWidget {
@@ -8,25 +10,38 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = ResponsiveLayout.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          eyebrow.toUpperCase(),
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.6,
-            color: Color(0xFF8A6A37),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: WikiDecorations.slot(
+            color: WikiPalette.slot,
+            radiusValue: 8,
+          ),
+          child: Text(
+            eyebrow.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.4,
+              color: WikiPalette.ink,
+            ),
           ),
         ),
         const SizedBox(height: 8),
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF201A16),
+          style: TextStyle(
+            fontSize: responsive.sectionTitleSize,
+            fontWeight: FontWeight.w900,
+            color: WikiPalette.ink,
+            height: 1.1,
+            shadows: const [
+              Shadow(offset: Offset(1, 1), color: Color(0x44FFF4D7)),
+            ],
           ),
         ),
       ],
