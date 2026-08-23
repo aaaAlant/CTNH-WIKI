@@ -15,9 +15,8 @@ class StructureInsightPanel extends StatelessWidget {
     required this.stepController,
     required this.filterController,
     required this.visiblePartCount,
-    required this.capabilityBullets,
-    required this.roadmapBullets,
     this.hoveredPartId,
+    this.hoveredPartNotifier,
   });
 
   final StructurePreviewDefinition structure;
@@ -26,8 +25,7 @@ class StructureInsightPanel extends StatelessWidget {
   final StructureFilterController filterController;
   final int visiblePartCount;
   final String? hoveredPartId;
-  final List<String> capabilityBullets;
-  final List<String> roadmapBullets;
+  final ValueNotifier<String?>? hoveredPartNotifier;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +34,7 @@ class StructureInsightPanel extends StatelessWidget {
         selectionController,
         stepController,
         filterController,
+        if (hoveredPartNotifier != null) hoveredPartNotifier!,
       ]),
       builder: (context, _) {
         final metadata = structure.metadata;
@@ -43,21 +42,23 @@ class StructureInsightPanel extends StatelessWidget {
         final selectedPart = structure.partById(
           selectionController.selectedPartId,
         );
-        final hoveredPart = structure.partById(hoveredPartId);
+        final hoveredPart = structure.partById(
+          hoveredPartNotifier?.value ?? hoveredPartId,
+        );
 
         return Container(
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: const Color(0xFFFFFCF6),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(color: const Color(0xFFE7DCCB)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '结构说明面板',
+                '结构说明',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
@@ -87,22 +88,25 @@ class StructureInsightPanel extends StatelessWidget {
                 spacing: 10,
                 runSpacing: 10,
                 children: [
-                  _PreviewTag(label: '${structure.parts.length} 个部件'),
-                  _PreviewTag(label: '$visiblePartCount 个可见'),
+                  _PreviewTag(label: '${structure.parts.length} 个方块'),
+                  _PreviewTag(label: '$visiblePartCount 个已显示'),
                   _PreviewTag(
                     label:
-                        '步骤 ${stepController.currentIndex + 1}/${stepController.stepCount}',
+                        '第 ${stepController.currentIndex + 1}/${stepController.stepCount} 步',
                   ),
                   if (filterController.hasActiveFilter)
                     const _PreviewTag(label: '已启用过滤'),
                   if (hoveredPart != null)
-                    _PreviewTag(label: '悬停 ${hoveredPart.displayName}'),
+                    _PreviewTag(label: '当前指向 ${hoveredPart.displayName}'),
                 ],
               ),
               const SizedBox(height: 18),
-              _SectionLabel(label: '结构概览'),
+              _SectionLabel(label: '结构信息'),
               const SizedBox(height: 10),
-              _OverviewCard(metadata: metadata),
+              _OverviewCard(
+                metadata: metadata,
+                partCount: structure.parts.length,
+              ),
               const SizedBox(height: 18),
               StructureFilterPanel(
                 structure: structure,
@@ -111,51 +115,19 @@ class StructureInsightPanel extends StatelessWidget {
                 visiblePartCount: visiblePartCount,
               ),
               const SizedBox(height: 18),
-              _SectionLabel(label: '当前步骤'),
+              _SectionLabel(label: '当前视图'),
               const SizedBox(height: 10),
               _StepSummaryCard(
                 currentIndex: stepController.currentIndex,
                 totalCount: stepController.stepCount,
-                stepTitle: currentStep?.title ?? '未配置步骤',
-                stepDescription: currentStep?.description ?? '当前结构还没有配置步骤信息。',
+                stepTitle: currentStep?.title ?? '完整结构',
+                stepDescription: currentStep?.description ?? '查看多方块整体结构。',
                 focusedPartCount: stepController.focusedPartIds.length,
               ),
               const SizedBox(height: 18),
-              _SectionLabel(label: '当前部件'),
+              _SectionLabel(label: '当前方块'),
               const SizedBox(height: 10),
               StructurePartDetailCard(part: selectedPart),
-              const SizedBox(height: 18),
-              _SectionLabel(label: '当前已接入能力'),
-              const SizedBox(height: 10),
-              _BulletGroup(items: capabilityBullets),
-              const SizedBox(height: 18),
-              _SectionLabel(label: '下一步扩展'),
-              const SizedBox(height: 10),
-              _BulletGroup(items: roadmapBullets),
-              const SizedBox(height: 18),
-              const _SectionLabel(label: '预留入口'),
-              const SizedBox(height: 10),
-              const Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  _FutureEntryTile(
-                    icon: Icons.bookmarks_rounded,
-                    title: '关联词条',
-                    description: '后续可挂接图鉴词条或说明页。',
-                  ),
-                  _FutureEntryTile(
-                    icon: Icons.checklist_rounded,
-                    title: '任务概览',
-                    description: '后续可关联任务节点或解锁顺序。',
-                  ),
-                  _FutureEntryTile(
-                    icon: Icons.update_rounded,
-                    title: '版本记录',
-                    description: '后续可展示结构适配的版本差异。',
-                  ),
-                ],
-              ),
             ],
           ),
         );
@@ -165,9 +137,10 @@ class StructureInsightPanel extends StatelessWidget {
 }
 
 class _OverviewCard extends StatelessWidget {
-  const _OverviewCard({required this.metadata});
+  const _OverviewCard({required this.metadata, required this.partCount});
 
   final StructurePreviewMetadata metadata;
+  final int partCount;
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +149,7 @@ class _OverviewCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F2E8),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xFFE6D9C8)),
       ),
       child: Wrap(
@@ -184,12 +157,9 @@ class _OverviewCard extends StatelessWidget {
         runSpacing: 12,
         children: [
           _OverviewChip(label: '模块', value: _moduleLabel(metadata.module)),
-          _OverviewChip(label: '状态', value: _statusLabel(metadata.status)),
-          if (metadata.source case final source?)
-            _OverviewChip(label: '来源', value: source),
+          _OverviewChip(label: '方块', value: '$partCount'),
           if (metadata.versionRange != null)
             _OverviewChip(label: '版本', value: _versionLabel(metadata)),
-          ...metadata.tags.map((tag) => _OverviewChip(label: '标签', value: tag)),
         ],
       ),
     );
@@ -201,14 +171,6 @@ class _OverviewCard extends StatelessWidget {
       StructurePreviewModule.magic => '魔法',
       StructurePreviewModule.adventure => '冒险',
       StructurePreviewModule.shared => '通用',
-    };
-  }
-
-  String _statusLabel(StructurePreviewStatus status) {
-    return switch (status) {
-      StructurePreviewStatus.draft => '草稿',
-      StructurePreviewStatus.inProgress => '开发中',
-      StructurePreviewStatus.published => '已发布',
     };
   }
 
@@ -253,14 +215,14 @@ class _StepSummaryCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F2E8),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xFFE6D9C8)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '步骤 ${currentIndex + 1}/$totalCount',
+            '第 ${currentIndex + 1}/$totalCount 步',
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w800,
@@ -288,79 +250,10 @@ class _StepSummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '当前聚焦 $focusedPartCount 个核心部件，可在左侧结构中点击查看详细信息。',
+            '当前聚焦 $focusedPartCount 个核心方块，可在左侧结构图中点击查看详细信息。',
             style: const TextStyle(
               fontSize: 13,
               height: 1.6,
-              color: Color(0xFF6B625A),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BulletGroup extends StatelessWidget {
-  const _BulletGroup({required this.items});
-
-  final List<String> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: items
-          .map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _BulletRow(text: item),
-            ),
-          )
-          .toList(),
-    );
-  }
-}
-
-class _FutureEntryTile extends StatelessWidget {
-  const _FutureEntryTile({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
-
-  final IconData icon;
-  final String title;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 164,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F2E8),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE6D9C8)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 18, color: const Color(0xFF9C6A2B)),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF201A16),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            description,
-            style: const TextStyle(
-              fontSize: 12,
-              height: 1.55,
               color: Color(0xFF6B625A),
             ),
           ),
@@ -407,7 +300,7 @@ class _OverviewChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: const Color(0xFFE7DCCB)),
       ),
       child: RichText(
@@ -445,36 +338,6 @@ class _SectionLabel extends StatelessWidget {
         letterSpacing: 1.1,
         color: Color(0xFF9C6A2B),
       ),
-    );
-  }
-}
-
-class _BulletRow extends StatelessWidget {
-  const _BulletRow({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 7),
-          child: Icon(Icons.circle, size: 7, color: Color(0xFFC88A3D)),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.6,
-              color: Color(0xFF4E443D),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

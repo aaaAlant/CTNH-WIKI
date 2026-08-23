@@ -28,6 +28,12 @@ class StructureMaterialStyle {
     this.opacity = 1,
     this.mapAsset,
     this.faceTextures,
+    this.objAsset,
+    this.objTextures = const {},
+    this.modelData,
+    this.modelRotationX = 0,
+    this.modelRotationY = 0,
+    this.modelRotationZ = 0,
     this.pixelated = false,
     this.alphaTest = 0,
     this.doubleSided = false,
@@ -39,6 +45,12 @@ class StructureMaterialStyle {
   final double opacity;
   final String? mapAsset;
   final StructureFaceTextureSet? faceTextures;
+  final String? objAsset;
+  final Map<String, String> objTextures;
+  final String? modelData;
+  final double modelRotationX;
+  final double modelRotationY;
+  final double modelRotationZ;
   final bool pixelated;
   final double alphaTest;
   final bool doubleSided;
@@ -93,7 +105,7 @@ class StructureCameraConfig {
     this.minDistance = 4,
     this.maxDistance = 18,
     this.maxPolarAngle = 1.42,
-    this.autoRotate = true,
+    this.autoRotate = false,
     this.autoRotateSpeed = 0.8,
   });
 
@@ -113,6 +125,9 @@ class StructurePrimitive {
     required this.position,
     required this.size,
     required this.material,
+    this.partId,
+    this.layerId,
+    this.gridPosition,
     this.rotation = const StructureRotation.zero(),
   }) : type = StructurePrimitiveType.cuboid,
        radiusTop = null,
@@ -127,6 +142,9 @@ class StructurePrimitive {
     required this.radiusBottom,
     required this.height,
     required this.material,
+    this.partId,
+    this.layerId,
+    this.gridPosition,
     this.rotation = const StructureRotation.zero(),
     this.radialSegments = 18,
   }) : type = StructurePrimitiveType.cylinder,
@@ -142,6 +160,9 @@ class StructurePrimitive {
   final int radialSegments;
   final StructureRotation rotation;
   final StructureMaterialStyle material;
+  final String? partId;
+  final String? layerId;
+  final StructureVector3? gridPosition;
 }
 
 class StructurePreviewSceneData {
@@ -151,12 +172,12 @@ class StructurePreviewSceneData {
     required this.primitives,
     this.backgroundColor = 0xFF2A3139,
     this.ambientLightColor = 0xFFF4E7CB,
-    this.ambientLightIntensity = 1.8,
+    this.ambientLightIntensity = 0.9,
     this.keyLightColor = 0xFFFFF3DA,
-    this.keyLightIntensity = 2.6,
+    this.keyLightIntensity = 1.6,
     this.keyLightPosition = const StructureVector3(5.5, 8, 5),
-    this.fillLightColor = 0xFF8AA8C4,
-    this.fillLightIntensity = 1.4,
+    this.fillLightColor = 0xFFDDE7EE,
+    this.fillLightIntensity = 0.7,
     this.fillLightPosition = const StructureVector3(-5.5, 4, -3.5),
   });
 

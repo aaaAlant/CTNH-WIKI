@@ -1,10 +1,13 @@
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_selection_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/controllers/structure_step_controller.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_definition.dart';
+import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_hit_result.dart';
 import 'package:ctnh_wiki/features/structure_preview/services/structure_hit_test_service.dart';
 import 'package:ctnh_wiki/features/structure_preview/services/structure_preview_scene_builder.dart';
+import 'package:ctnh_wiki/features/structure_preview/view/widgets/structure_candidate_overlay.dart';
 import 'package:ctnh_wiki/features/structure_preview/three_js/structure_preview_renderer.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:three_js/three_js.dart' as three;
 
@@ -19,6 +22,7 @@ class StructurePreviewViewport extends StatefulWidget {
     this.selectionController,
     this.stepController,
     this.onHoveredPartChanged,
+    this.onHitChanged,
     this.borderRadius = const BorderRadius.all(Radius.circular(28)),
   });
 
@@ -28,6 +32,7 @@ class StructurePreviewViewport extends StatefulWidget {
   final StructureSelectionController? selectionController;
   final StructureStepController? stepController;
   final ValueChanged<String?>? onHoveredPartChanged;
+  final ValueChanged<StructurePreviewHitResult?>? onHitChanged;
   final BorderRadius borderRadius;
 
   @override
@@ -47,6 +52,10 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
   bool _pointerListenerBound = false;
   Set<String>? _appliedVisiblePartIds;
   String? _hoveredPartId;
+  StructurePreviewHitResult? _pendingHit;
+  Offset? _pointerDownPosition;
+  Offset? _lastPointerPosition;
+  bool _pointerDragging = false;
 
   StructureSelectionController get _selectionController {
     return widget.selectionController ?? _ownedSelectionController;
@@ -159,6 +168,8 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
         antialias: true,
         enableShadowMap: false,
         screenResolution: kIsWeb ? 1 : 1.25,
+        toneMapping: three.ACESFilmicToneMapping,
+        toneMappingExposure: 0.9,
       ),
       setup: () async {
         await _renderer?.initialize(buildResult);
@@ -167,7 +178,7 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
         _handleHoveredPartChanged(_hoveredPartId);
       },
       onSetupComplete: () {
-        _bindPointerListener();
+        _pointerListenerBound = true;
         if (mounted) {
           setState(() {});
         }
@@ -226,6 +237,11 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
       three.PeripheralType.pointerdown,
       _onPointerDown,
     );
+    listenable.addEventListener(three.PeripheralType.pointerup, _onPointerUp);
+    listenable.addEventListener(
+      three.PeripheralType.pointercancel,
+      _onPointerCancel,
+    );
     listenable.addEventListener(
       three.PeripheralType.pointerleave,
       _onPointerLeave,
@@ -247,6 +263,14 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
       listenable.removeEventListener(
         three.PeripheralType.pointerdown,
         _onPointerDown,
+      );
+      listenable.removeEventListener(
+        three.PeripheralType.pointerup,
+        _onPointerUp,
+      );
+      listenable.removeEventListener(
+        three.PeripheralType.pointercancel,
+        _onPointerCancel,
       );
       listenable.removeEventListener(
         three.PeripheralType.pointerleave,
@@ -307,54 +331,168 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
   }
 
   void _onPointerDown(dynamic event) {
-    final viewer = _threeJs;
-    final renderer = _renderer;
-    if (viewer == null || renderer == null) {
-      return;
-    }
-
-    final listenable = viewer.globalKey.currentState;
-    if (listenable == null) {
-      return;
-    }
-
-    final partId = _hitTestService.pickPartId(
-      event: event,
-      listenableKey: viewer.globalKey,
-      camera: viewer.camera,
-      objects: renderer.interactiveObjects,
+    _beginPointer(
+      Offset(
+        (event.clientX as num).toDouble(),
+        (event.clientY as num).toDouble(),
+      ),
+      _pickHit(event),
     );
-    _selectionController.selectPart(partId);
+  }
+
+  void _onRawPointerDown(PointerDownEvent event) {
+    _beginPointer(event.localPosition, _pickHitAt(event.localPosition));
+  }
+
+  void _beginPointer(Offset position, StructurePreviewHitResult? hit) {
+    _pointerDownPosition = position;
+    _lastPointerPosition = position;
+    _pointerDragging = false;
+    _pendingHit = hit;
+    _updateHoveredPart(hit?.partId);
   }
 
   void _onPointerMove(dynamic event) {
-    if (event.pointerType != 'mouse' && event.pointerType != 'pen') {
+    _movePointer(
+      Offset(
+        (event.clientX as num).toDouble(),
+        (event.clientY as num).toDouble(),
+      ),
+      event.pointerType?.toString() ?? 'mouse',
+      _pickHit(event),
+      event.buttons,
+    );
+  }
+
+  void _onRawPointerMove(PointerMoveEvent event) {
+    _movePointer(
+      event.localPosition,
+      _pointerTypeName(event.kind),
+      _pickHitAt(event.localPosition),
+      event.buttons,
+    );
+  }
+
+  void _movePointer(
+    Offset position,
+    String pointerType,
+    StructurePreviewHitResult? hit,
+    Object? buttons,
+  ) {
+    if (buttons is num && buttons.toInt() & 1 == 0) {
+      _resetPointerState();
+    }
+    if (_pointerDownPosition != null) {
+      final totalDelta = position - _pointerDownPosition!;
+      if (totalDelta.distance > 8) {
+        _pointerDragging = true;
+      }
+      final delta = position - (_lastPointerPosition ?? _pointerDownPosition!);
+      _lastPointerPosition = position;
+      if (_pointerDragging && delta.distance > 0) {
+        _renderer?.rotateBy(delta.dx, delta.dy);
+      }
+      if (_pointerDragging) {
+        return;
+      }
+    }
+
+    if (pointerType != 'mouse' &&
+        pointerType != 'pen' &&
+        pointerType != 'stylus') {
       _updateHoveredPart(null);
       return;
     }
+    _updateHoveredPart(hit?.partId);
+  }
 
+  void _onPointerUp(dynamic event) {
+    _finishPointer();
+  }
+
+  void _onRawPointerUp(PointerUpEvent event) {
+    _finishPointer();
+  }
+
+  void _finishPointer() {
+    final hit = _pendingHit;
+    final wasDragging = _pointerDragging;
+    _resetPointerState();
+    if (wasDragging || hit == null) {
+      return;
+    }
+    widget.onHitChanged?.call(hit);
+    _selectionController.selectPart(hit.partId);
+  }
+
+  void _onRawPointerHover(PointerHoverEvent event) {
+    _updateHoveredPart(_pickHitAt(event.localPosition)?.partId);
+  }
+
+  void _onPointerCancel(dynamic _) {
+    _resetPointerState();
+  }
+
+  void _onRawPointerCancel(PointerCancelEvent event) {
+    _resetPointerState();
+  }
+
+  void _onPointerLeave(dynamic _) {
+    _resetPointerState();
+    _updateHoveredPart(null);
+  }
+
+  String _pointerTypeName(PointerDeviceKind kind) {
+    return switch (kind) {
+      PointerDeviceKind.mouse => 'mouse',
+      PointerDeviceKind.stylus => 'stylus',
+      PointerDeviceKind.invertedStylus => 'stylus',
+      PointerDeviceKind.touch => 'touch',
+      _ => 'other',
+    };
+  }
+
+  StructurePreviewHitResult? _pickHit(dynamic event) {
     final viewer = _threeJs;
     final renderer = _renderer;
     if (viewer == null || renderer == null) {
-      return;
+      return null;
     }
-
     final listenable = viewer.globalKey.currentState;
     if (listenable == null) {
-      return;
+      return null;
     }
-
-    final partId = _hitTestService.pickPartId(
+    return _hitTestService.pickHit(
       event: event,
       listenableKey: viewer.globalKey,
       camera: viewer.camera,
       objects: renderer.interactiveObjects,
     );
-    _updateHoveredPart(partId);
   }
 
-  void _onPointerLeave(dynamic _) {
-    _updateHoveredPart(null);
+  StructurePreviewHitResult? _pickHitAt(Offset localPosition) {
+    final viewer = _threeJs;
+    final renderer = _renderer;
+    if (viewer == null || renderer == null) {
+      return null;
+    }
+    final listenable = viewer.globalKey.currentState;
+    if (listenable == null) {
+      return null;
+    }
+    return _hitTestService.pickHitAt(
+      localPosition: localPosition,
+      listenableKey: viewer.globalKey,
+      camera: viewer.camera,
+      objects: renderer.interactiveObjects,
+    );
+  }
+
+  void _resetPointerState() {
+    _pendingHit = null;
+    _pointerDownPosition = null;
+    _lastPointerPosition = null;
+    _pointerDragging = false;
   }
 
   void _updateHoveredPart(String? partId) {
@@ -400,9 +538,42 @@ class _StructurePreviewViewportState extends State<StructurePreviewViewport> {
     return SizedBox(
       width: widget.size.width,
       height: widget.size.height,
-      child: ClipRRect(
-        borderRadius: widget.borderRadius,
-        child: viewer.build(),
+      child: Stack(
+        children: [
+          Listener(
+            behavior: HitTestBehavior.opaque,
+            onPointerDown: _onRawPointerDown,
+            onPointerMove: _onRawPointerMove,
+            onPointerUp: _onRawPointerUp,
+            onPointerCancel: _onRawPointerCancel,
+            onPointerHover: _onRawPointerHover,
+            onPointerSignal: (event) {
+              if (event is PointerScrollEvent) {
+                GestureBinding.instance.pointerSignalResolver.register(event, (
+                  signalEvent,
+                ) {
+                  signalEvent.respond(allowPlatformDefault: false);
+                });
+              }
+            },
+            child: ClipRRect(
+              borderRadius: widget.borderRadius,
+              child: viewer.build(),
+            ),
+          ),
+          AnimatedBuilder(
+            animation: _selectionController,
+            builder: (context, _) {
+              final part = widget.structure.partById(
+                _selectionController.selectedPartId,
+              );
+              if (part == null || part.candidates.isEmpty) {
+                return const SizedBox.shrink();
+              }
+              return StructureCandidateOverlay(candidates: part.candidates);
+            },
+          ),
+        ],
       ),
     );
   }

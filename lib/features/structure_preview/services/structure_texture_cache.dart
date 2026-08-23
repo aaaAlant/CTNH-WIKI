@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWasm, kIsWeb;
 import 'package:three_js/three_js.dart' as three;
 
 class StructureTextureCache {
@@ -9,22 +10,48 @@ class StructureTextureCache {
     bool pixelated = true,
   }) {
     return _assetTextures.putIfAbsent(assetPath, () async {
-      final texture = await three.TextureLoader().fromAsset(assetPath);
-      if (texture == null) {
+      try {
+        final texture = await three
+            .TextureLoader()
+            .fromAsset(_runtimeAssetPath(assetPath))
+            .timeout(const Duration(seconds: 4));
+        if (texture == null) {
+          return null;
+        }
+
+        if (pixelated) {
+          texture.magFilter = three.NearestFilter;
+          texture.minFilter = three.NearestFilter;
+          texture.generateMipmaps = false;
+        }
+
+        texture.colorSpace = three.SRGBColorSpace;
+
+        texture.needsUpdate = true;
+        _resolvedTextures[assetPath] = texture;
+        return texture;
+      } catch (_) {
         return null;
       }
-
-      if (pixelated) {
-        texture.magFilter = three.NearestFilter;
-        texture.minFilter = three.NearestFilter;
-        texture.generateMipmaps = false;
-      }
-
-      texture.colorSpace = three.SRGBColorSpace;
-      texture.needsUpdate = true;
-      _resolvedTextures[assetPath] = texture;
-      return texture;
     });
+  }
+
+  Future<three.Group?> loadObjAsset(String assetPath) async {
+    try {
+      return await three
+          .OBJLoader()
+          .fromAsset(assetPath)
+          .timeout(const Duration(seconds: 8));
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String _runtimeAssetPath(String assetPath) {
+    if (kIsWeb && !kIsWasm) {
+      return 'assets/$assetPath';
+    }
+    return assetPath;
   }
 
   void dispose() {

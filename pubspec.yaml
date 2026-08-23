@@ -1,4 +1,4 @@
-﻿name: ctnh_wiki
+name: ctnh_wiki
 description: "A new Flutter project."
 publish_to: 'none'
 
@@ -40,5 +40,8 @@ flutter:
     - assets/images/gui/
     - assets/icons/app/
     - assets/icons/home/
+    - assets/textures/modules/auto/
+    - assets/textures/modules/auto/icons/
+    - assets/models/modules/auto/
 
 

@@ -7,12 +7,12 @@ class StructurePreviewStage {
   const StructurePreviewStage({
     this.backgroundColor = 0xFF2A3139,
     this.ambientLightColor = 0xFFF4E7CB,
-    this.ambientLightIntensity = 1.8,
+    this.ambientLightIntensity = 0.9,
     this.keyLightColor = 0xFFFFF3DA,
-    this.keyLightIntensity = 2.6,
+    this.keyLightIntensity = 1.6,
     this.keyLightPosition = const StructureVector3(5.5, 8, 5),
-    this.fillLightColor = 0xFF8AA8C4,
-    this.fillLightIntensity = 1.4,
+    this.fillLightColor = 0xFFDDE7EE,
+    this.fillLightIntensity = 0.7,
     this.fillLightPosition = const StructureVector3(-5.5, 4, -3.5),
   });
 

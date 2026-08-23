@@ -1,11 +1,13 @@
+import 'package:ctnh_wiki/features/structure_preview/models/structure_block_candidate.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_part.dart';
+import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_scene.dart';
 import 'package:flutter/material.dart';
 
 class StructurePartDetailCard extends StatelessWidget {
   const StructurePartDetailCard({
     super.key,
     required this.part,
-    this.emptyLabel = '点击或悬停左侧结构中的部件，这里会显示该部件的说明、朝向和状态。',
+    this.emptyLabel = '点击或悬停左侧结构中的方块，这里会显示说明和可替换仓室。',
   });
 
   final StructurePreviewPart? part;
@@ -51,7 +53,7 @@ class StructurePartDetailCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                _FieldLine(label: 'Block ID', value: part!.blockId),
+                _FieldLine(label: '坐标', value: _positionLabel(part!.position)),
                 const SizedBox(height: 6),
                 _FieldLine(label: '朝向', value: _facingLabel(part!.facing)),
                 const SizedBox(height: 6),
@@ -65,14 +67,22 @@ class StructurePartDetailCard extends StatelessWidget {
                     color: Color(0xFF4E443D),
                   ),
                 ),
-                if (part!.tags.isNotEmpty) ...[
-                  const SizedBox(height: 14),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: part!.tags
-                        .map((tag) => _MetaChip(label: tag))
-                        .toList(),
+                if (part!.candidates.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  const Text(
+                    '可替换仓室',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFF9C6A2B),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ...part!.candidates.map(
+                    (candidate) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: _CandidateRow(candidate: candidate),
+                    ),
                   ),
                 ],
               ],
@@ -91,6 +101,15 @@ class StructurePartDetailCard extends StatelessWidget {
       StructurePartCategory.transport => '连接',
       StructurePartCategory.decoration => '装饰',
     };
+  }
+
+  String _positionLabel(StructureVector3 position) {
+    return 'x=' +
+        position.x.round().toString() +
+        ', y=' +
+        position.y.round().toString() +
+        ', z=' +
+        position.z.round().toString();
   }
 
   String _facingLabel(StructureFacing facing) {
@@ -160,6 +179,71 @@ class _MetaChip extends StatelessWidget {
           fontWeight: FontWeight.w700,
           color: Color(0xFF6B4F2D),
         ),
+      ),
+    );
+  }
+}
+
+class _CandidateRow extends StatelessWidget {
+  const _CandidateRow({required this.candidate});
+
+  final StructureBlockCandidate candidate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.58),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE7DCCB)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 28,
+            height: 28,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE5D3B8),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Icon(
+              Icons.view_in_ar_rounded,
+              size: 15,
+              color: Color(0xFF6B4F2D),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  candidate.displayName,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF201A16),
+                  ),
+                ),
+                if (candidate.description.isNotEmpty) ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    candidate.description,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      height: 1.45,
+                      color: Color(0xFF4E443D),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

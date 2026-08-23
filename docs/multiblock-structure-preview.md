@@ -1,165 +1,88 @@
-﻿# 多方块结构预览模块说明
+# 多方块结构预览
 
-## 1. 当前目标
+## 当前范围
 
-“多方块结构预览”用于在 Flutter 页面里嵌入一个可交互的 3D 结构窗口，向玩家展示：
+Wiki 已新增独立的“多方块预览”页面，用于查看从现有 GTM / CTNH 多方块定义提炼出的结构数据。当前 catalog 已登记：
 
-- 一个多方块结构由哪些方块组成
-- 它们在空间里如何分布
-- 应该按什么顺序搭建
-- 点击任意关键方块后，对应说明是什么
+- CTNH-Core：工业土高炉（现有 Wiki pattern fixture）
+  - 地暖系统、天体观测站、能量态光伏电站、宰杀场、焦炉塔、基岩钻机、等离子冷凝器、草原、发酵罐、消化罐（手动从 MultiblocksA 提炼）
+- CTNH-Energy：蓄能变电站基础方案、扩展电池层方案
+- CTNH-Mana：宝石镶嵌机
+- CTNH-Bio：巨型肉块
+- CTNH-Astral：火箭组装平台
+- CTPP：粉碎工厂
 
-当前实现已经不再只是手工摆几个演示方块，而是开始支持从机器 `pattern` 自动生成结构。
+页面入口由 lib/app/wiki_app_shell.dart 和 lib/data/wiki_tabs_data.dart 注册，页面编排位于 lib/features/structure_preview/view/structure_preview_tab.dart。
 
-## 2. 当前已完成能力
+## 数据边界
 
-### 2.1 结构模型与 three_js 预览
+Wiki 不解析原始 .nbt、Ponder NBT、SNBT 或 Java 文本，也不依赖 Minecraft/GTM runtime。结构来源是现有 GTM/CTNH 定义经过人工或外部转换提炼后的 Wiki 数据定义，当前以 Dart catalog fixture 维护：
 
-已完成：
+- lib/features/structure_preview/data/structure_preview_catalog.dart
+- lib/features/structure_preview/services/multiblock_pattern_builder.dart
+- lib/features/structure_preview/models/
 
-- 正式结构定义模型
-- three_js 预览视口
-- 相机旋转、缩放
-- 部件选中与悬停高亮
-- 步骤切换
-- 分类过滤
-- 说明面板联动
+每个 catalog 条目记录 moduleKey、来源引用、pattern 方向、controller、visual fallback 和候选来源。未知候选保留 runtime/unresolved 说明，不伪装成空气。
 
-核心目录：
+## 页面能力
 
-- `lib/features/structure_preview/models/`
-- `lib/features/structure_preview/services/`
-- `lib/features/structure_preview/three_js/`
-- `lib/features/structure_preview/view/`
+- 模块筛选：按 CTNH-Core、CTNH-Energy、CTNH-Mana、CTNH-Bio、CTNH-Astral、CTPP 选择结构
+- 结构选择：在当前模块的 machine definition 条目中切换
+- 方案分页：使用 P:1、P:2，Energy 蓄能变电站示例展示基础和扩展电池层
+- 分层：使用 ALL 或 L:n 选择由结构网格 y 坐标派生的水平层
+- 搭建步骤：独立于空间层，用于累计显示和聚焦部件
+- 3D 交互：Three.js 旋转、缩放、拖拽、悬停高亮和点击选中
+- 详情面板：显示 Block ID、局部坐标、朝向、状态、来源标签和候选可替换方块
+- 动态/未知位置：仅当源码明确要求空气时显示空腔；非强制 any 使用 skip，不添加半透明占位方块
 
-### 2.2 方块注册与贴图映射
+候选列表遵循 GTM EMI 的展示语义：候选是位置谓词的可接受分支，和 canonical display 分开；查看候选不会替换 3D 结构。
 
-已完成：
+## 结构提炼 Skill
 
-- `blockId -> visuals` 的注册表
-- 单贴图材质
-- 六面贴图材质
-- 像素风贴图采样
-- 贴图缓存
+新增 skill：skills/ctnh-multiblock-preview/SKILL.md
 
-核心文件：
+新增或修正结构前，先按该 skill 记录 pattern 来源、.aisle 顺序、.where 符号证据、controller 原点、层方向、候选分支、visual 资源和验证结果。skill 明确区分：
 
-- `lib/features/structure_preview/data/structure_block_registry.dart`
-- `lib/features/structure_preview/services/structure_texture_cache.dart`
+- exact：唯一确定的注册方块
+- controller：控制器位置
+- skip / air：空腔，不生成实体方块
+- candidate：多个合法替换方块
+- unresolved：动态、自定义或缺少证据的谓词
+- manual：Wiki 侧人工补充的说明或视觉
 
-### 2.3 pattern 自动建模
+## 坐标规则
 
-新增完成：
+当前 builder 默认采用：
 
-- 可把 `FactoryBlockPattern.start().aisle(...).where(...)` 这一类结构模式转成预览部件
-- 支持按 `symbol` 映射到真实方块定义或空气跳过
-- 自动生成三维坐标与部件 id
-- 自动产出 `symbol -> partIds`，供步骤系统直接复用
+- aisle 数量为 depth
+- aisle 行数为 height
+- 行字符数为 width
+- aisle 从后向前
+- 行从下向上
+- X/Z 居中，Y 从 0 层向上
 
-核心文件：
+结构层控制器通过 grid:x-y-z 或显式 layer 标签解析层，Three.js primitive 同时保留 partId、layerId 和网格坐标。页面滚动后的点击命中使用 viewport 的全局原点计算，避免偏移。
 
-- `lib/features/structure_preview/services/multiblock_pattern_builder.dart`
+## 视觉与降级
 
-当前 builder 支持：
+Three.js 当前支持 cuboid/cylinder、单贴图或六面材质。Minecraft baked model、复杂 block entity 和动态模型必须在提炼阶段转换为 Wiki visual；不能只提供 block ID。预览通过 `StructureForgeTextureResolver` 读取生成的 Forge 纹理清单，按 block id、model face/texture_overrides 和 LDLib `ldlib.connection` 自动选择 base、overlay、face 与 connection，不再维护手写资源映射；单张贴图加载失败会在 4 秒后降级为颜色材质，详情面板仍显示结构信息。
 
-- 多个 `aisle`
-- 每个 `aisle` 多行字符串
-- `skip` 符号
-- 自定义方块 id、分类、标签、朝向、旋转
-- 配置行序和 aisle 朝向
+纹理清单由 `tool/forge_model_parser.dart` 解析 blockstate、model variant、parent 链、texture map、texture_overrides 和 element face 的 `#texture` 引用，再由 `tool/generate_structure_texture_manifest.dart` 生成。解析器不扫描或解析 Gradle jar；缺失资源先由当前结果报告，再按需从 `FORGE_RESOURCE_CACHE` 中的已提取资源复制，最终只保留 `assets/textures/modules/auto/` 和 `assets/models/modules/auto/`。新增或修改模型后重跑生成器，不要直接改生成文件。
 
-## 3. 新增示例：工业土高炉
+结构注册表不再引用工作区外或未声明的 data/machine/*.png 临时路径。正式资源必须位于 Wiki 已跟踪并在 pubspec.yaml 声明的目录。
 
-当前首页科技模块已经接入了一个真实多方块示例：工业土高炉。
+Flutter 的目录型资产只扫描目录第一层文件，不会递归扫描 `assets/textures/modules/` 下的子目录。当前已按模块与子目录逐一声明实际资源目录；新增贴图时也必须为包含资源的目录补一条声明。
 
-相关文件：
+## 验证
 
-- `lib/features/home/data/tech_structure_preview_data.dart`
-- `lib/features/structure_preview/data/structure_block_registry.dart`
-- `data/machine/machine_primitive_bricks.png`
-- `data/machine/overlay_front.png`
-- `data/machine/overlay_front_active.png`
+提交前检查：
 
-### 3.1 当前结构来源
+- pattern 所有 aisle 高度和行宽一致
+- 每个非 skip 符号都有映射和稳定部件 ID
+- controller、层方向和结构尺寸与来源一致
+- candidate、any、air、dynamic、unresolved 状态在详情中可见
+- P 页面和 ALL/L 层切换不会残留上一个结构的选中状态
+- git diff --check 通过
+- 可用时运行 flutter analyze、flutter test 和 flutter build web --release
 
-当前土高炉结构直接来自你提供的 pattern：
-
-```java
-.pattern(definition -> FactoryBlockPattern.start()
-    .aisle("XXX", "XXX", "XXX", "XXX")
-    .aisle("XXX", "X&X", "X#X", "X#X")
-    .aisle("XXX", "XYX", "XXX", "XXX")
-    .where('X', blocks(CASING_PRIMITIVE_BRICKS.get()))
-    .where('#', Predicates.air())
-    .where('&', Predicates.air().or(...))
-    .where('Y', Predicates.controller(blocks(definition.getBlock())))
-    .build())
-```
-
-### 3.2 当前解析结果
-
-当前预览按下面的规则构建：
-
-- `X`：土高炉砖块
-- `Y`：工业土高炉控制器
-- `#`：空气，不建模
-- `&`：空气/雪，不建模
-
-当前结构尺寸：
-
-- 宽度 3
-- 高度 4
-- 深度 3
-
-### 3.3 当前外观实现
-
-已完成：
-
-- 砖体使用 `machine_primitive_bricks.png`
-- 控制器主体仍沿用砖体贴图
-- 控制器正面叠加 `overlay_front_active.png`
-
-当前实现方式不是运行时拼贴图片，而是：
-
-- 基础方块走 registry 里的贴图立方体
-- 控制器额外增加一个很薄的前脸 overlay 几何层
-
-这样做的好处是简单、稳定，而且对现有渲染层侵入小。
-
-## 4. 当前关键假设
-
-这次土高炉预览有一个明确假设：
-
-- pattern 的行顺序当前按“从下到上”解释
-- aisle 顺序当前按“从后到前”解释
-- 控制器 `Y` 因此位于结构正面中心
-
-这个假设是为了让控制器朝向和预览视角更符合机器阅读习惯。
-
-如果你后面确认 GT/CTNH 实际 pattern 的坐标规则不同，我们只需要调整 builder 的两个方向参数，不需要重写整个结构定义。
-
-## 5. 下一阶段建议
-
-建议继续按下面顺序推进：
-
-1. 给控制器补 `inactive / active` 状态切换
-2. 给 pattern builder 增加可选的符号级覆写视觉
-3. 把更多机器 pattern 接进同一套 builder
-4. 把多方块预览接到机器图鉴页，而不是只放在首页科技模块
-5. 增加“显示空气腔体轮廓”或“显示内部空间”的辅助模式
-
-## 6. 当前结论
-
-现在这套多方块预览已经具备两层能力：
-
-- 可以展示 3D 结构
-- 可以从真实机器 pattern 自动建模
-
-这意味着后面扩展别的多方块机器时，工作重点会从“手工摆方块坐标”转成：
-
-- 提供 pattern
-- 提供方块贴图或模型
-- 配置 symbol 映射
-- 配置步骤和说明
-
-这条链路已经可以作为正式框架继续扩展。
+当前使用 Flutter 3.47.1 / Dart 3.13.1 完成 `flutter analyze`、`flutter test` 与 `flutter build web --release`。正式发布前仍需在目标浏览器中检查 WebGL、触摸交互和截图表现。

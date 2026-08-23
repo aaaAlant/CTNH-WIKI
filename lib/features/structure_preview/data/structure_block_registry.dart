@@ -1,4 +1,4 @@
-﻿import 'package:ctnh_wiki/features/structure_preview/models/structure_block.dart';
+import 'package:ctnh_wiki/features/structure_preview/models/structure_block.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_part.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_scene.dart';
 
@@ -85,17 +85,11 @@ const _monitorLogoScreenVisual = StructurePartVisual.cuboid(
   ),
 );
 
-const _primitiveBrickFaceTextures = StructureFaceTextureSet(
-  all: 'data/machine/machine_primitive_bricks.png',
-);
-
 const _primitiveBrickCasingVisual = StructurePartVisual.cuboid(
   id: 'body',
   size: StructureVector3(1, 1, 1),
   material: StructureMaterialStyle(
-    color: 0xFFFFFFFF,
-    faceTextures: _primitiveBrickFaceTextures,
-    pixelated: true,
+    color: 0xFFB08B66,
     roughness: 0.96,
     metalness: 0.02,
   ),
@@ -105,9 +99,7 @@ const _primitiveBlastFurnaceControllerBaseVisual = StructurePartVisual.cuboid(
   id: 'body',
   size: StructureVector3(1, 1, 1),
   material: StructureMaterialStyle(
-    color: 0xFFFFFFFF,
-    faceTextures: _primitiveBrickFaceTextures,
-    pixelated: true,
+    color: 0xFFB08B66,
     roughness: 0.94,
     metalness: 0.02,
   ),
@@ -119,9 +111,7 @@ const _primitiveBlastFurnaceControllerFrontOverlayVisual =
       size: StructureVector3(0.8, 0.8, 0.04),
       localOffset: StructureVector3(0, 0, 0.491),
       material: StructureMaterialStyle(
-        color: 0xFFFFFFFF,
-        mapAsset: 'data/machine/overlay_front_active.png',
-        pixelated: true,
+        color: 0xFFE4A04B,
         roughness: 0.82,
         metalness: 0.0,
         alphaTest: 0.12,

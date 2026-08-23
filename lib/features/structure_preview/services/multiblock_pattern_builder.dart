@@ -1,4 +1,5 @@
-﻿import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_part.dart';
+import 'package:ctnh_wiki/features/structure_preview/models/structure_block_candidate.dart';
+import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_part.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_scene.dart';
 
 class MultiblockPatternSymbolDefinition {
@@ -12,6 +13,7 @@ class MultiblockPatternSymbolDefinition {
     this.facing = StructureFacing.north,
     this.state = StructurePartState.required,
     this.tags = const [],
+    this.candidates = const [],
     this.visuals = const [],
   }) : skip = false;
 
@@ -26,6 +28,7 @@ class MultiblockPatternSymbolDefinition {
       facing = StructureFacing.north,
       state = StructurePartState.required,
       tags = const [],
+      candidates = const [],
       visuals = const [];
 
   final bool skip;
@@ -38,6 +41,7 @@ class MultiblockPatternSymbolDefinition {
   final StructureFacing facing;
   final StructurePartState state;
   final List<String> tags;
+  final List<StructureBlockCandidate> candidates;
   final List<StructurePartVisual> visuals;
 }
 
@@ -153,6 +157,9 @@ class MultiblockPatternBuilder {
                 'pattern:$symbol',
                 'grid:$xIndex-$yPositionIndex-$zPositionIndex',
               ],
+              candidates: definition.candidates
+                  .map((candidate) => candidate.forPart(partId))
+                  .toList(growable: false),
               visuals: definition.visuals,
             ),
           );

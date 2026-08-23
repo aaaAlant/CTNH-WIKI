@@ -3,6 +3,7 @@ import 'package:ctnh_wiki/app/wiki_visuals.dart';
 import 'package:ctnh_wiki/data/wiki_tabs_data.dart';
 import 'package:ctnh_wiki/features/guides/view/guides_tutorial_tab.dart';
 import 'package:ctnh_wiki/features/home/view/home_tab.dart';
+import 'package:ctnh_wiki/features/structure_preview/view/structure_preview_tab.dart';
 import 'package:ctnh_wiki/features/shared/widgets/background_texture.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,11 @@ class WikiAppShell extends StatefulWidget {
 class _WikiAppShellState extends State<WikiAppShell> {
   int _selectedIndex = 0;
 
-  static const _pages = [HomeTab(), GuidesTutorialTab()];
+  static const _pages = [
+    HomeTab(),
+    GuidesTutorialTab(),
+    StructurePreviewTab(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +84,7 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compactShowLabel = responsive.width >= 330;
+    final compactShowLabel = responsive.width >= 640;
     final chips = List.generate(
       items.length,
       (index) => _NavChip(
@@ -203,9 +208,11 @@ class _NavChip extends StatelessWidget {
     final width = MediaQuery.sizeOf(context).width;
     final iconOnly = !showLabel;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
+    return Tooltip(
+      message: iconOnly ? label : '',
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Container(
@@ -243,6 +250,7 @@ class _NavChip extends StatelessWidget {
                 ),
               ],
             ],
+          ),
           ),
         ),
       ),
