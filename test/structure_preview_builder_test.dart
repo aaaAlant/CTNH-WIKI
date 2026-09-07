@@ -3,6 +3,7 @@ import 'package:ctnh_wiki/features/structure_preview/data/structure_preview_cata
 import 'package:ctnh_wiki/features/structure_preview/data/structure_texture_manifest.g.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_block_candidate.dart';
 import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_part.dart';
+import 'package:ctnh_wiki/features/structure_preview/models/structure_preview_scene.dart';
 import 'package:ctnh_wiki/features/structure_preview/services/multiblock_pattern_builder.dart';
 import 'package:ctnh_wiki/features/structure_preview/services/structure_preview_scene_builder.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -171,5 +172,29 @@ test('generated Forge manifest omits void placeholder faces', () {
     controller.selectLayer(1);
     expect(controller.visiblePartIds, isNotNull);
     expect(controller.visiblePartIds, hasLength(2));
+  });
+
+  test('texture resolver keeps manifest textures untinted', () {
+    const builder = StructurePreviewSceneBuilder();
+    const tinted = StructureMaterialStyle(
+      color: 0xFF8BC6C5,
+      opacity: 0.72,
+    );
+    final resolved = builder.textureResolver.resolve(
+      tinted,
+      'create:andesite_casing',
+      'body',
+    );
+    expect(resolved.color, 0xFFFFFFFF);
+    expect(
+      resolved.mapAsset ?? resolved.faceTextures?.all,
+      contains('andesite_casing'),
+    );
+    final missing = builder.textureResolver.resolve(
+      tinted,
+      'test:missing-block',
+      'body',
+    );
+    expect(missing.color, tinted.color);
   });
 }

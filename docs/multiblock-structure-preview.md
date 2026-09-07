@@ -65,7 +65,7 @@ Wiki 不解析原始 .nbt、Ponder NBT、SNBT 或 Java 文本，也不依赖 Min
 
 ## 视觉与降级
 
-Three.js 当前支持 cuboid/cylinder、单贴图或六面材质。Minecraft baked model、复杂 block entity 和动态模型必须在提炼阶段转换为 Wiki visual；不能只提供 block ID。预览通过 `StructureForgeTextureResolver` 读取生成的 Forge 纹理清单，按 block id、model face/texture_overrides 和 LDLib `ldlib.connection` 自动选择 base、overlay、face 与 connection，不再维护手写资源映射；单张贴图加载失败会在 4 秒后降级为颜色材质，详情面板仍显示结构信息。
+Three.js 当前支持 cuboid/cylinder、单贴图或六面材质。Minecraft baked model、复杂 block entity 和动态模型必须在提炼阶段转换为 Wiki visual；不能只提供 block ID。预览通过 `StructureForgeTextureResolver` 读取生成的 Forge 纹理清单，按 block id、model face/texture_overrides 和 LDLib `ldlib.connection` 自动选择 base、overlay、face 与 connection，不再维护手写资源映射；单张贴图加载失败会在 4 秒后降级为颜色材质，详情面板仍显示结构信息。清单命中时 tint 固定为白色（`0xFFFFFFFF`），占位颜色只用于清单缺失时的降级显示，避免把安山岩机壳等贴图染成蓝色。
 
 纹理清单由 `tool/forge_model_parser.dart` 解析 blockstate、model variant、parent 链、texture map、texture_overrides 和 element face 的 `#texture` 引用，再由 `tool/generate_structure_texture_manifest.dart` 生成。解析器不扫描或解析 Gradle jar；缺失资源先由当前结果报告，再按需从 `FORGE_RESOURCE_CACHE` 中的已提取资源复制，最终只保留 `assets/textures/modules/auto/` 和 `assets/models/modules/auto/`。新增或修改模型后重跑生成器，不要直接改生成文件。
 

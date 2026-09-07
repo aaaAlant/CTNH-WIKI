@@ -34,7 +34,8 @@ class StructureForgeTextureResolver {
     String assetPath,
   ) {
     return StructureMaterialStyle(
-      color: material.color,
+      // 清单纹理自带颜色，tint 必须保持白色，否则占位颜色会把贴图染色。
+      color: 0xFFFFFFFF,
       metalness: material.metalness,
       roughness: material.roughness,
       opacity: material.opacity,
@@ -57,7 +58,8 @@ class StructureForgeTextureResolver {
         definition.front ?? textures['overlay_front'] ?? textures['front'];
 
     return StructureMaterialStyle(
-      color: material.color,
+      // 清单纹理自带颜色，tint 必须保持白色，否则占位颜色会把贴图染色。
+      color: 0xFFFFFFFF,
       metalness: material.metalness,
       roughness: material.roughness,
       opacity: material.opacity,
